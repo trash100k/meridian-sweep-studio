@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          address: string
+          created_at: string
+          id: string
+          lat: number | null
+          lng: number | null
+          phone: string | null
+          property_payload: Json | null
+          satellite_url: string | null
+          soil_grade: string | null
+          soil_payload: Json | null
+          zip: string
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          phone?: string | null
+          property_payload?: Json | null
+          satellite_url?: string | null
+          soil_grade?: string | null
+          soil_payload?: Json | null
+          zip: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          phone?: string | null
+          property_payload?: Json | null
+          satellite_url?: string | null
+          soil_grade?: string | null
+          soil_payload?: Json | null
+          zip?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
