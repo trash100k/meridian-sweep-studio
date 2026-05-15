@@ -36,10 +36,10 @@ export function HazeIn({ children, delay = 0, className = "", as: Tag = "div" }:
     return () => io.disconnect();
   }, [delay]);
 
-  // @ts-expect-error - dynamic tag
+  const Component = Tag as React.ElementType;
   return (
-    <Tag ref={ref} className={`haze-in ${className}`}>
+    <Component ref={ref} className={`haze-in ${className}`}>
       {children}
-    </Tag>
+    </Component>
   );
 }
