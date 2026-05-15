@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { GrassSweep } from "@/components/GrassSweep";
+import heroImage from "@/assets/hero-grass-sunset.jpg";
 import { HazeIn } from "@/components/HazeIn";
 import { DiagnosticEngine } from "@/components/DiagnosticEngine";
 import { BUSINESS } from "@/config/business";
