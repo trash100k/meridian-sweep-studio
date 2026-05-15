@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import heroImage from "@/assets/hero-grass-sunset.jpg";
-import { HazeIn } from "@/components/HazeIn";
+import { SunsetStage } from "@/components/SunsetStage";
+import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 import { DiagnosticEngine } from "@/components/DiagnosticEngine";
 import { BUSINESS } from "@/config/business";
 
@@ -8,16 +8,16 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: `${BUSINESS.name} — Soil-first lawn restoration` },
+      { title: `${BUSINESS.name} — Stewards of your lawn in Meridian, MS` },
       {
         name: "description",
         content:
-          "Free instant soil compaction diagnostic for your property. Real USDA soil data, satellite imagery, and an A–F grade in seconds.",
+          "Meridian's red clay sheds water like a tarp. Affordable Landscaping reads the soil six inches deeper than anyone else looks. Free 20-second diagnostic.",
       },
       { property: "og:title", content: `${BUSINESS.name} — Free soil diagnostic` },
       {
         property: "og:description",
-        content: "Your lawn isn't dying. Your soil is suffocating. Run the free diagnostic.",
+        content: "Your lawn isn't dying. Your soil is suffocating. Meridian, MS.",
       },
     ],
     links: [
@@ -31,112 +31,125 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+// Smooth crossfade helper
+const fade = (t: number, start: number, peak: number, end: number) => {
+  if (t <= start || t >= end) return 0;
+  if (t < peak) return (t - start) / (peak - start);
+  return 1 - (t - peak) / (end - peak);
+};
+
 function Index() {
   return (
-    <main className="bg-loam text-bone">
-      {/* HERO ----------------------------------------------------------------- */}
-      <section className="relative h-[100svh] w-full overflow-hidden">
-        <img
-          src={heroImage}
-          alt="Low-angle photograph of a lush lawn at golden-hour sunset"
-          width={1920}
-          height={1080}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        {/* Vignette to anchor the type */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(8,4,2,0.55) 70%, rgba(8,4,2,0.9) 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--loam, 20 30% 4%)) 95%)" }}
-        />
+    <SunsetStage>
+      {({ t, setT }) => {
+        const act1 = fade(t, -0.05, 0.06, 0.28);
+        const act2 = fade(t, 0.18, 0.32, 0.55);
+        const act3 = fade(t, 0.48, 0.62, 0.82);
+        const act4Reveal = Math.max(0, Math.min(1, (t - 0.7) / 0.18));
 
-        <div className="relative z-10 flex h-full flex-col">
-          <header className="px-6 md:px-10 py-6 flex items-center justify-between">
-            <span className="font-display text-xl text-bone tracking-wide">
-              {BUSINESS.shortName}
-            </span>
-            <span className="text-xs uppercase tracking-[0.25em] text-bone/60 font-mono">
-              {BUSINESS.serviceArea}
-            </span>
-          </header>
-          <div className="flex-1 flex items-center px-6 md:px-10">
-            <div className="max-w-3xl">
-              <HazeIn as="h1" className="font-display text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02]">
-                Your lawn isn't dying.
-                <br />
-                <span className="text-ember">Your soil is suffocating.</span>
-              </HazeIn>
-              <HazeIn delay={500} as="p" className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
-                A free, 20-second diagnostic of the dirt under your feet. Real soil data, satellite imagery, and a compaction grade — before you spend another dollar on fertilizer that can't reach the roots.
-              </HazeIn>
-              <HazeIn delay={1000} className="mt-10">
-                <a
-                  href="#diagnostic"
-                  className="inline-flex items-center gap-2 rounded-md bg-ember text-primary-foreground font-medium px-7 py-4 shadow-ember transition hover:brightness-110"
-                >
-                  Run my free diagnostic →
-                </a>
-              </HazeIn>
+        return (
+          <div className="relative h-full w-full">
+            {/* Top bar */}
+            <header className="absolute inset-x-0 top-0 z-30 px-6 md:px-10 py-6 flex items-center justify-between">
+              <button
+                onClick={() => setT(0)}
+                className="font-display text-xl text-bone tracking-wide hover:text-wheat transition"
+              >
+                {BUSINESS.shortName}
+              </button>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-bone/60 font-mono">
+                {BUSINESS.serviceArea}
+              </span>
+            </header>
+
+            {/* Acts I–III — crossfading copy stacked center-left */}
+            <div className="absolute inset-0 z-20 flex items-center px-6 md:px-12 pointer-events-none">
+              <div className="max-w-2xl w-full">
+                {/* Act I */}
+                <ActLayer opacity={act1}>
+                  <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] text-bone">
+                    Your lawn isn't dying.
+                    <br />
+                    <span className="text-ember">Your soil is suffocating.</span>
+                  </h1>
+                  <p className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
+                    A free, 20-second look at the dirt under your feet — before you spend another
+                    dollar on fertilizer that can't reach the roots.
+                  </p>
+                </ActLayer>
+
+                {/* Act II */}
+                <ActLayer opacity={act2}>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-ember mb-4 font-mono">
+                    The Red Clay Problem
+                  </p>
+                  <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone">
+                    Meridian sits on a sheet of <span className="text-ember">red Mississippi clay</span> that
+                    sheds water like a tarp.
+                  </h2>
+                  <p className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
+                    Your grass never had a chance. Most lawn services treat the blade. The damage is
+                    six inches deeper.
+                  </p>
+                </ActLayer>
+
+                {/* Act III */}
+                <ActLayer opacity={act3}>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-wheat mb-4 font-mono">
+                    The Stewards
+                  </p>
+                  <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone">
+                    {BUSINESS.shortName} are the
+                    <br />
+                    <span className="text-wheat italic">stewards of your lawn</span> —
+                    <br />
+                    six inches deeper than anyone else looks.
+                  </h2>
+                  <p className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
+                    Born and raised on Meridian dirt. Family-run. Honest pricing.
+                  </p>
+                </ActLayer>
+              </div>
             </div>
+
+            {/* Act IV — liquid glass form, center */}
+            <div
+              className="absolute inset-0 z-30 flex items-center justify-center px-4"
+              style={{ pointerEvents: act4Reveal > 0.4 ? "auto" : "none" }}
+            >
+              <LiquidGlassCard reveal={act4Reveal} className="w-full max-w-lg">
+                <DiagnosticEngine />
+              </LiquidGlassCard>
+            </div>
+
+            {/* Tiny footer credit */}
+            <footer
+              className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/40 transition-opacity duration-500"
+              style={{ opacity: t > 0.78 ? 1 : 0 }}
+            >
+              <span>{BUSINESS.phone}</span>
+              <span>Powered by SoilGrids · ISRIC</span>
+            </footer>
           </div>
-        </div>
-      </section>
+        );
+      }}
+    </SunsetStage>
+  );
+}
 
-      {/* RED CLAY PROBLEM ---------------------------------------------------- */}
-      <section className="relative py-28 md:py-40 px-6 md:px-10">
-        <div className="max-w-3xl mx-auto space-y-20 md:space-y-28">
-          <HazeIn>
-            <p className="text-xs uppercase tracking-[0.3em] text-ember mb-4">The Red Clay Problem</p>
-            <p className="font-display text-3xl md:text-5xl text-balance leading-tight">
-              Mississippi sits on a sheet of compacted clay that sheds water like a tarp.
-            </p>
-          </HazeIn>
-          <HazeIn delay={120}>
-            <p className="font-display text-3xl md:text-5xl text-balance leading-tight text-bone/85">
-              Most lawn services treat the <em className="not-italic text-ember">blade</em>. The damage is six inches deeper.
-            </p>
-          </HazeIn>
-          <HazeIn delay={240}>
-            <p className="font-display text-3xl md:text-5xl text-balance leading-tight text-bone/85">
-              You don't need more fertilizer. You need <em className="not-italic text-ember">air</em> in the ground.
-            </p>
-          </HazeIn>
-        </div>
-      </section>
-
-      {/* DIAGNOSTIC ENGINE --------------------------------------------------- */}
-      <section id="diagnostic" className="relative py-24 md:py-32 px-6 md:px-10 bg-soil/30 border-y border-border/40 scroll-mt-12">
-        <div className="max-w-3xl mx-auto">
-          <HazeIn>
-            <p className="text-xs uppercase tracking-[0.3em] text-ember mb-4">The Diagnostic Engine</p>
-            <h2 className="font-display text-4xl md:text-6xl text-balance leading-tight mb-12">
-              Find out what's actually under your grass.
-            </h2>
-          </HazeIn>
-          <DiagnosticEngine />
-        </div>
-      </section>
-
-      {/* FOOTER -------------------------------------------------------------- */}
-      <footer className="px-6 md:px-10 py-10 border-t border-border/40">
-        <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-sm">
-          <div>
-            <p className="font-display text-lg text-bone">{BUSINESS.name}</p>
-            <p className="text-muted-foreground">
-              {BUSINESS.serviceArea} · {BUSINESS.phone}
-            </p>
-          </div>
-          <p className="text-xs text-muted-foreground font-mono">
-            Powered by SoilGrids · ISRIC
-          </p>
-        </div>
-      </footer>
-    </main>
+function ActLayer({ opacity, children }: { opacity: number; children: React.ReactNode }) {
+  return (
+    <div
+      className="absolute inset-0 flex flex-col justify-center"
+      style={{
+        opacity,
+        filter: `blur(${(1 - opacity) * 14}px)`,
+        transform: `translateY(${(1 - opacity) * 12}px)`,
+        transition: "opacity 200ms linear, filter 200ms linear, transform 200ms linear",
+        pointerEvents: opacity > 0.5 ? "auto" : "none",
+      }}
+    >
+      <div>{children}</div>
+    </div>
   );
 }

@@ -1,98 +1,83 @@
-# Meridian Sunset Sweep — Build Plan (v2)
+## Sunset Tunnel — scroll-jacked, cursor-reactive, liquid glassmorphism
 
-Build the full cinematic experience now. Leave clearly marked placeholders for the things you're still deciding on so they're easy to flip on later.
+One pinned cinematic stage. Native scroll is locked. Wheel / trackpad / touch / arrow keys all drive a single normalized progress `t ∈ [0,1]` that orchestrates camera, sky, beam, and the rise of a liquid-glass form. No buttons, no anchors, no funnel — the experience ends inside the glass.
 
----
+### The 4 acts (driven by `t`)
 
-## What ships
+```
+   t = 0.00 ─── ACT I  · GROUND
+     low camera in the grass, sun on the horizon
+     headline + sub fade in
+     cursor drags a warm beam across the blades
 
-### 1. Hero — Meridian Sunset Sweep (full viewport)
-- WebGL grass field via Three.js + `InstancedMesh` (~30k blades, scaled down on mobile)
-- Camera fixed ~6in above turf, continuous +Z tunnel, recycling tile = infinite runway
-- Vertex shader: wind sway + subtle parting near camera
-- Fragment shader: warm rim light on tips, deep loam shadow at roots
-- Headline materializes in air: *"Your lawn isn't dying. Your soil is suffocating."*
-- Single CTA: **Run my free diagnostic →**
-- Reduced-motion users get a still painterly hero; no-WebGL users get a looping golden-hour video poster
+   t = 0.25 ─── ACT II · RED CLAY
+     camera dollies forward, blades part
+     soil cross-section rises revealing red Meridian clay
+     red-dirt copy crossfades in
 
-### 2. The Red Clay Problem
-Three short revelations fade in via IntersectionObserver as the sweep continues. Per-character opacity + Z-translate + blur falloff (text condensing out of haze).
+   t = 0.55 ─── ACT III · TUNNEL
+     camera tilts straight up, grass slides off bottom
+     beam goes vertical, sky bleeds ember → indigo
+     stewardship line materializes mid-sky in haze
 
-### 3. The Diagnostic Engine (the Silent Siphon)
-- Two fields only: **Zip code** + **Property address**
-- Submit → loading sequence shows three "Mycelium" pulls happening with check-marks as each resolves:
-  - Querying USDA soil maps…
-  - Pulling parcel data…
-  - Capturing satellite imagery…
+   t = 0.80 ─── ACT IV · GLASS
+     pure sunset sky
+     liquid-glass diagnostic card rises from below center,
+     refracting the sun behind it — this is the only destination
+```
 
-### 4. Diagnostic Report (renders inline after submit)
-- Satellite tile of the address — **placeholder until Mapbox token is added**, falls back to stylized SVG yard sketch
-- **Soil Compaction Grade A–F** — real data from SoilGrids (free, no key)
-- Estimated Lot Size + Estate Value — deterministic mock seeded by address hash
-- Phone capture CTA: *"Book your restoration window — we'll call within 1 business day."*
+### Cinematic + cursor-reactive
 
-### 5. Footer
-Minimal: business name, service area, tiny "Powered by SoilGrids" line.
+- **Camera (canvas 2D)** — sky disc, grass photo, soil cross-section, beam — each with its own Y-offset and scale curve keyed to `t`. Cursor parallax: sky −6px, grass +12px, soil +4px. Sun bloom brightens as cursor nears it.
+- **Beam of light** — soft radial god-ray from the sun; end-point spring-tracks the cursor (`lerp 0.12`). Brightens grass tips it crosses (additive blend). At `t > 0.55` straightens vertical and becomes the tunnel.
+- **Type** — Instrument Serif materializes via blur(16→0) + opacity, 900ms staggered. Crossfade between acts; never two acts on screen at once.
+- **Reduced motion** — static composite + normal stacked layout with the form visible immediately.
 
----
+### Scroll-jack model
 
-## Backend (Lovable Cloud)
+- `position: fixed; inset: 0` stage; `body` overflow locked on this route only
+- Wheel + touch + arrow + space funnel into a `targetT` integrator with momentum, clamp `[0,1]`
+- `currentT` springs toward `targetT` (stiffness 0.08) inside one rAF loop
+- Wheel listeners `passive: false` so we can `preventDefault`
+- rAF pauses on `visibilitychange`; resets cleanly on back/forward
+- Accessibility: `Tab` jumps `t → 0.85` and focuses the first input; the form is always in DOM for screen readers (visually hidden until `t > 0.7`)
 
-**Table: `leads`**
-- id, created_at, zip, address, lat, lng, phone (nullable), soil_grade, soil_payload (jsonb), property_payload (jsonb), satellite_url
-- RLS: anon insert allowed (lead capture), select denied (service-role only)
+### Liquid glassmorphism — next-level
 
-**Server functions** (`src/lib/diagnostic.functions.ts`)
-- `geocodeAddress` — Mapbox geocoding when token present, else zip-centroid lookup
-- `pullSoil` — SoilGrids `/properties/query` for clay/sand/bulk-density at 0–30cm → Compaction Grade
-- `pullProperty` — deterministic mock (lot size, year built, estimated value)
-- `pullSatellite` — Mapbox Static Images when token present, else `{ fallback: true }`
-- `runDiagnostic` — orchestrates all four in parallel via `Promise.allSettled`, inserts the lead, returns the report
-- `attachPhone` — updates the lead with phone number
+The card is the centerpiece, not a panel. Real glass, not a frosted div.
 
-**Public API for OpenClaw — placeholder, off by default**
+- **Surface** — `backdrop-filter: blur(28px) saturate(180%) brightness(1.08) contrast(1.05)`, ultra-thin 1px highlight stroke (top-left bright, bottom-right dim) via masked gradient borders, soft inner shadow for depth
+- **Refraction** — SVG `feTurbulence (baseFreq 0.012) → feDisplacementMap (scale 6)` filter (id `#liquid-glass`, defined once in `__root.tsx`), animated baseFreq for the slow shimmer that bends the sunset behind the card
+- **Specular sheen** — conic-gradient pseudo-element orbits the border at 14s/rev for the wet sheen
+- **Caustic edge** — a second pseudo with chromatic-aberration split (red/cyan offsets via `mix-blend-mode: screen`) to fake light splitting through the rim
+- **Hover/cursor reactive** — card surface tilts ±2° on cursor (CSS variables in rAF, no React renders); a soft circular highlight follows the cursor across the glass
+- **Inputs** — borderless, ember caret + 1px focus underline only; submit is a glass pill, not a button. Loading/report stages render *inside* the card; it grows fluidly and the sky behind dims for legibility
+- **Performance** — single backdrop-filter element, displacement filter capped at 6px, devicePixelRatio capped at 1.5; mobile drops feDisplacementMap (keeps blur + saturate) to stay smooth
 
-I'll scaffold these routes but leave them returning 501 until you decide:
-- `GET /api/public/leads?since=&limit=&include_phone=` — returns lead rows (phone hidden unless flag set)
-- `GET /api/public/stats` — totals, average grade, top zips, leads-with-phone count
+### Copy
 
-Both will check `Bearer $LEADS_API_KEY`. The secret won't be added yet — when you're ready, you flip them on by:
-1. Adding the `LEADS_API_KEY` secret
-2. Removing the `// PLACEHOLDER:` 501 short-circuit at the top of each handler
+- **Act I** — H1: *Your lawn isn't dying.* / H1 (ember): *Your soil is suffocating.*
+- **Act II** — *Meridian sits on a sheet of red Mississippi clay that sheds water like a tarp. Your grass never had a chance.*
+- **Act III** — *Affordable Landscaping are the stewards of your lawn — six inches deeper than anyone else looks.*
+- **Act IV** — *Free, 20-second soil diagnostic. No callback queue. No upsell.*
 
-A `// PLACEHOLDER:` comment block in each file documents exactly what to change.
+### Files
 
----
+- New: `src/components/SunsetStage.tsx` — canvas composite + scroll-jack controller + act state
+- New: `src/components/LiquidGlassCard.tsx` — the glass surface (Act IV)
+- New: `src/hooks/useScrollJack.ts` — wheel/touch/key → `t` integrator with spring
+- Edit: `src/routes/index.tsx` — replace body with `<SunsetStage />`; old hero / Red Clay / Diagnostic / footer sections removed (footer becomes a tiny line under the glass)
+- Edit: `src/components/DiagnosticEngine.tsx` — visual shell only (wrap fields/results in glass surfaces); server-fn logic untouched
+- Edit: `src/routes/__root.tsx` — inject hidden SVG `<defs>` for `#liquid-glass`; lock body overflow on `/`
+- Edit: `src/styles.css` — `.liquid-glass` utility, sheen + displacement keyframes, reduced-motion overrides
+- Edit: `src/config/business.ts` — confirm name = "Affordable Landscaping", serviceArea = "Meridian, MS"
+- Delete: `src/components/GrassSweep.tsx` (unused)
 
-## Placeholders left open (clearly marked in code)
+### Out of scope
 
-| What | Where | How to enable later |
-| --- | --- | --- |
-| **Mapbox token** | `MAPBOX_TOKEN` env var | Add via secrets tool → real satellite + geocoding turn on automatically |
-| **OpenClaw leads endpoint** | `src/routes/api/public/leads.ts` | Add `LEADS_API_KEY` secret + remove 501 guard |
-| **OpenClaw stats endpoint** | `src/routes/api/public/stats.ts` | Same |
-| **Business name / phone / service area** | Single constants file `src/config/business.ts` | One edit to swap "Meridian Turf Restoration / Meridian, MS / (601) 555-0142" for the real ones |
-| **Real property data (Regrid)** | `pullProperty` server fn | Drop in Regrid call when you're ready |
-| **Email/SMS notification on new lead** | n/a yet | Add Resend or Twilio later |
+- WebGL / Three.js (canvas 2D + the photo reads more cinematic and ships <10kb)
+- Audio / sfx
+- Additional routes / pages
+- Payments, scheduling, upsells
 
----
-
-## Design system
-- Palette: deep loam black, soil shadow, ember orange, wheat highlight, off-white
-- Typography: Instrument Serif for display, Inter for body/form
-- Tokens in `src/styles.css` as oklch
-- Restrained per the manifesto: minimal nav, no "trusted by" row, no footer link columns
-
----
-
-## Routes
-- `/` — full cinematic experience (single page, `src/routes/index.tsx`)
-- `/api/public/leads` — placeholder (501)
-- `/api/public/stats` — placeholder (501)
-
----
-
-## Out of scope for this build
-- Admin dashboard (query Lovable Cloud table directly for now)
-- Payments / scheduling
-- Multi-page split (this is a single funnel by design)
+Approved — hit **Implement plan** and I'll build it.

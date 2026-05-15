@@ -1,10 +1,9 @@
-// PLACEHOLDER: Swap these for the real business when you're ready.
-// One file, one edit — flows through the entire site.
+// Affordable Landscaping — Meridian, MS
 export const BUSINESS = {
-  name: "Meridian Turf Restoration",
-  shortName: "Meridian Turf",
+  name: "Affordable Landscaping",
+  shortName: "Affordable Landscaping",
   serviceArea: "Meridian, MS",
   phone: "(601) 555-0142",
-  email: "hello@meridianturf.example",
-  tagline: "Soil-first lawn restoration for Mississippi red clay.",
+  email: "hello@affordablelandscaping.example",
+  tagline: "Stewards of your lawn — six inches deeper than anyone else looks.",
 } as const;
