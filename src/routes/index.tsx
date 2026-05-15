@@ -36,17 +36,26 @@ function Index() {
     <main className="bg-loam text-bone">
       {/* HERO ----------------------------------------------------------------- */}
       <section className="relative h-[100svh] w-full overflow-hidden">
-        <div className="absolute inset-0">
-          <GrassSweep className="absolute inset-0" />
-        </div>
+        <img
+          src={heroImage}
+          alt="Low-angle photograph of a lush lawn at golden-hour sunset"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
         {/* Vignette to anchor the type */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(8,4,2,0.55) 70%, rgba(8,4,2,0.85) 100%)",
+              "radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(8,4,2,0.55) 70%, rgba(8,4,2,0.9) 100%)",
           }}
         />
+        <div
+          className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--loam, 20 30% 4%)) 95%)" }}
+        />
+
         <div className="relative z-10 flex h-full flex-col">
           <header className="px-6 md:px-10 py-6 flex items-center justify-between">
             <span className="font-display text-xl text-bone tracking-wide">
