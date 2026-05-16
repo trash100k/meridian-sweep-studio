@@ -140,7 +140,7 @@ function Index() {
 function ActLayer({ opacity, children }: { opacity: number; children: React.ReactNode }) {
   return (
     <div
-      className="absolute inset-0 flex flex-col justify-center"
+      className="absolute inset-0 flex flex-col justify-start pt-28 md:justify-center md:pt-0"
       style={{
         opacity,
         filter: `blur(${(1 - opacity) * 14}px)`,

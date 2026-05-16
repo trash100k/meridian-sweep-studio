@@ -3,6 +3,8 @@
 // Feels like coasting a convertible — not snapping between sections.
 import { useEffect, useRef } from "react";
 
+const DEFAULT_STOPS = [0, 0.25, 0.55, 0.8];
+
 type Options = {
   // Pixels of accumulated input to traverse t = 0 → 1.
   travel?: number;
@@ -18,8 +20,8 @@ export type ScrollJackHandle = {
 };
 
 export function useScrollJack({
-  travel = 3200,
-  stops = [0, 0.25, 0.55, 0.8],
+  travel = 1350,
+  stops = DEFAULT_STOPS,
   enabled = true,
   onChange,
 }: Options = {}): ScrollJackHandle {
@@ -28,6 +30,16 @@ export function useScrollJack({
   const posRef = useRef(0); // 0..travel, but allowed to rubber-band outside
   const velRef = useRef(0); // pixels per frame
   const lastInputRef = useRef(0);
+  const onChangeRef = useRef(onChange);
+  const stopsRef = useRef(stops);
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useEffect(() => {
+    stopsRef.current = stops;
+  }, [stops]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -42,12 +54,12 @@ export function useScrollJack({
     };
 
     // A nudge from user input — adds velocity, doesn't teleport.
-    const addInput = (dy: number, scale = 0.55) => {
+    const addInput = (dy: number, scale = 0.9) => {
       lastInputRef.current = performance.now();
       // Scale wheel pixels into a comfortable velocity range.
-      velRef.current += dy * scale * 0.06;
+      velRef.current += dy * scale * 0.09;
       // Cap velocity so a furious scroll doesn't shoot past everything.
-      const maxV = 22;
+      const maxV = 46;
       if (velRef.current > maxV) velRef.current = maxV;
       if (velRef.current < -maxV) velRef.current = -maxV;
     };
@@ -81,7 +93,7 @@ export function useScrollJack({
     const onTouchEnd = () => {
       if (touchY != null && Math.abs(touchVel) > 0.5) {
         // Flick — keep the momentum
-        velRef.current += touchVel * 1.4;
+        velRef.current += touchVel * 2.2;
       }
       touchY = null;
       touchVel = 0;
@@ -94,12 +106,12 @@ export function useScrollJack({
         e.preventDefault();
         // Jump toward the next stop.
         const cur = posRef.current / travel;
-        const next = stops.find((s) => s > cur + 0.02) ?? 1;
+        const next = stopsRef.current.find((s) => s > cur + 0.02) ?? 1;
         setTargetT(next);
       } else if (e.key === "ArrowUp" || e.key === "PageUp") {
         e.preventDefault();
         const cur = posRef.current / travel;
-        const prev = [...stops].reverse().find((s) => s < cur - 0.02) ?? 0;
+        const prev = [...stopsRef.current].reverse().find((s) => s < cur - 0.02) ?? 0;
         setTargetT(prev);
       } else if (e.key === "Home") {
         e.preventDefault();
@@ -122,10 +134,10 @@ export function useScrollJack({
     let last = performance.now();
     let alive = true;
 
-    const FRICTION = 0.92;      // velocity decay per frame
-    const MAGNET_RADIUS = 0.07; // in t-units
-    const MAGNET_STRENGTH = 0.4; // how hard idle attractor pulls
-    const IDLE_MS = 220;        // ms after last input before magnets engage
+    const FRICTION = 0.94;      // velocity decay per frame
+    const MAGNET_RADIUS = 0.09; // in t-units
+    const MAGNET_STRENGTH = 0.28; // how hard idle attractor pulls
+    const IDLE_MS = 360;        // ms after last input before magnets engage
     const RUBBER = 0.18;        // overshoot decay at ends
 
     const tick = (now: number) => {
@@ -152,7 +164,7 @@ export function useScrollJack({
           const curT = posRef.current / travel;
           let nearest = stops[0];
           let bestD = Infinity;
-          for (const s of stops) {
+          for (const s of stopsRef.current) {
             const d = Math.abs(curT - s);
             if (d < bestD) { bestD = d; nearest = s; }
           }
@@ -177,7 +189,7 @@ export function useScrollJack({
       const next = Math.max(0, Math.min(1, posRef.current / travel));
       if (Math.abs(next - tRef.current) > 0.00005) {
         tRef.current = next;
-        onChange?.(next);
+        onChangeRef.current?.(next);
       }
       raf = requestAnimationFrame(tick);
     };
@@ -211,7 +223,7 @@ export function useScrollJack({
       document.documentElement.style.overflow = prevHtmlOverflow;
       document.body.style.overflow = prevBodyOverflow;
     };
-  }, [travel, enabled, onChange, stops]);
+  }, [travel, enabled]);
 
   return {
     t: tRef,
