@@ -34,6 +34,7 @@ export function SunsetStage({ children }: Props) {
   // Stage progress (mirrored for React-driven UI overlay)
   const tRef = useRef(0);
   const [tState, setTState] = useState(0);
+  const lastReact = useRef(0);
 
   const scrollJack = useScrollJack({
     onChange: (t) => {
@@ -46,7 +47,6 @@ export function SunsetStage({ children }: Props) {
       }
     },
   });
-  const lastReact = useRef(0);
 
   // Load hero image
   useEffect(() => {
@@ -113,7 +113,7 @@ export function SunsetStage({ children }: Props) {
 
       // ─── Sky layer ────────────────────────────────────────────────────────
       // Color shifts ember → indigo as t increases.
-      const horizonY = lerp(h * 0.62, h * 1.15, smoothstep(0.4, 0.85, t));
+      const horizonY = lerp(h * 0.42, h * 1.08, smoothstep(0.35, 0.85, t));
       const sky = ctx.createLinearGradient(0, 0, 0, h);
       // Top of sky
       sky.addColorStop(0, mix("#1a0f2e", "#0a0420", smoothstep(0.5, 1, t)));
@@ -170,7 +170,7 @@ export function SunsetStage({ children }: Props) {
       const img = imgRef.current;
       if (img) {
         // Grass slides off bottom as we tunnel up.
-        const grassY = lerp(0, h * 1.1, smoothstep(0.5, 0.92, t));
+        const grassY = lerp(-h * 0.22, h * 1.1, smoothstep(0.5, 0.92, t));
         const grassParallaxX = (cx - 0.5) * 24;
         const grassParallaxY = (cy - 0.5) * 12;
         const scale = lerp(1.05, 1.18, smoothstep(0.2, 0.55, t));
@@ -218,10 +218,10 @@ export function SunsetStage({ children }: Props) {
       </div>
       {/* Scroll progress hint, fades when t > 0.05 */}
       <div
-        className="pointer-events-none absolute bottom-6 left-1/2 z-20 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-bone/60 font-mono transition-opacity duration-500"
+        className="pointer-events-none absolute bottom-4 left-1/2 z-20 w-[min(18rem,calc(100vw-2rem))] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.26em] leading-relaxed text-bone/60 font-mono transition-opacity duration-500"
         style={{ opacity: tState < 0.04 ? 1 : 0 }}
       >
-        scroll · drag · type — no buttons
+        wheel · drag · type — no scrolling
       </div>
     </div>
   );
