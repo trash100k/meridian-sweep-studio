@@ -3,7 +3,7 @@
 // Feels like coasting a convertible — not snapping between sections.
 import { useEffect, useRef } from "react";
 
-const DEFAULT_STOPS = [0, 0.25, 0.55, 0.8];
+const DEFAULT_STOPS = [0, 0.28, 0.58, 0.88];
 
 type Options = {
   // Pixels of accumulated input to traverse t = 0 → 1.
@@ -138,8 +138,8 @@ export function useScrollJack({
     let alive = true;
 
     const FRICTION = 0.94;      // velocity decay per frame
-    const MAGNET_RADIUS = 0.11; // in t-units
-    const MAGNET_STRENGTH = 0.42; // how hard idle attractor pulls
+    const MAGNET_RADIUS = 0.09; // in t-units
+    const MAGNET_STRENGTH = 0.55; // how hard idle attractor pulls
     const IDLE_MS = 260;        // ms after last input before magnets engage
     const RUBBER = 0.18;        // overshoot decay at ends
 
