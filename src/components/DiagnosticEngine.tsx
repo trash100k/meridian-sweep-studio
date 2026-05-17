@@ -339,69 +339,6 @@ function hex(h: string): [number, number, number] {
   return [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)];
 }
 
-
-  if (stage === "report" && result) {
-    return <Report result={result} phone={phone} setPhone={setPhone} submitPhone={submitPhone} error={error} />;
-  }
-
-  if (stage === "thanks") {
-    return (
-      <div className="text-center py-2">
-        <p className="font-display text-3xl md:text-4xl text-bone mb-3">
-          We've got it.
-        </p>
-        <p className="text-bone/70 text-sm">
-          {BUSINESS.shortName} will call within one business day to walk your yard.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={submit} className="space-y-6">
-      <div>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-bone/60 font-mono mb-3">
-          Free soil diagnostic · 20 seconds
-        </p>
-        <p className="font-display text-3xl md:text-4xl text-bone leading-[1.05] text-balance">
-          What's actually under your grass?
-        </p>
-      </div>
-      <div className="space-y-1">
-        <input
-          required
-          inputMode="numeric"
-          maxLength={5}
-          pattern="\d{5}"
-          placeholder="Zip code"
-          value={zip}
-          onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
-          className="liquid-input"
-          aria-label="Zip code"
-        />
-        <input
-          required
-          maxLength={200}
-          placeholder="Property address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          className="liquid-input"
-          aria-label="Property address"
-        />
-      </div>
-      {error && <p className="text-sm text-destructive">{error}</p>}
-      <div className="flex items-center justify-between gap-4 pt-2">
-        <p className="text-[11px] text-bone/50 font-mono">
-          No phone required. No spam.
-        </p>
-        <button type="submit" className="liquid-pill">
-          Read my soil →
-        </button>
-      </div>
-    </form>
-  );
-}
-
 function Report({
   result,
   phone,
