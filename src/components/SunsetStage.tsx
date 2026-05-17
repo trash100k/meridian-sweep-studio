@@ -342,14 +342,19 @@ function drawGrassPhoto(
   scale: number,
   t: number,
 ) {
-  // Cover-fit the image into the bottom half, then offset by yOffset.
-  const targetH = h * 0.7 * scale;
+  // Cover-fit the image full-bleed across the bottom of the stage.
+  const baseH = h * 1.05 * scale;
   const ratio = img.width / img.height;
-  const drawW = targetH * ratio;
-  const drawH = targetH;
-  // Anchor bottom-center
+  let drawW = baseH * ratio;
+  let drawH = baseH;
+  // Guarantee horizontal cover — never letter-box the sides.
+  if (drawW < w * 1.1) {
+    drawW = w * 1.1;
+    drawH = drawW / ratio;
+  }
+  // Anchor bottom-center, biased slightly past the bottom so the foreground crops cleanly.
   const x = (w - drawW) / 2 + xParallax;
-  const y = h - drawH + yOffset;
+  const y = h - drawH * 0.92 + yOffset;
   ctx.save();
   // Slight golden tint that fades in early acts
   ctx.globalAlpha = 1;
