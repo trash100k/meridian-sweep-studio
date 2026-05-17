@@ -20,7 +20,7 @@ export type ScrollJackHandle = {
 };
 
 export function useScrollJack({
-  travel = 1350,
+  travel = 4200,
   stops = DEFAULT_STOPS,
   enabled = true,
   onChange,
@@ -56,8 +56,11 @@ export function useScrollJack({
     // A nudge from user input — adds velocity, doesn't teleport.
     const addInput = (dy: number, scale = 0.9) => {
       lastInputRef.current = performance.now();
+      // Launch friction: first beats of the story shouldn't rocket past the opening.
+      const tNow = posRef.current / travel;
+      const launchDamp = tNow < 0.02 ? 0.55 : tNow < 0.06 ? 0.78 : 1;
       // Scale wheel pixels into a comfortable velocity range.
-      velRef.current += dy * scale * 0.09;
+      velRef.current += dy * scale * 0.09 * launchDamp;
       // Cap velocity so a furious scroll doesn't shoot past everything.
       const maxV = 46;
       if (velRef.current > maxV) velRef.current = maxV;
@@ -135,9 +138,9 @@ export function useScrollJack({
     let alive = true;
 
     const FRICTION = 0.94;      // velocity decay per frame
-    const MAGNET_RADIUS = 0.09; // in t-units
-    const MAGNET_STRENGTH = 0.28; // how hard idle attractor pulls
-    const IDLE_MS = 360;        // ms after last input before magnets engage
+    const MAGNET_RADIUS = 0.11; // in t-units
+    const MAGNET_STRENGTH = 0.42; // how hard idle attractor pulls
+    const IDLE_MS = 260;        // ms after last input before magnets engage
     const RUBBER = 0.18;        // overshoot decay at ends
 
     const tick = (now: number) => {

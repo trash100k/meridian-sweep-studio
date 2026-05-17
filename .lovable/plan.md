@@ -1,46 +1,66 @@
-## Sunset Tunnel — Scroll-Jacked Joyride
+## Goal
 
-No page scroll. The wheel/trackpad/touch/arrow keys feed a single progress value `t ∈ [0,1]` that drives a cinematic 4-act journey. Scroll feels like steering a convertible into a sunset, not fighting a page.
+Make the homepage feel like a controlled cinematic joyride instead of rushing straight to the lead form:
 
-### Joyride feel (the part that matters)
+- Copy must be readable immediately and at each act.
+- The wheel/trackpad journey must settle into story beats.
+- The lead form must arrive only after the story lands.
+- The grass/sunset photo must feel full-bleed and cinematic again, not small.
 
-- **Body locked**: `overflow: hidden` on `html, body`. Hero is `position: fixed; inset: 0`. Nothing scrolls in the browser sense.
-- **Momentum integrator**: wheel/touch deltas add to `targetT` with friction 0.92. `currentT` springs toward `targetT` (stiffness 0.08, damping 0.85) in one rAF loop. Result = gliding, not snapping.
-- **Magnetic act stops**: gentle attractor wells at t = 0.0, 0.25, 0.55, 0.80. When |velocity| < 0.0008 within ±0.06 of a stop, `targetT` eases to it. You can blow past with intent; idle hands settle into the next vista.
-- **Rubber-band ends**: `t` clamps [0,1] with overshoot decay so reaching the form doesn't feel like a wall.
-- **Scrub backward freely**: same physics in reverse. The journey is reversible.
-- **Reduced motion**: `prefers-reduced-motion` → instant jumps between acts via PageDown/Up, no spring, no parallax.
-- **Keyboard**: ArrowDown/Space advance one act; ArrowUp retreats; Tab jumps `t → 0.85` and focuses the form (a11y escape hatch).
-- **Touch**: vertical drag → `targetT` delta; flick adds momentum.
+## Changes
 
-### The four acts (driven by `t`)
+### 1. Slow and stabilize the scroll-jack timing
 
+In `src/hooks/useScrollJack.ts`:
+
+- Increase the travel distance from `1350` to about `4200`, so one flick no longer jumps from hero to form.
+- Strengthen magnetic stops so the journey catches at the act positions: `0`, `0.25`, `0.55`, `0.80`.
+- Reduce the idle delay slightly so the camera settles after the user pauses.
+- Add gentle launch friction near `t = 0`, so the first interaction does not rocket past the opening copy.
+
+### 2. Fix copy visibility and act timing
+
+In `src/routes/index.tsx`:
+
+- Replace the current single-peak fade with a plateau fade: each act fades in, stays fully visible, then fades out.
+- Make Act I full opacity at page load instead of starting half-transparent and blurred.
+- Align acts to the magnetic stops:
+
+```text
+Act I    readable immediately, holds before fading
+Act II   red clay copy holds around the first stop
+Act III  steward copy holds before the form
+Act IV   glass form appears only near the end
 ```
-t=0.00  Ground       low camera, sun on horizon, grass blowing
-t=0.25  Red Clay     soil cross-section rises, copy about Meridian's red dirt
-t=0.55  Tunnel       camera tilts up, god-ray straightens vertical
-t=0.80  Glass        liquid-glass diagnostic card surfaces in the sunset
-```
 
-Each act blends with the next over a 0.15-wide window — never a hard cut.
+### 3. Delay the lead form
 
-### Cursor reactivity (the "playing with you" part)
+In `src/routes/index.tsx`:
 
-- Sky parallax −6px, grass +18px, soil +4px following cursor.
-- Sun bloom intensifies as cursor approaches it.
-- God-ray endpoint spring-tracks cursor (lerp 0.12) until t > 0.55, then locks vertical.
-- Liquid-glass card tilts ±4° on cursor and shows a soft spotlight beneath the pointer.
+- Move form reveal start later, from around `t=0.70` to around `t=0.82`.
+- Only allow form pointer interactions once it is substantially visible.
+- Delay the footer/phone reveal until the glass form act.
 
-### Files
+### 4. Fix the photo scale
 
-- New: `src/components/SunsetStage.tsx`, `src/components/LiquidGlassCard.tsx`, `src/hooks/useScrollJack.ts`
-- Edit: `src/routes/index.tsx` (replace body with `<SunsetStage />`), `src/routes/__root.tsx` (overflow lock + SVG `feTurbulence/feDisplacementMap` defs), `src/styles.css` (utils + keyframes), `src/components/DiagnosticEngine.tsx` (visual shell only — no logic change)
-- Delete: `src/components/GrassSweep.tsx`
+In `src/components/SunsetStage.tsx`:
 
-### Out of scope
+- Enlarge the grass/sunset photo draw area so it covers the lower hero properly at the current preview size.
+- Anchor it lower and wider so it reads as cinematic foreground, not a small inserted image.
+- Keep the tunnel transition, but start from a bigger full-bleed grass layer.
 
-WebGL/Three.js, audio, additional routes, payments, business logic changes.
+## Files to edit
 
----
+- `src/hooks/useScrollJack.ts`
+- `src/routes/index.tsx`
+- `src/components/SunsetStage.tsx`
 
-Hit **Implement plan** and I'll build it.
+## Validation
+
+After implementation, check the preview behavior:
+
+- Initial load shows readable copy.
+- First wheel/trackpad input does not skip straight to the form.
+- Each act can be seen before the next one.
+- The form is delayed until the final act.
+- The photo fills the hero foreground again.
