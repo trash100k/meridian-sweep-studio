@@ -118,7 +118,7 @@ function Index() {
             {/* Act IV — liquid glass form, center */}
             <div
               className="absolute inset-0 z-30 flex items-center justify-center px-4"
-              style={{ pointerEvents: act4Reveal > 0.4 ? "auto" : "none" }}
+              style={{ pointerEvents: act4Reveal > 0.6 ? "auto" : "none" }}
             >
               <LiquidGlassCard reveal={act4Reveal} className="w-full max-w-lg">
                 <DiagnosticEngine />
@@ -128,7 +128,7 @@ function Index() {
             {/* Tiny footer credit */}
             <footer
               className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/40 transition-opacity duration-500"
-              style={{ opacity: t > 0.78 ? 1 : 0 }}
+              style={{ opacity: t > 0.85 ? 1 : 0 }}
             >
               <span>{BUSINESS.phone}</span>
               <span>Powered by SoilGrids · ISRIC</span>
