@@ -143,10 +143,10 @@ function Index() {
 function ActLayer({ opacity, children }: { opacity: number; children: React.ReactNode }) {
   return (
     <div
-      className="absolute inset-0 flex flex-col justify-start pt-28 md:justify-center md:pt-0"
+      className="absolute inset-0 flex items-center"
       style={{
         opacity,
-        filter: `blur(${(1 - opacity) * 14}px)`,
+        filter: `blur(${(1 - opacity) * 10}px)`,
         transform: `translateY(${(1 - opacity) * 12}px)`,
         transition: "opacity 200ms linear, filter 200ms linear, transform 200ms linear",
         pointerEvents: opacity > 0.5 ? "auto" : "none",
