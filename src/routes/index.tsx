@@ -31,21 +31,24 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-// Smooth crossfade helper
-const fade = (t: number, start: number, peak: number, end: number) => {
-  if (t <= start || t >= end) return 0;
-  if (t < peak) return (t - start) / (peak - start);
-  return 1 - (t - peak) / (end - peak);
+// Plateau fade: ramps in over [in0,in1], holds at 1 across [in1,out0], ramps out over [out0,out1].
+const fade = (t: number, in0: number, in1: number, out0: number, out1: number) => {
+  if (t <= in0) return in0 === in1 ? 1 : 0;
+  if (t < in1) return (t - in0) / (in1 - in0);
+  if (t <= out0) return 1;
+  if (t < out1) return 1 - (t - out0) / (out1 - out0);
+  return 0;
 };
 
 function Index() {
   return (
     <SunsetStage>
       {({ t, setT }) => {
-        const act1 = fade(t, -0.05, 0.06, 0.28);
-        const act2 = fade(t, 0.18, 0.32, 0.55);
-        const act3 = fade(t, 0.48, 0.62, 0.82);
-        const act4Reveal = Math.max(0, Math.min(1, (t - 0.7) / 0.18));
+        // Act I is fully visible at rest (in0 === in1 === 0).
+        const act1 = fade(t, 0, 0, 0.18, 0.28);
+        const act2 = fade(t, 0.20, 0.30, 0.48, 0.58);
+        const act3 = fade(t, 0.50, 0.60, 0.74, 0.82);
+        const act4Reveal = Math.max(0, Math.min(1, (t - 0.82) / 0.1));
 
         return (
           <div className="relative h-full w-full">
