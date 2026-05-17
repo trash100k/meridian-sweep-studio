@@ -40,15 +40,18 @@ const fade = (t: number, in0: number, in1: number, out0: number, out1: number) =
   return 0;
 };
 
+// Snappy attack, soft tail — Apple-style.
+const easeOutQuint = (x: number) => 1 - Math.pow(1 - x, 5);
+
 function Index() {
   return (
     <SunsetStage>
       {({ t, setT }) => {
         // Act I is fully visible at rest (in0 === in1 === 0).
-        const act1 = fade(t, 0, 0, 0.18, 0.28);
-        const act2 = fade(t, 0.20, 0.30, 0.48, 0.58);
-        const act3 = fade(t, 0.50, 0.60, 0.74, 0.82);
-        const act4Reveal = Math.max(0, Math.min(1, (t - 0.82) / 0.1));
+        const act1 = fade(t, 0, 0, 0.16, 0.24);
+        const act2 = fade(t, 0.20, 0.26, 0.36, 0.46);
+        const act3 = fade(t, 0.44, 0.52, 0.66, 0.76);
+        const act4Reveal = Math.max(0, Math.min(1, (t - 0.80) / 0.1));
 
         return (
           <div className="relative h-full w-full">
@@ -118,7 +121,7 @@ function Index() {
             {/* Act IV — liquid glass form, center */}
             <div
               className="absolute inset-0 z-30 flex items-center justify-center px-4"
-              style={{ pointerEvents: act4Reveal > 0.6 ? "auto" : "none" }}
+              style={{ pointerEvents: act4Reveal > 0.5 ? "auto" : "none" }}
             >
               <LiquidGlassCard reveal={act4Reveal} className="w-full max-w-lg">
                 <DiagnosticEngine />
@@ -128,7 +131,7 @@ function Index() {
             {/* Tiny footer credit */}
             <footer
               className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/40 transition-opacity duration-500"
-              style={{ opacity: t > 0.85 ? 1 : 0 }}
+              style={{ opacity: t > 0.86 ? 1 : 0 }}
             >
               <span>{BUSINESS.phone}</span>
               <span>Powered by SoilGrids · ISRIC</span>
@@ -141,15 +144,17 @@ function Index() {
 }
 
 function ActLayer({ opacity, children }: { opacity: number; children: React.ReactNode }) {
+  const eased = easeOutQuint(Math.max(0, Math.min(1, opacity)));
   return (
     <div
       className="absolute inset-0 flex items-center"
       style={{
-        opacity,
-        filter: `blur(${(1 - opacity) * 10}px)`,
-        transform: `translateY(${(1 - opacity) * 12}px)`,
-        transition: "opacity 200ms linear, filter 200ms linear, transform 200ms linear",
-        pointerEvents: opacity > 0.5 ? "auto" : "none",
+        opacity: eased,
+        filter: `blur(${(1 - eased) * 6}px)`,
+        transform: `translateY(${(1 - eased) * 8}px)`,
+        transition:
+          "opacity 360ms cubic-bezier(0.22, 1, 0.36, 1), filter 360ms cubic-bezier(0.22, 1, 0.36, 1), transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+        pointerEvents: eased > 0.5 ? "auto" : "none",
       }}
     >
       <div>{children}</div>
