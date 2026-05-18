@@ -88,6 +88,7 @@ export function DiagnosticEngine() {
           inputMode="numeric"
           maxLength={5}
           pattern="\d{5}"
+          autoComplete="postal-code"
           placeholder="Zip code"
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
@@ -97,6 +98,7 @@ export function DiagnosticEngine() {
         <input
           required
           maxLength={200}
+          autoComplete="street-address"
           placeholder="Property address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
@@ -106,7 +108,7 @@ export function DiagnosticEngine() {
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
       <div className="flex items-center justify-between gap-4 pt-2">
-        <p className="text-[11px] text-bone/50 font-mono">
+        <p className="text-[11px] text-bone/70 font-mono">
           No phone required. No spam.
         </p>
         <button type="submit" className="liquid-pill">
