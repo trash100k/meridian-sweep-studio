@@ -1,103 +1,59 @@
-## Goal
+# Final polish — readability + stress-proof
 
-Three coordinated fixes for the homepage joyride:
+Tighten contrast against the sunset background, lock in defensive guards so the experience can't break under stress (resize, fast scroll, slow network, reduced motion, mobile), and finalize copy hierarchy.
 
-1. **Cinematic loading sequence** — while the Silent Siphon diagnostic runs, show a sunset slowly descending behind a hill silhouette, with copy beats keyed to the sun's altitude. If the server takes longer than expected, the sun "pauses" just above the ridge with reassuring copy instead of dropping off-screen.
-2. **Apple-snappy spring crossfades** — replace linear act fades with a real spring curve.
-3. **Anchor alignment for Acts II and III** — "The Red Clay Problem" and "The Stewards" must hold exactly on their scroll magnets.
+## 1. Readable text on sunset background
 
----
+The brightest sky band sits behind Acts I–III copy at small viewports. Hero text needs guaranteed contrast.
 
-## 1. Sunset-behind-hill loader (the headline change)
+- `src/routes/index.tsx`: wrap each `ActLayer` copy block in a soft **readability scrim** — a localized radial gradient `linear-gradient(105deg, rgba(8,4,12,0.55) 0%, rgba(8,4,12,0.28) 55%, transparent 85%)` that sits behind the headline/body but doesn't reach the screen edges. Adds ~3:1 → 7:1 contrast without visible boxes.
+- Bump body copy from `text-bone/80` → `text-bone/90` and the small mono label intros from `text-bone/60` → `text-bone/75`.
+- Add a subtle `text-shadow: 0 1px 24px rgba(8,4,12,0.45)` utility (`.copy-shadow`) and apply to the display headlines only — keeps Instrument Serif crisp on the ember band.
+- Footer credit goes from `text-bone/40` → `text-bone/65` once revealed; bump header service-area label from `text-bone/60` → `text-bone/80`.
+- Sunset loader: status line is white on dusk sky — fine, but escalation copy ("Letting the sun rest…") sits on the bloom. Add the same scrim treatment under the copy block + bump progress timestamp text from `text-bone/50` → `text-bone/75`.
 
-In `src/components/DiagnosticEngine.tsx`, replace the current step list loader with a small self-contained `SunsetLoader` component.
+## 2. Stronger vignette under copy zone
 
-**Visual composition** (pure SVG inside the existing glass card — no canvas, no new deps):
+In `SunsetStage.tsx`, the bottom-right of Act II/III brightens too much when the sun centers. Bias the final vignette toward the left third where copy lives:
 
-```text
-┌──────────────────────────────────────────────┐
-│   peach → indigo sky gradient                │
-│                                              │
-│            ◯  sun (descends slowly)          │
-│         ╲ god-rays                           │
-│   ───────────────  horizon haze              │
-│  ╱╲      ╱──────╲       ╱╲   hill silhouette │
-│ ╱  ╲____╱        ╲_____╱  ╲                  │
-│                                              │
-│   READING YOUR DIRT                          │
-│   ▓▓▓▓▓▓▓▓▓▓░░░░░░  62%   t+04s              │
-└──────────────────────────────────────────────┘
-```
+- Add a second left-anchored vignette pass: `radial-gradient at 25% 50%, transparent 35%, rgba(8,4,12,0.45) 85%` composited after the existing centered vignette. Costs one extra fillRect per frame.
 
-- **Sky**: vertical gradient `#ffb070 → #a64a2c → #3a1d3a → #0a0420`, animated by shifting gradient stops as `progress` climbs (`0 → 1`).
-- **Sun**: a circle with a soft radial bloom that translates from `y = 18%` down to `y = 82%` (just clipped by the hill silhouette) on an ease curve. At slow-path (`elapsed > 14s`), sun parks at `y = 70%` (right at the ridge) and gains a gentle 2 s breathing scale — feels like it's waiting, not stuck.
-- **Hill silhouette**: a single SVG `<path>` of two soft Mississippi rolling hills in `--loam` color, with a thin highlight stroke catching the last light. Static — only the sun moves behind it.
-- **God-rays**: three faint diagonal screen-blend lines emanating from the sun, opacity ramps `0 → 0.6` as the sun reaches the horizon.
-- **Stars** (very subtle): 5–7 tiny dots fade in only after `progress > 0.85` (full dusk).
-- **Progress bar**: thin 1px line beneath the scene, fills with a `--ember → --wheat` gradient. Eases asymptotically toward 95 % so it never appears "done" before the server resolves; snaps to 100 % over 250 ms on success.
+## 3. Stress-proof the scroll-jack
 
-**Copy beats keyed to elapsed time** (single line under the scene, crossfades with spring easing):
+`useScrollJack.ts` already has friction + magnets, but a few stress cases:
 
-```text
-0 – 6 s    Reading your dirt…
-6 – 14 s   Pulling deeper records — Meridian clay is thick today.
-14 – 22 s  Letting the sun rest on the ridge while we finish.
-22 s +     Still working. [Keep waiting]  [Try again]
-```
+- **Tab switch / long sleep**: `visibilitychange` cancels rAF but doesn't reset `last`/`lastInputRef`. On return, the first frame's `dtMs` is clamped to 48 (good), but a queued wheel event can spike velocity. Reset `velRef.current = 0` and bump `lastInputRef.current = now` on resume.
+- **Touch flick on iOS Safari**: `touchVel` calc divides by `dt` which can be 1ms → unbounded. Cap `touchVel` to ±20.
+- **Rapid resize**: canvas resize listener has no rAF throttle. Wrap in `requestAnimationFrame` debounce to avoid layout thrash.
+- **Reduced-motion**: confirm `prefersReduced` path in `useScrollJack` still permits keyboard nav (it does — keys call `setTargetT` directly, fine).
 
-**Behavior**:
-- Drive everything off a single `elapsed` state updated via `requestAnimationFrame` (no setTimeout chain).
-- `progress = min(0.95, easeOutCubic(elapsed / 6000))` for the first phase; after 6 s ease asymptotically toward 0.95.
-- On server resolve: jump progress to 1, hold scene for 250 ms (sun just dipping below ridge, final indigo wash), then transition to the report.
-- On server error: keep the scene, show inline error text + a single "Try again" pill that re-runs `submit` with the existing zip/address (no need to retype).
-- Respect `prefers-reduced-motion`: skip the rAF loop, render a static dusk frame with the copy and a determinate-looking bar.
+## 4. Stress-proof the diagnostic loader
 
-## 2. Apple-snappy spring crossfades
+`DiagnosticEngine.tsx` `SunsetLoader`:
 
-In `src/routes/index.tsx`'s `ActLayer`:
+- Add hard ceiling: after `seconds > 45`, stop the rAF loop (just hold the frame) so a stalled tab doesn't burn CPU indefinitely.
+- Error path: currently `setStage("idle")` drops user back to form with `error` set, but the error message isn't rendered in `idle` form — it is, on line 113. Confirm and keep.
+- `onRetry` resets `startRef.current = performance.now()` inside the loader instead of just re-calling `submit` (otherwise the new attempt inherits the old elapsed counter visually for one paint). Wire a `key` bump on the loader from the parent on retry.
 
-- Replace `transition: ... 200ms linear` with:
-  ```ts
-  transition:
-    "opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
-     filter 360ms cubic-bezier(0.22, 1, 0.36, 1),
-     transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1)";
-  ```
-- Reduce blur max `10px → 6px` and y-translate `12px → 8px` — motion felt, not seen.
-- Apply `easeOutQuint` to opacity before assigning, for snappy-attack / soft-tail feel.
+## 5. Defensive UI polish
 
-Reuse the same easing for the loader's copy crossfades so motion language matches.
+- `index.tsx`: when `act4Reveal > 0.5`, also push `aria-hidden="true"` onto Act I–III layers so screen readers don't read three hidden headlines.
+- Add `prefers-reduced-motion` short-circuit in `ActLayer` — drop blur and translate, keep opacity only.
+- `LiquidGlassCard`: clamp `translateY` to `0` when `reveal >= 0.99` so sub-pixel jitter doesn't blur the form text.
+- Form inputs: add `autoComplete="postal-code"` and `autoComplete="street-address"` for browser autofill.
 
-## 3. Realign acts to magnetic stops
+## 6. Mobile (773×541 viewport and below)
 
-In `src/hooks/useScrollJack.ts`:
+- Hero headline (`text-5xl md:text-7xl lg:text-8xl`) wraps to 4 lines on narrow screens, eating the sun. Tighten mobile to `text-4xl` and add `pr-4` so the ember word doesn't run into the right edge.
+- Move the "wheel · drag · type" hint up to `bottom-6` so it doesn't collide with iOS home indicator.
 
-- Move `DEFAULT_STOPS` from `[0, 0.25, 0.55, 0.80]` to `[0.00, 0.28, 0.58, 0.88]`.
-- `MAGNET_RADIUS`: `0.11 → 0.09` (tighter capture window).
-- `MAGNET_STRENGTH`: `0.42 → 0.55` (snappier lock).
+## Files touched
 
-In `src/routes/index.tsx`, realign plateau fades so each act's hold zone is centered on its stop:
+- `src/routes/index.tsx` — scrims, copy opacity bumps, reduced-motion guard, aria-hidden on hidden acts, mobile sizing
+- `src/components/DiagnosticEngine.tsx` — loader scrim, retry reset, 45s ceiling, copy opacity bumps
+- `src/components/SunsetStage.tsx` — left-biased vignette pass, resize rAF throttle
+- `src/components/LiquidGlassCard.tsx` — clamp translate at full reveal
+- `src/hooks/useScrollJack.ts` — visibility resume reset, touchVel cap
+- `src/styles.css` — `.copy-shadow`, `.readability-scrim` utilities
 
-```text
-Act I    fade(t, 0.00, 0.00, 0.16, 0.24)
-Act II   fade(t, 0.20, 0.26, 0.36, 0.46)   center 0.28
-Act III  fade(t, 0.44, 0.52, 0.66, 0.76)   center 0.58
-Act IV   reveal ramp 0.80 → 0.90          center 0.88
-```
-
-Phone/footer reveal moves to `t > 0.86`. Form pointer-events unlock at `act4Reveal > 0.5`.
-
-## Files to edit
-
-- `src/components/DiagnosticEngine.tsx`  (new internal `SunsetLoader`, slow-path UI)
-- `src/routes/index.tsx`  (fade windows, spring easing)
-- `src/hooks/useScrollJack.ts`  (stops, magnet tuning)
-
-No new dependencies. Hill + sun rendered as inline SVG using existing design tokens (`--ember`, `--wheat`, `--loam`, `--bone`).
-
-## Validation
-
-- Submitting the diagnostic shows the sun descending behind the hill, copy crossfading on cue, never appearing stuck — even at 20 s.
-- An induced error surfaces a "Try again" pill that re-runs without re-entering data.
-- Idle scroll snaps so Act II and Act III headlines sit perfectly centered with no overlap from neighbors.
-- Crossfades feel snappy in, soft out — no linear mush.
+No new dependencies. No backend changes. No new routes.

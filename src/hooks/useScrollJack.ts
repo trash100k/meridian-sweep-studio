@@ -86,8 +86,11 @@ export function useScrollJack({
       const y = e.touches[0]?.clientY ?? touchY;
       const now = performance.now();
       const dy = touchY - y;
-      const dt = Math.max(1, now - touchT);
-      touchVel = (dy / dt) * 16; // px per frame
+      const dt = Math.max(8, now - touchT);
+      let tv = (dy / dt) * 16;
+      if (tv > 20) tv = 20;
+      else if (tv < -20) tv = -20;
+      touchVel = tv;
       touchY = y;
       touchT = now;
       // Direct drag — small velocity injection
@@ -203,6 +206,8 @@ export function useScrollJack({
         cancelAnimationFrame(raf);
       } else {
         last = performance.now();
+        lastInputRef.current = last;
+        velRef.current = 0;
         raf = requestAnimationFrame(tick);
       }
     };
