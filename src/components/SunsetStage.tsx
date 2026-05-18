@@ -242,7 +242,7 @@ export function SunsetStage({ children }: Props) {
       </div>
       {/* Scroll progress hint, fades when t > 0.05 */}
       <div
-        className="pointer-events-none absolute bottom-4 left-1/2 z-20 w-[min(18rem,calc(100vw-2rem))] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.26em] leading-relaxed text-bone/60 font-mono transition-opacity duration-500"
+        className="pointer-events-none absolute bottom-6 left-1/2 z-20 w-[min(18rem,calc(100vw-2rem))] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.26em] leading-relaxed text-bone/75 font-mono copy-shadow transition-opacity duration-500"
         style={{ opacity: tState < 0.04 ? 1 : 0 }}
       >
         wheel · drag · type — no scrolling
