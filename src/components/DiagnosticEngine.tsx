@@ -7,6 +7,7 @@ type DiagnosticResult = Awaited<ReturnType<typeof runDiagnostic>>;
 type Stage = "idle" | "loading" | "report" | "thanks";
 
 const SPRING = "cubic-bezier(0.22, 1, 0.36, 1)";
+const LOADER_CEILING_MS = 45000;
 
 export function DiagnosticEngine() {
   const run = useServerFn(runDiagnostic);
@@ -18,10 +19,12 @@ export function DiagnosticEngine() {
   const [stage, setStage] = useState<Stage>("idle");
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loaderKey, setLoaderKey] = useState(0);
 
   const submit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     setError(null);
+    setLoaderKey((k) => k + 1);
     setStage("loading");
     try {
       const r = await run({ data: { zip: zip.trim(), address: address.trim() } });
@@ -49,7 +52,7 @@ export function DiagnosticEngine() {
   };
 
   if (stage === "loading") {
-    return <SunsetLoader onRetry={() => submit()} />;
+    return <SunsetLoader key={loaderKey} onRetry={() => submit()} />;
   }
 
   if (stage === "report" && result) {
