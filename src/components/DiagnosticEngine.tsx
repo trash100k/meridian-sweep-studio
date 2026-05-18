@@ -7,6 +7,7 @@ type DiagnosticResult = Awaited<ReturnType<typeof runDiagnostic>>;
 type Stage = "idle" | "loading" | "report" | "thanks";
 
 const SPRING = "cubic-bezier(0.22, 1, 0.36, 1)";
+const LOADER_CEILING_MS = 45000;
 
 export function DiagnosticEngine() {
   const run = useServerFn(runDiagnostic);
@@ -18,10 +19,12 @@ export function DiagnosticEngine() {
   const [stage, setStage] = useState<Stage>("idle");
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loaderKey, setLoaderKey] = useState(0);
 
   const submit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     setError(null);
+    setLoaderKey((k) => k + 1);
     setStage("loading");
     try {
       const r = await run({ data: { zip: zip.trim(), address: address.trim() } });
@@ -49,7 +52,7 @@ export function DiagnosticEngine() {
   };
 
   if (stage === "loading") {
-    return <SunsetLoader onRetry={() => submit()} />;
+    return <SunsetLoader key={loaderKey} onRetry={() => submit()} />;
   }
 
   if (stage === "report" && result) {
@@ -85,6 +88,7 @@ export function DiagnosticEngine() {
           inputMode="numeric"
           maxLength={5}
           pattern="\d{5}"
+          autoComplete="postal-code"
           placeholder="Zip code"
           value={zip}
           onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
@@ -94,6 +98,7 @@ export function DiagnosticEngine() {
         <input
           required
           maxLength={200}
+          autoComplete="street-address"
           placeholder="Property address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
@@ -103,7 +108,7 @@ export function DiagnosticEngine() {
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
       <div className="flex items-center justify-between gap-4 pt-2">
-        <p className="text-[11px] text-bone/50 font-mono">
+        <p className="text-[11px] text-bone/70 font-mono">
           No phone required. No spam.
         </p>
         <button type="submit" className="liquid-pill">
@@ -135,7 +140,9 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
     let alive = true;
     const tick = () => {
       if (!alive) return;
-      setElapsed(performance.now() - startRef.current);
+      const e = performance.now() - startRef.current;
+      setElapsed(e);
+      if (e >= LOADER_CEILING_MS) return; // hard CPU ceiling
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -273,7 +280,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
         {lines.map((line, i) => (
           <p
             key={i}
-            className="absolute inset-0 font-display text-xl md:text-2xl text-bone leading-snug text-balance"
+            className="absolute inset-0 font-display text-xl md:text-2xl text-bone leading-snug text-balance copy-shadow"
             style={{
               opacity: i === phase ? 1 : 0,
               transform: `translateY(${i === phase ? 0 : 6}px)`,
@@ -297,7 +304,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
             }}
           />
         </div>
-        <div className="flex items-center justify-between text-[10px] font-mono text-bone/50">
+        <div className="flex items-center justify-between text-[10px] font-mono text-bone/75">
           <span>{Math.round(progress * 100)}%</span>
           <span>t+{Math.floor(seconds).toString().padStart(2, "0")}s</span>
         </div>
@@ -306,7 +313,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
       {/* Slow-path actions */}
       {phase === 3 && (
         <div className="flex items-center justify-end gap-3 pt-1">
-          <span className="text-[11px] font-mono text-bone/50">No data was lost.</span>
+          <span className="text-[11px] font-mono text-bone/70">No data was lost.</span>
           <button type="button" onClick={onRetry} className="liquid-pill">
             Try again
           </button>
