@@ -54,7 +54,7 @@ export function LiquidGlassCard({ children, className = "", visible = true, reve
   }, []);
 
   const opacity = Math.max(0, Math.min(1, reveal));
-  const translate = (1 - opacity) * 60;
+  const translate = opacity >= 0.99 ? 0 : (1 - opacity) * 60;
 
   return (
     <div

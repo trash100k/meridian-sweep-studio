@@ -59,11 +59,11 @@ function Index() {
             <header className="absolute inset-x-0 top-0 z-30 px-6 md:px-10 py-6 flex items-center justify-between">
               <button
                 onClick={() => setT(0)}
-                className="font-display text-xl text-bone tracking-wide hover:text-wheat transition"
+                className="font-display text-xl text-bone tracking-wide hover:text-wheat transition copy-shadow"
               >
                 {BUSINESS.shortName}
               </button>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-bone/60 font-mono">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-bone/80 font-mono copy-shadow">
                 {BUSINESS.serviceArea}
               </span>
             </header>
@@ -72,48 +72,54 @@ function Index() {
             <div className="absolute inset-0 z-20 flex items-center px-6 md:px-12 pointer-events-none">
               <div className="max-w-2xl w-full">
                 {/* Act I */}
-                <ActLayer opacity={act1}>
-                  <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] text-bone">
-                    Your lawn isn't dying.
-                    <br />
-                    <span className="text-ember">Your soil is suffocating.</span>
-                  </h1>
-                  <p className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
-                    A free, 20-second look at the dirt under your feet — before you spend another
-                    dollar on fertilizer that can't reach the roots.
-                  </p>
+                <ActLayer opacity={act1} hidden={act4Reveal > 0.5}>
+                  <div className="readability-scrim pr-4">
+                    <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] text-bone copy-shadow">
+                      Your lawn isn't dying.
+                      <br />
+                      <span className="text-ember">Your soil is suffocating.</span>
+                    </h1>
+                    <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
+                      A free, 20-second look at the dirt under your feet — before you spend another
+                      dollar on fertilizer that can't reach the roots.
+                    </p>
+                  </div>
                 </ActLayer>
 
                 {/* Act II */}
-                <ActLayer opacity={act2}>
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-ember mb-4 font-mono">
-                    The Red Clay Problem
-                  </p>
-                  <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone">
-                    Meridian sits on a sheet of <span className="text-ember">red Mississippi clay</span> that
-                    sheds water like a tarp.
-                  </h2>
-                  <p className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
-                    Your grass never had a chance. Most lawn services treat the blade. The damage is
-                    six inches deeper.
-                  </p>
+                <ActLayer opacity={act2} hidden={act4Reveal > 0.5}>
+                  <div className="readability-scrim pr-4">
+                    <p className="text-[11px] uppercase tracking-[0.3em] text-ember mb-4 font-mono copy-shadow">
+                      The Red Clay Problem
+                    </p>
+                    <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone copy-shadow">
+                      Meridian sits on a sheet of <span className="text-ember">red Mississippi clay</span> that
+                      sheds water like a tarp.
+                    </h2>
+                    <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
+                      Your grass never had a chance. Most lawn services treat the blade. The damage is
+                      six inches deeper.
+                    </p>
+                  </div>
                 </ActLayer>
 
                 {/* Act III */}
-                <ActLayer opacity={act3}>
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-wheat mb-4 font-mono">
-                    The Stewards
-                  </p>
-                  <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone">
-                    {BUSINESS.shortName} are the
-                    <br />
-                    <span className="text-wheat italic">stewards of your lawn</span> —
-                    <br />
-                    six inches deeper than anyone else looks.
-                  </h2>
-                  <p className="mt-6 text-lg md:text-xl text-bone/80 max-w-xl text-balance">
-                    Born and raised on Meridian dirt. Family-run. Honest pricing.
-                  </p>
+                <ActLayer opacity={act3} hidden={act4Reveal > 0.5}>
+                  <div className="readability-scrim pr-4">
+                    <p className="text-[11px] uppercase tracking-[0.3em] text-wheat mb-4 font-mono copy-shadow">
+                      The Stewards
+                    </p>
+                    <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone copy-shadow">
+                      {BUSINESS.shortName} are the
+                      <br />
+                      <span className="text-wheat italic">stewards of your lawn</span> —
+                      <br />
+                      six inches deeper than anyone else looks.
+                    </h2>
+                    <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
+                      Born and raised on Meridian dirt. Family-run. Honest pricing.
+                    </p>
+                  </div>
                 </ActLayer>
               </div>
             </div>
@@ -130,7 +136,7 @@ function Index() {
 
             {/* Tiny footer credit */}
             <footer
-              className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/40 transition-opacity duration-500"
+              className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/65 copy-shadow transition-opacity duration-500"
               style={{ opacity: t > 0.86 ? 1 : 0 }}
             >
               <span>{BUSINESS.phone}</span>
@@ -143,18 +149,23 @@ function Index() {
   );
 }
 
-function ActLayer({ opacity, children }: { opacity: number; children: React.ReactNode }) {
+function ActLayer({ opacity, hidden, children }: { opacity: number; hidden?: boolean; children: React.ReactNode }) {
   const eased = easeOutQuint(Math.max(0, Math.min(1, opacity)));
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return (
     <div
+      aria-hidden={hidden || eased < 0.05}
       className="absolute inset-0 flex items-center"
       style={{
         opacity: eased,
-        filter: `blur(${(1 - eased) * 6}px)`,
-        transform: `translateY(${(1 - eased) * 8}px)`,
-        transition:
-          "opacity 360ms cubic-bezier(0.22, 1, 0.36, 1), filter 360ms cubic-bezier(0.22, 1, 0.36, 1), transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
-        pointerEvents: eased > 0.5 ? "auto" : "none",
+        filter: prefersReduced ? undefined : `blur(${(1 - eased) * 6}px)`,
+        transform: prefersReduced ? undefined : `translateY(${(1 - eased) * 8}px)`,
+        transition: prefersReduced
+          ? "opacity 360ms cubic-bezier(0.22, 1, 0.36, 1)"
+          : "opacity 360ms cubic-bezier(0.22, 1, 0.36, 1), filter 360ms cubic-bezier(0.22, 1, 0.36, 1), transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+        pointerEvents: eased > 0.5 && !hidden ? "auto" : "none",
       }}
     >
       <div>{children}</div>
