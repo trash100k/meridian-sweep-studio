@@ -140,7 +140,9 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
     let alive = true;
     const tick = () => {
       if (!alive) return;
-      setElapsed(performance.now() - startRef.current);
+      const e = performance.now() - startRef.current;
+      setElapsed(e);
+      if (e >= LOADER_CEILING_MS) return; // hard CPU ceiling
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
