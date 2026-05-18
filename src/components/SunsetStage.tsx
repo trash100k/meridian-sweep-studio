@@ -93,7 +93,15 @@ export function SunsetStage({ children }: Props) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
-    window.addEventListener("resize", resize);
+    let resizeRaf = 0;
+    const onResize = () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        resize();
+      });
+    };
+    window.addEventListener("resize", onResize);
 
     let raf = 0;
     let alive = true;
@@ -177,7 +185,7 @@ export function SunsetStage({ children }: Props) {
         drawGrassPhoto(ctx, img, w, h, grassY + grassParallaxY, grassParallaxX, scale, t);
       }
 
-      // ─── Final atmosphere — vignette + slight noise ───────────────────────
+      // ─── Final atmosphere — vignette + left-biased copy scrim ──────────────
       const vignette = ctx.createRadialGradient(
         w * 0.5,
         h * 0.42,
@@ -191,6 +199,21 @@ export function SunsetStage({ children }: Props) {
       ctx.fillStyle = vignette;
       ctx.fillRect(0, 0, w, h);
 
+      // Left-anchored scrim — keeps copy zone readable through every act.
+      const copyScrim = ctx.createRadialGradient(
+        w * 0.22,
+        h * 0.5,
+        Math.min(w, h) * 0.05,
+        w * 0.22,
+        h * 0.5,
+        Math.max(w, h) * 0.7,
+      );
+      copyScrim.addColorStop(0, "rgba(8,4,12,0.48)");
+      copyScrim.addColorStop(0.5, "rgba(8,4,12,0.22)");
+      copyScrim.addColorStop(1, "rgba(8,4,12,0)");
+      ctx.fillStyle = copyScrim;
+      ctx.fillRect(0, 0, w, h);
+
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
@@ -198,7 +221,8 @@ export function SunsetStage({ children }: Props) {
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
+      window.removeEventListener("resize", onResize);
     };
   }, [imgReady]);
 
