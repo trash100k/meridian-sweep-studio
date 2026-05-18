@@ -280,7 +280,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
         {lines.map((line, i) => (
           <p
             key={i}
-            className="absolute inset-0 font-display text-xl md:text-2xl text-bone leading-snug text-balance"
+            className="absolute inset-0 font-display text-xl md:text-2xl text-bone leading-snug text-balance copy-shadow"
             style={{
               opacity: i === phase ? 1 : 0,
               transform: `translateY(${i === phase ? 0 : 6}px)`,
@@ -304,7 +304,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
             }}
           />
         </div>
-        <div className="flex items-center justify-between text-[10px] font-mono text-bone/50">
+        <div className="flex items-center justify-between text-[10px] font-mono text-bone/75">
           <span>{Math.round(progress * 100)}%</span>
           <span>t+{Math.floor(seconds).toString().padStart(2, "0")}s</span>
         </div>
@@ -313,7 +313,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
       {/* Slow-path actions */}
       {phase === 3 && (
         <div className="flex items-center justify-end gap-3 pt-1">
-          <span className="text-[11px] font-mono text-bone/50">No data was lost.</span>
+          <span className="text-[11px] font-mono text-bone/70">No data was lost.</span>
           <button type="button" onClick={onRetry} className="liquid-pill">
             Try again
           </button>
