@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SunsetStage } from "@/components/SunsetStage";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 import { DiagnosticEngine } from "@/components/DiagnosticEngine";
 import { BUSINESS } from "@/config/business";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -142,6 +143,16 @@ function Index() {
               <span>{BUSINESS.phone}</span>
               <span>Powered by SoilGrids · ISRIC</span>
             </footer>
+
+            {/* Skip-the-story link — appears once cinema is past Act II */}
+            <Link
+              to="/diagnostic"
+              className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 text-[10px] font-mono uppercase tracking-[0.25em] text-bone/70 hover:text-wheat transition-opacity duration-500 copy-shadow"
+              style={{ opacity: t > 0.04 && t < 0.78 ? 1 : 0, pointerEvents: t > 0.04 && t < 0.78 ? "auto" : "none" }}
+            >
+              Skip the story → run diagnostic
+            </Link>
+
           </div>
         );
       }}

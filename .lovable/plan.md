@@ -1,59 +1,100 @@
-# Final polish — readability + stress-proof
 
-Tighten contrast against the sunset background, lock in defensive guards so the experience can't break under stress (resize, fast scroll, slow network, reduced motion, mobile), and finalize copy hierarchy.
+# Turn Silent Siphon into a multi-page website
 
-## 1. Readable text on sunset background
+Keep the cinematic homepage intact. Add a hover-revealed glass nav, six new routes, and a dedicated diagnostic page so the form is deep-linkable while Act IV still closes the homepage scroll.
 
-The brightest sky band sits behind Acts I–III copy at small viewports. Hero text needs guaranteed contrast.
+## Site map
 
-- `src/routes/index.tsx`: wrap each `ActLayer` copy block in a soft **readability scrim** — a localized radial gradient `linear-gradient(105deg, rgba(8,4,12,0.55) 0%, rgba(8,4,12,0.28) 55%, transparent 85%)` that sits behind the headline/body but doesn't reach the screen edges. Adds ~3:1 → 7:1 contrast without visible boxes.
-- Bump body copy from `text-bone/80` → `text-bone/90` and the small mono label intros from `text-bone/60` → `text-bone/75`.
-- Add a subtle `text-shadow: 0 1px 24px rgba(8,4,12,0.45)` utility (`.copy-shadow`) and apply to the display headlines only — keeps Instrument Serif crisp on the ember band.
-- Footer credit goes from `text-bone/40` → `text-bone/65` once revealed; bump header service-area label from `text-bone/60` → `text-bone/80`.
-- Sunset loader: status line is white on dusk sky — fine, but escalation copy ("Letting the sun rest…") sits on the bloom. Add the same scrim treatment under the copy block + bump progress timestamp text from `text-bone/50` → `text-bone/75`.
+```
+/              Home — current Act I–IV sunset experience + nav reveal at top
+/diagnostic    Standalone Silent Siphon diagnostic (form + result, no scroll-jack)
+/services      Aeration, soil remediation, drainage, lawn rescue offerings
+/process       Diagnose → plan → restore → steward (4-step explainer)
+/results       Before/after grades, soil score lift, brief testimonial cards
+/about         Stewards, philosophy, service area (Meridian + ZIPs)
+/contact       Phone, email, contact form, service-area note
+/faq           Red clay, pricing tiers, scheduling, what to expect
+```
 
-## 2. Stronger vignette under copy zone
+Total: 8 routes (home + 7 sub-pages).
 
-In `SunsetStage.tsx`, the bottom-right of Act II/III brightens too much when the sun centers. Bias the final vignette toward the left third where copy lives:
+## Navigation pattern — "hidden until hover"
 
-- Add a second left-anchored vignette pass: `radial-gradient at 25% 50%, transparent 35%, rgba(8,4,12,0.45) 85%` composited after the existing centered vignette. Costs one extra fillRect per frame.
+A new `<SiteNav />` component lives in `__root.tsx` so every route gets it.
 
-## 3. Stress-proof the scroll-jack
+- **On `/`** (homepage): nav is fully hidden by default. Reveal when:
+  - cursor enters the top 80px of the viewport, OR
+  - `act4Reveal > 0.6` (form is showing), OR
+  - user scrolls/swipes on any non-home route (always visible there).
+- **On any other route**: nav is always visible, pinned top with a thin liquid-glass bar.
+- Style: same dusk palette, `bone/80` text, `text-shadow` from `.copy-shadow`, a soft `backdrop-blur` glass strip ~56px tall. Logo left ("Silent Siphon" wordmark in Instrument Serif), links right (Diagnostic, Services, Process, Results, About, Contact). Mobile (≤768px): collapses to a single menu button that opens a full-screen dusk overlay.
+- Spring motion: `transform: translateY(-100%)` → `0` with a 280ms cubic ease, matching the existing "apple snappy" feel.
 
-`useScrollJack.ts` already has friction + magnets, but a few stress cases:
+## Homepage changes
 
-- **Tab switch / long sleep**: `visibilitychange` cancels rAF but doesn't reset `last`/`lastInputRef`. On return, the first frame's `dtMs` is clamped to 48 (good), but a queued wheel event can spike velocity. Reset `velRef.current = 0` and bump `lastInputRef.current = now` on resume.
-- **Touch flick on iOS Safari**: `touchVel` calc divides by `dt` which can be 1ms → unbounded. Cap `touchVel` to ±20.
-- **Rapid resize**: canvas resize listener has no rAF throttle. Wrap in `requestAnimationFrame` debounce to avoid layout thrash.
-- **Reduced-motion**: confirm `prefersReduced` path in `useScrollJack` still permits keyboard nav (it does — keys call `setTargetT` directly, fine).
+- Mount `<SiteNav variant="home" />` at the top.
+- Act IV (form) stays exactly as today — it's the cinematic close.
+- Add a small "Skip the story → run diagnostic" link in the bottom corner that routes to `/diagnostic`. Fades in with the scroll hint.
+- Footer credit gets a secondary line of small nav links so the homepage is still self-sufficient for someone who scrolls all the way through.
 
-## 4. Stress-proof the diagnostic loader
+## /diagnostic page (new)
 
-`DiagnosticEngine.tsx` `SunsetLoader`:
+Direct route to the lead form without the scroll-jack so it's shareable, ad-linkable, and works on slow devices.
 
-- Add hard ceiling: after `seconds > 45`, stop the rAF loop (just hold the frame) so a stalled tab doesn't burn CPU indefinitely.
-- Error path: currently `setStage("idle")` drops user back to form with `error` set, but the error message isn't rendered in `idle` form — it is, on line 113. Confirm and keep.
-- `onRetry` resets `startRef.current = performance.now()` inside the loader instead of just re-calling `submit` (otherwise the new attempt inherits the old elapsed counter visually for one paint). Wire a `key` bump on the loader from the parent on retry.
+- Reuses `<DiagnosticEngine />` exactly as built (form + SunsetLoader + result reveal). No code duplication.
+- Wrapper page provides:
+  - A short hero ("Free 60-second soil diagnostic. No call required.")
+  - The engine card centered, with the same dusk gradient background but *static* (no canvas animation) so it loads instantly.
+  - Trust strip below: "Used by 30+ Meridian homeowners · Soil data from ISRIC SoilGrids · Your address is never shared."
+- `head()` meta: title "Free Lawn Soil Diagnostic — Silent Siphon", description tuned for paid traffic.
 
-## 5. Defensive UI polish
+## /services, /process, /results, /about, /contact, /faq
 
-- `index.tsx`: when `act4Reveal > 0.5`, also push `aria-hidden="true"` onto Act I–III layers so screen readers don't read three hidden headlines.
-- Add `prefers-reduced-motion` short-circuit in `ActLayer` — drop blur and translate, keep opacity only.
-- `LiquidGlassCard`: clamp `translateY` to `0` when `reveal >= 0.99` so sub-pixel jitter doesn't blur the form text.
-- Form inputs: add `autoComplete="postal-code"` and `autoComplete="street-address"` for browser autofill.
+Each is a real route file with its own `head()` (unique title, description, og:title, og:description). All share:
 
-## 6. Mobile (773×541 viewport and below)
+- Dusk gradient background (CSS only, no canvas) for visual continuity with the homepage.
+- `.readability-scrim` + `.copy-shadow` utilities already in `styles.css` for legible copy.
+- A reusable `<PageHero>` component (eyebrow label + Instrument Serif headline + body).
+- A reusable `<PageSection>` wrapper with consistent vertical rhythm.
+- Footer: same as homepage, with nav links + service area.
 
-- Hero headline (`text-5xl md:text-7xl lg:text-8xl`) wraps to 4 lines on narrow screens, eating the sun. Tighten mobile to `text-4xl` and add `pr-4` so the ember word doesn't run into the right edge.
-- Move the "wheel · drag · type" hint up to `bottom-6` so it doesn't collide with iOS home indicator.
+Content scaffolding per page:
 
-## Files touched
+- **/services** — 4 service cards (Diagnostic, Core Aeration, Deep Soil Restoration, Drainage Engineering), each with what it solves, what's included, when to book. CTA to `/diagnostic`.
+- **/process** — 4 numbered steps (Diagnose, Map, Restore, Steward) as alternating left/right blocks. CTA to `/diagnostic`.
+- **/results** — grid of before/after grade cards (e.g. "Grade F → Grade B in one season"), 2–3 short testimonial quotes. CTA to `/diagnostic`.
+- **/about** — Stewards intro, philosophy paragraph, service-area list pulled from `src/config/business.ts`.
+- **/contact** — Phone number from `business.ts`, contact form (writes to existing `leads` table via a new `submitContact` server fn — same Zod validation pattern as `runDiagnostic`), service-area note. Optional, can be a simple `mailto:` for v1.
+- **/faq** — 8–10 expandable items (reuse `components/ui/accordion`). Covers red clay, pricing tiers, scheduling, what aeration actually does, why diagnostic is free.
 
-- `src/routes/index.tsx` — scrims, copy opacity bumps, reduced-motion guard, aria-hidden on hidden acts, mobile sizing
-- `src/components/DiagnosticEngine.tsx` — loader scrim, retry reset, 45s ceiling, copy opacity bumps
-- `src/components/SunsetStage.tsx` — left-biased vignette pass, resize rAF throttle
-- `src/components/LiquidGlassCard.tsx` — clamp translate at full reveal
-- `src/hooks/useScrollJack.ts` — visibility resume reset, touchVel cap
-- `src/styles.css` — `.copy-shadow`, `.readability-scrim` utilities
+## SEO
 
-No new dependencies. No backend changes. No new routes.
+Every route gets distinct `head()` meta (title, description, og:title, og:description). Single H1 per page. Semantic `<main>`, `<section>`, `<nav>`, `<footer>`. No og:image at root — only at leaves once we have hero artwork.
+
+## Files touched / created
+
+**New:**
+- `src/components/SiteNav.tsx` — hover/scroll-aware glass nav
+- `src/components/SiteFooter.tsx` — shared footer with nav links
+- `src/components/PageHero.tsx`, `src/components/PageSection.tsx` — reusable layout primitives
+- `src/routes/diagnostic.tsx`
+- `src/routes/services.tsx`
+- `src/routes/process.tsx`
+- `src/routes/results.tsx`
+- `src/routes/about.tsx`
+- `src/routes/contact.tsx`
+- `src/routes/faq.tsx`
+
+**Edited:**
+- `src/routes/__root.tsx` — mount `<SiteNav />` + `<SiteFooter />` around `<Outlet />`
+- `src/routes/index.tsx` — pass `variant="home"` to nav, add "skip" link
+- `src/styles.css` — nav reveal transitions, page-hero utility classes (if needed)
+- `src/lib/diagnostic.functions.ts` — optional `submitContact` server fn if we wire the contact form to the DB (deferred unless you want it now)
+
+**No changes:** `DiagnosticEngine.tsx`, `SunsetStage.tsx`, `useScrollJack.ts`, `LiquidGlassCard.tsx`, `routeTree.gen.ts` (auto-regenerates), backend schema.
+
+## Open items I'll default unless you say otherwise
+
+1. **Contact form storage** — default: simple `mailto:` link for v1, no new server fn. Say "wire contact to DB" if you'd rather persist submissions.
+2. **Page copy** — I'll write placeholder copy in the Silent Siphon voice (sparse, confident, dusk-coded). Swap any line later.
+3. **Mobile nav** — full-screen dusk overlay with the 7 links stacked in Instrument Serif. No hamburger animation gimmicks.
