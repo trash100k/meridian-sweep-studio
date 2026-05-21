@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 const LINKS = [
   { to: "/diagnostic", label: "Diagnostic" },
@@ -21,11 +21,9 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl grid gap-8 md:grid-cols-3 items-start">
         <div>
           <p className="font-display text-xl text-bone copy-shadow">
-            {BUSINESS.shortName}
+            {SITE_CONFIG.business.shortName}
           </p>
-          <p className="mt-2 text-sm text-bone/70 max-w-xs">
-            {BUSINESS.tagline}
-          </p>
+          <p className="mt-2 text-sm text-bone/70 max-w-xs">{SITE_CONFIG.business.tagline}</p>
         </div>
         <ul className="flex flex-wrap gap-x-5 gap-y-2">
           {LINKS.map((l) => (
@@ -41,16 +39,14 @@ export function SiteFooter() {
         </ul>
         <div className="md:text-right text-sm text-bone/85 space-y-1">
           <a
-            href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+            href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
             className="font-display text-xl text-bone hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded"
-            aria-label={`Call ${BUSINESS.phone}`}
+            aria-label={`Call ${SITE_CONFIG.business.phone}`}
           >
-            {BUSINESS.phone}
+            {SITE_CONFIG.business.phone}
           </a>
-          <p>{BUSINESS.serviceArea}</p>
-          <p className="text-[10px] font-mono text-bone/55 pt-2">
-            Soil data · ISRIC SoilGrids
-          </p>
+          <p>{SITE_CONFIG.business.serviceArea}</p>
+          <p className="text-[10px] font-mono text-bone/55 pt-2">Soil data · ISRIC SoilGrids</p>
         </div>
       </div>
     </footer>

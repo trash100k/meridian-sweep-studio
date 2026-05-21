@@ -140,11 +140,11 @@ export function useScrollJack({
     let last = performance.now();
     let alive = true;
 
-    const FRICTION = 0.94;      // velocity decay per frame
+    const FRICTION = 0.94; // velocity decay per frame
     const MAGNET_RADIUS = 0.09; // in t-units
     const MAGNET_STRENGTH = 0.55; // how hard idle attractor pulls
-    const IDLE_MS = 260;        // ms after last input before magnets engage
-    const RUBBER = 0.18;        // overshoot decay at ends
+    const IDLE_MS = 260; // ms after last input before magnets engage
+    const RUBBER = 0.18; // overshoot decay at ends
 
     const tick = (now: number) => {
       if (!alive) return;
@@ -172,7 +172,10 @@ export function useScrollJack({
           let bestD = Infinity;
           for (const s of stopsRef.current) {
             const d = Math.abs(curT - s);
-            if (d < bestD) { bestD = d; nearest = s; }
+            if (d < bestD) {
+              bestD = d;
+              nearest = s;
+            }
           }
           if (bestD < MAGNET_RADIUS) {
             const pull = (nearest * travel - posRef.current) * MAGNET_STRENGTH * (dt / 4);

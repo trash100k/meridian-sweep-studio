@@ -1,18 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
   head: () => ({
     meta: [
-      { title: `Contact — ${BUSINESS.shortName}` },
+      { title: `Contact — ${SITE_CONFIG.business.shortName}` },
       {
         name: "description",
-        content:
-          "Call, email, or run the free soil diagnostic. Family-run lawn stewards in Meridian, MS.",
+        content: `Call, email, or run the free soil diagnostic. Family-run lawn stewards in ${SITE_CONFIG.business.serviceArea}.`,
       },
-      { property: "og:title", content: `Contact — ${BUSINESS.shortName}` },
+      { property: "og:title", content: `Contact — ${SITE_CONFIG.business.shortName}` },
       {
         property: "og:description",
         content: "Real people. One business day. No automated systems.",
@@ -26,14 +25,18 @@ function ContactPage() {
     <PageShell>
       <PageHero
         eyebrow="Contact"
-        title={<>Real people. <span className="text-ember">One business day.</span></>}
+        title={
+          <>
+            Real people. <span className="text-ember">One business day.</span>
+          </>
+        }
         body="Call, email, or run the diagnostic and we'll come to you. No automated systems, no offshore call center."
       />
 
       <PageSection>
         <a
-          href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
-          aria-label={`Call ${BUSINESS.shortName} at ${BUSINESS.phone}`}
+          href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
+          aria-label={`Call ${SITE_CONFIG.business.shortName} at ${SITE_CONFIG.business.phone}`}
           className="block rounded-2xl border border-ember/40 p-8 md:p-10 backdrop-blur-md transition hover:border-ember focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
           style={{
             backgroundImage:
@@ -45,17 +48,18 @@ function ContactPage() {
             Call us · fastest path
           </p>
           <p className="mt-3 font-display text-4xl md:text-6xl text-bone copy-shadow">
-            {BUSINESS.phone}
+            {SITE_CONFIG.business.phone}
           </p>
           <p className="mt-3 text-sm md:text-base text-bone/90">
             Answered by a real person. One business day, no automated systems.
           </p>
           <ul className="mt-5 flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-[0.18em]">
-            {["Free yard walk", "No contracts", "Meridian + 25 mi"].map((c) => (
-              <li
-                key={c}
-                className="rounded-full border border-bone/20 px-3 py-1 text-bone/85"
-              >
+            {[
+              "Free yard walk",
+              "No contracts",
+              `${SITE_CONFIG.business.serviceArea.split(",")[0]} + 25 mi`,
+            ].map((c) => (
+              <li key={c} className="rounded-full border border-bone/20 px-3 py-1 text-bone/85">
                 {c}
               </li>
             ))}
@@ -63,12 +67,16 @@ function ContactPage() {
         </a>
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <ContactCard label="Email" value={BUSINESS.email} href={`mailto:${BUSINESS.email}`} />
-          <ContactCard label="Service area" value={BUSINESS.serviceArea} />
+          <ContactCard
+            label="Email"
+            value={SITE_CONFIG.business.email}
+            href={`mailto:${SITE_CONFIG.business.email}`}
+          />
+          <ContactCard label="Service area" value={SITE_CONFIG.business.serviceArea} />
         </div>
 
         <form
-          action={`mailto:${BUSINESS.email}`}
+          action={`mailto:${SITE_CONFIG.business.email}`}
           method="post"
           encType="text/plain"
           className="mt-12 mx-auto max-w-xl rounded-2xl border border-bone/10 bg-loam/40 p-8 backdrop-blur-sm space-y-5"
@@ -129,7 +137,8 @@ function ContactCard({ label, value, href }: { label: string; value: string; hre
       <p className="mt-3 font-display text-2xl text-bone copy-shadow">{value}</p>
     </>
   );
-  const cls = "block rounded-2xl border border-bone/10 bg-loam/40 p-6 backdrop-blur-sm transition hover:border-ember/40";
+  const cls =
+    "block rounded-2xl border border-bone/10 bg-loam/40 p-6 backdrop-blur-sm transition hover:border-ember/40";
   return href ? (
     <a href={href} className={cls}>
       {inner}

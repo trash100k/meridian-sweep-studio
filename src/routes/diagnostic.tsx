@@ -2,19 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 import { DiagnosticEngine } from "@/components/DiagnosticEngine";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 export const Route = createFileRoute("/diagnostic")({
   component: DiagnosticPage,
   head: () => ({
     meta: [
-      { title: `Free Lawn Soil Diagnostic — ${BUSINESS.shortName}` },
+      { title: `Free Lawn Soil Diagnostic — ${SITE_CONFIG.business.shortName}` },
       {
         name: "description",
-        content:
-          "Free 20-second soil diagnostic for Meridian, MS lawns. Real soil data, no call required, no spam.",
+        content: `Free 20-second soil diagnostic for ${SITE_CONFIG.business.serviceArea} lawns. Real soil data, no call required, no spam.`,
       },
-      { property: "og:title", content: `Free Soil Diagnostic — ${BUSINESS.shortName}` },
+      { property: "og:title", content: `Free Soil Diagnostic — ${SITE_CONFIG.business.shortName}` },
       {
         property: "og:description",
         content: "Find out what's actually under your grass before you spend another dollar.",
@@ -28,7 +27,11 @@ function DiagnosticPage() {
     <PageShell>
       <PageHero
         eyebrow="Silent Siphon"
-        title={<>Free <span className="text-ember">60-second</span> soil diagnostic.</>}
+        title={
+          <>
+            Free <span className="text-ember">60-second</span> soil diagnostic.
+          </>
+        }
         body="No call required. Pull real soil data for your address — clay percentage, bulk density, compaction grade — before you spend another dollar on fertilizer that can't reach the roots."
       />
 
@@ -39,7 +42,8 @@ function DiagnosticPage() {
           </LiquidGlassCard>
 
           <p className="mt-8 text-center text-[11px] font-mono text-bone/65 copy-shadow">
-            Used by 30+ Meridian homeowners · Soil data from ISRIC SoilGrids · Your address is never shared.
+            Used by 30+ {SITE_CONFIG.business.serviceArea.split(",")[0]} homeowners · Soil data from
+            ISRIC SoilGrids · Your address is never shared.
           </p>
         </div>
       </PageSection>

@@ -1,19 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
 import { CallBand } from "@/components/CallBand";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
   head: () => ({
     meta: [
-      { title: `Services — ${BUSINESS.shortName}` },
+      { title: `Services — ${SITE_CONFIG.business.shortName}` },
       {
         name: "description",
-        content:
-          "Soil diagnostics, core aeration, deep soil restoration, and drainage engineering for Meridian, MS lawns.",
+        content: `Soil diagnostics, core aeration, deep soil restoration, and drainage engineering for ${SITE_CONFIG.business.serviceArea} lawns.`,
       },
-      { property: "og:title", content: `Services — ${BUSINESS.shortName}` },
+      { property: "og:title", content: `Services — ${SITE_CONFIG.business.shortName}` },
       {
         property: "og:description",
         content: "Four ways we get water and air back to your roots.",
@@ -22,45 +21,22 @@ export const Route = createFileRoute("/services")({
   }),
 });
 
-const SERVICES = [
-  {
-    name: "Soil Diagnostic",
-    solves: "Not knowing what's actually wrong.",
-    includes: "Address-level soil read, compaction grade, written plan. Free.",
-    when: "Always start here.",
-  },
-  {
-    name: "Core Aeration",
-    solves: "Surface runoff and shallow roots.",
-    includes: "3-inch plugs across the full lot, debris cleared, overseed-ready.",
-    when: "Early fall or early spring.",
-  },
-  {
-    name: "Deep Soil Restoration",
-    solves: "Severe clay compaction (Grade D / F).",
-    includes: "Vertical fracturing, gypsum + organic matter injection, follow-up read at 90 days.",
-    when: "Once. Maintenance after.",
-  },
-  {
-    name: "Drainage Engineering",
-    solves: "Standing water, sloped runoff into the wrong place.",
-    includes: "Site survey, French drain or swale design, build, and verification.",
-    when: "Before the next big rain.",
-  },
-];
-
 function ServicesPage() {
   return (
     <PageShell>
       <PageHero
         eyebrow="Services"
-        title={<>Four ways we get <span className="text-ember">water and air</span> back to your roots.</>}
+        title={
+          <>
+            Four ways we get <span className="text-ember">water and air</span> back to your roots.
+          </>
+        }
         body="Every service starts with the free diagnostic. We won't sell you aeration if the soil doesn't need it."
       />
 
       <PageSection>
         <div className="grid gap-6 md:grid-cols-2">
-          {SERVICES.map((s) => (
+          {SITE_CONFIG.content.services.map((s) => (
             <article
               key={s.name}
               className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm"
