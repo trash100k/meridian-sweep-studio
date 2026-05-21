@@ -31,12 +31,38 @@ function ContactPage() {
       />
 
       <PageSection>
-        <div className="grid gap-6 md:grid-cols-3">
-          <ContactCard
-            label="Phone"
-            value={BUSINESS.phone}
-            href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
-          />
+        <a
+          href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+          aria-label={`Call ${BUSINESS.shortName} at ${BUSINESS.phone}`}
+          className="block rounded-2xl border border-ember/40 p-8 md:p-10 backdrop-blur-md transition hover:border-ember focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, rgba(255,140,80,0.18) 0%, rgba(58,29,58,0.55) 60%, rgba(8,4,12,0.65) 100%)",
+            boxShadow: "0 24px 60px -30px rgba(255,140,80,0.45)",
+          }}
+        >
+          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-ember copy-shadow">
+            Call us · fastest path
+          </p>
+          <p className="mt-3 font-display text-4xl md:text-6xl text-bone copy-shadow">
+            {BUSINESS.phone}
+          </p>
+          <p className="mt-3 text-sm md:text-base text-bone/90">
+            Answered by a real person. One business day, no automated systems.
+          </p>
+          <ul className="mt-5 flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-[0.18em]">
+            {["Free yard walk", "No contracts", "Meridian + 25 mi"].map((c) => (
+              <li
+                key={c}
+                className="rounded-full border border-bone/20 px-3 py-1 text-bone/85"
+              >
+                {c}
+              </li>
+            ))}
+          </ul>
+        </a>
+
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
           <ContactCard label="Email" value={BUSINESS.email} href={`mailto:${BUSINESS.email}`} />
           <ContactCard label="Service area" value={BUSINESS.serviceArea} />
         </div>
