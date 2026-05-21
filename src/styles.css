@@ -347,5 +347,81 @@
   .liquid-pill:active {
     transform: translateY(0);
   }
+  .liquid-pill:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--ember),
+      0 1px 0 0 color-mix(in oklab, white 35%, transparent) inset,
+      0 12px 30px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ─── Call pill (sticky bottom-right) ───────────────────────────── */
+  .call-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 1.1rem;
+    border-radius: 999px;
+    color: var(--bone);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--ember) 28%, transparent),
+      color-mix(in oklab, white 10%, transparent)
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid color-mix(in oklab, var(--ember) 35%, transparent);
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, white 30%, transparent) inset,
+      0 18px 40px -16px rgba(0, 0, 0, 0.6),
+      0 0 24px -6px color-mix(in oklab, var(--ember) 50%, transparent);
+    transition: transform 200ms ease, background 200ms ease, box-shadow 200ms ease;
+  }
+  .call-pill:hover {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--ember) 45%, transparent),
+      color-mix(in oklab, white 14%, transparent)
+    );
+    transform: translateY(-2px);
+  }
+  .call-pill__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: color-mix(in oklab, white 18%, transparent);
+    color: var(--bone);
+  }
+  .call-pill__label {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .call-pill__eyebrow {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: color-mix(in oklab, var(--bone) 75%, transparent);
+    margin-bottom: 3px;
+  }
+  .call-pill__number {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: var(--bone);
+  }
+  @media (max-width: 640px) {
+    .call-pill__label { display: none; }
+    .call-pill__icon { width: 32px; height: 32px; }
+    .call-pill { padding: 0.55rem; }
+  }
 }
+
 

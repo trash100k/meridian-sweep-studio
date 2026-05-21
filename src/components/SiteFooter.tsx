@@ -32,17 +32,23 @@ export function SiteFooter() {
             <li key={l.to}>
               <Link
                 to={l.to}
-                className="text-[12px] uppercase tracking-[0.18em] font-mono text-bone/70 hover:text-wheat transition"
+                className="text-[12px] uppercase tracking-[0.18em] font-mono text-bone/80 hover:text-wheat transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-1 py-1"
               >
                 {l.label}
               </Link>
             </li>
           ))}
         </ul>
-        <div className="md:text-right text-sm text-bone/70 space-y-1">
-          <p>{BUSINESS.phone}</p>
+        <div className="md:text-right text-sm text-bone/85 space-y-1">
+          <a
+            href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+            className="font-display text-xl text-bone hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded"
+            aria-label={`Call ${BUSINESS.phone}`}
+          >
+            {BUSINESS.phone}
+          </a>
           <p>{BUSINESS.serviceArea}</p>
-          <p className="text-[10px] font-mono text-bone/45 pt-2">
+          <p className="text-[10px] font-mono text-bone/55 pt-2">
             Soil data · ISRIC SoilGrids
           </p>
         </div>

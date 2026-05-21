@@ -368,7 +368,7 @@ function Report({
         : "text-destructive";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" aria-live="polite">
       <div>
         <p className="text-[10px] uppercase tracking-[0.3em] text-bone/60 font-mono mb-2">
           Soil Compaction Grade

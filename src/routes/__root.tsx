@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
+import { CallPill } from "@/components/CallPill";
 
 
 function NotFoundComponent() {
@@ -140,6 +141,7 @@ function RootComponent() {
       <SiteNav />
       <Outlet />
       <SiteFooter />
+      <CallPill />
     </QueryClientProvider>
   );
 }

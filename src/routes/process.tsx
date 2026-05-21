@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
+import { CallBand } from "@/components/CallBand";
 import { BUSINESS } from "@/config/business";
 
 export const Route = createFileRoute("/process")({
@@ -97,6 +98,11 @@ function ProcessPage() {
           </Link>
         </div>
       </PageSection>
+
+      <CallBand
+        headline="Skip the guesswork. Book the free yard walk."
+        sub="Steps 02 through 04 start on-site. Call and we'll set a time this week — Meridian + 25 miles, no obligation."
+      />
     </PageShell>
   );
 }

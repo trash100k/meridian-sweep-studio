@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
+import { CallBand } from "@/components/CallBand";
 import { BUSINESS } from "@/config/business";
 
 export const Route = createFileRoute("/results")({
@@ -98,6 +99,11 @@ function ResultsPage() {
           </Link>
         </div>
       </PageSection>
+
+      <CallBand
+        headline="Want grade lifts like these on your lawn?"
+        sub="Every job above started with one phone call. We'll tell you on the spot if your soil is fixable — and what it'd realistically cost."
+      />
     </PageShell>
   );
 }

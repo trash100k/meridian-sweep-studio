@@ -60,13 +60,20 @@ function Index() {
             <header className="absolute inset-x-0 top-0 z-30 px-6 md:px-10 py-6 flex items-center justify-between">
               <button
                 onClick={() => setT(0)}
-                className="font-display text-xl text-bone tracking-wide hover:text-wheat transition copy-shadow"
+                aria-label="Restart story"
+                className="font-display text-xl text-bone tracking-wide hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-1"
               >
                 {BUSINESS.shortName}
               </button>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-bone/80 font-mono copy-shadow">
-                {BUSINESS.serviceArea}
-              </span>
+              <a
+                href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+                aria-label={`Call ${BUSINESS.phone}`}
+                className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-bone/90 hover:text-ember font-mono copy-shadow transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-2 py-1"
+                style={{ minHeight: 36 }}
+              >
+                <span aria-hidden>📞</span>
+                <span className="tracking-normal normal-case text-sm">{BUSINESS.phone}</span>
+              </a>
             </header>
 
             {/* Acts I–III — crossfading copy stacked center-left */}
@@ -127,20 +134,55 @@ function Index() {
 
             {/* Act IV — liquid glass form, center */}
             <div
-              className="absolute inset-0 z-30 flex items-center justify-center px-4"
+              className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 py-20 overflow-y-auto"
               style={{ pointerEvents: act4Reveal > 0.5 ? "auto" : "none" }}
             >
               <LiquidGlassCard reveal={act4Reveal} className="w-full max-w-lg">
                 <DiagnosticEngine />
               </LiquidGlassCard>
+
+              {/* Three reasons to call — quiet trust strip beneath the card */}
+              <div
+                className="mt-6 w-full max-w-lg rounded-2xl border border-bone/15 backdrop-blur-md px-5 py-4"
+                style={{
+                  opacity: act4Reveal,
+                  transform: `translateY(${(1 - act4Reveal) * 12}px)`,
+                  transition: "opacity 480ms cubic-bezier(0.22,1,0.36,1), transform 480ms cubic-bezier(0.22,1,0.36,1)",
+                  background:
+                    "linear-gradient(135deg, rgba(255,140,80,0.12) 0%, rgba(8,4,12,0.55) 100%)",
+                }}
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember mb-3 copy-shadow">
+                  Or just call us
+                </p>
+                <ul className="space-y-1.5 text-[13px] text-bone/90">
+                  <li className="flex gap-2"><span className="text-ember">·</span>Free yard walk — no obligation, no upsell</li>
+                  <li className="flex gap-2"><span className="text-ember">·</span>Same-week scheduling — Meridian + 25 mi</li>
+                  <li className="flex gap-2"><span className="text-ember">·</span>Real person answers — one business day</li>
+                </ul>
+                <a
+                  href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+                  className="mt-4 inline-flex items-center gap-2 font-display text-2xl text-bone hover:text-ember transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded"
+                  aria-label={`Call ${BUSINESS.phone}`}
+                >
+                  <span aria-hidden>📞</span>
+                  {BUSINESS.phone}
+                </a>
+              </div>
             </div>
 
             {/* Tiny footer credit */}
             <footer
-              className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/65 copy-shadow transition-opacity duration-500"
+              className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/80 copy-shadow transition-opacity duration-500"
               style={{ opacity: t > 0.86 ? 1 : 0 }}
             >
-              <span>{BUSINESS.phone}</span>
+              <a
+                href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+                className="hover:text-ember transition"
+                aria-label={`Call ${BUSINESS.phone}`}
+              >
+                {BUSINESS.phone}
+              </a>
               <span>Powered by SoilGrids · ISRIC</span>
             </footer>
 
