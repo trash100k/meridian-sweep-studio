@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
+import { CallBand } from "@/components/CallBand";
 import {
   Accordion,
   AccordionContent,
@@ -91,6 +92,11 @@ function FaqPage() {
           </Link>
         </div>
       </PageSection>
+
+      <CallBand
+        headline="Still have questions? We pick up the phone."
+        sub="One business day, every time. Real person, real answers — not a chatbot pretending to schedule."
+      />
     </PageShell>
   );
 }

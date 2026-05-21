@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
+import { CallBand } from "@/components/CallBand";
 import { BUSINESS } from "@/config/business";
 
 export const Route = createFileRoute("/services")({
@@ -80,6 +81,11 @@ function ServicesPage() {
           </Link>
         </div>
       </PageSection>
+
+      <CallBand
+        headline="Not sure which service your yard needs?"
+        sub="One short call and we'll tell you straight — no quote pressure, no auto-renew contracts. If the soil doesn't need it, we say so."
+      />
     </PageShell>
   );
 }
