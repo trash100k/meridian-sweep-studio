@@ -1,100 +1,87 @@
+# Plan: Make Contact Front-and-Center (Unobtrusively)
 
-# Turn Silent Siphon into a multi-page website
+The site reads beautifully but never closes. We'll add five quiet conversion surfaces that all reinforce the same call-to-action, then sweep accessibility so they're usable for everyone.
 
-Keep the cinematic homepage intact. Add a hover-revealed glass nav, six new routes, and a dedicated diagnostic page so the form is deep-linkable while Act IV still closes the homepage scroll.
+## 1. Persistent "Call" Glass Pill (every page)
 
-## Site map
+A new `<CallPill />` component fixed to the bottom-right.
 
-```
-/              Home — current Act I–IV sunset experience + nav reveal at top
-/diagnostic    Standalone Silent Siphon diagnostic (form + result, no scroll-jack)
-/services      Aeration, soil remediation, drainage, lawn rescue offerings
-/process       Diagnose → plan → restore → steward (4-step explainer)
-/results       Before/after grades, soil score lift, brief testimonial cards
-/about         Stewards, philosophy, service area (Meridian + ZIPs)
-/contact       Phone, email, contact form, service-area note
-/faq           Red clay, pricing tiers, scheduling, what to expect
-```
+- Glass styling matching `LiquidGlassCard` (dusk tint, blur, ember border on hover)
+- Shows phone icon + `(601) 604-0461` on desktop; collapses to icon-only on mobile (with full label revealed on tap)
+- Renders an `<a href="tel:…">` so it triggers the dialer on mobile and copy-on-click on desktop
+- Hidden on the homepage until `t > 0.05` so it doesn't break the Act I cinema; always visible elsewhere
+- Mounted in `__root.tsx` so it persists across route changes
+- Respects `prefers-reduced-motion` for the entrance fade
+- 44×44 minimum tap target, `aria-label="Call Affordable Landscaping at (601) 604-0461"`
 
-Total: 8 routes (home + 7 sub-pages).
+## 2. Nav Right-Side CTA
 
-## Navigation pattern — "hidden until hover"
+In `SiteNav.tsx`, add a small phone link to the right of the desktop link list:
 
-A new `<SiteNav />` component lives in `__root.tsx` so every route gets it.
+- `📞 (601) 604-0461` in ember, mono micro-caps
+- On mobile overlay, the phone number becomes a large tappable line beneath the menu links
 
-- **On `/`** (homepage): nav is fully hidden by default. Reveal when:
-  - cursor enters the top 80px of the viewport, OR
-  - `act4Reveal > 0.6` (form is showing), OR
-  - user scrolls/swipes on any non-home route (always visible there).
-- **On any other route**: nav is always visible, pinned top with a thin liquid-glass bar.
-- Style: same dusk palette, `bone/80` text, `text-shadow` from `.copy-shadow`, a soft `backdrop-blur` glass strip ~56px tall. Logo left ("Silent Siphon" wordmark in Instrument Serif), links right (Diagnostic, Services, Process, Results, About, Contact). Mobile (≤768px): collapses to a single menu button that opens a full-screen dusk overlay.
-- Spring motion: `transform: translateY(-100%)` → `0` with a 280ms cubic ease, matching the existing "apple snappy" feel.
+## 3. Homepage Final Act: "Three Reasons to Call" Card
 
-## Homepage changes
+Inside the existing Act IV liquid glass card (or as a sibling that appears at `t > 0.92`), add a small "Prefer to talk?" footer block under the diagnostic result with three one-line reasons:
 
-- Mount `<SiteNav variant="home" />` at the top.
-- Act IV (form) stays exactly as today — it's the cinematic close.
-- Add a small "Skip the story → run diagnostic" link in the bottom corner that routes to `/diagnostic`. Fades in with the scroll hint.
-- Footer credit gets a secondary line of small nav links so the homepage is still self-sufficient for someone who scrolls all the way through.
+1. **Free yard walk** — no obligation, no upsell
+2. **Same-week scheduling** — Meridian + 25 mi
+3. **Real person answers** — one business day, no call center
 
-## /diagnostic page (new)
+Each reason is a tiny row with an ember bullet, then the phone number as a tap-to-call button beneath.
 
-Direct route to the lead form without the scroll-jack so it's shareable, ad-linkable, and works on slow devices.
+## 4. Inline CTA Band on Sub-Pages
 
-- Reuses `<DiagnosticEngine />` exactly as built (form + SunsetLoader + result reveal). No code duplication.
-- Wrapper page provides:
-  - A short hero ("Free 60-second soil diagnostic. No call required.")
-  - The engine card centered, with the same dusk gradient background but *static* (no canvas animation) so it loads instantly.
-  - Trust strip below: "Used by 30+ Meridian homeowners · Soil data from ISRIC SoilGrids · Your address is never shared."
-- `head()` meta: title "Free Lawn Soil Diagnostic — Silent Siphon", description tuned for paid traffic.
+A new `<CallBand />` block used once per content page (services, process, results, about, faq) before the footer:
 
-## /services, /process, /results, /about, /contact, /faq
+- Dusk gradient panel with ember left border
+- Headline varies per page to give multiple reasons:
+  - **Services**: "Not sure which service fits? We'll tell you straight."
+  - **Process**: "Skip the guesswork — book the free yard walk."
+  - **Results**: "Want results like these on your lawn?"
+  - **About**: "Talk to the family who'll actually be on your yard."
+  - **FAQ**: "Still have questions? We pick up the phone."
+- Two actions: primary `Call (601) 604-0461`, secondary `Run free diagnostic →`
 
-Each is a real route file with its own `head()` (unique title, description, og:title, og:description). All share:
+## 5. Contact Page Trust Upgrade
 
-- Dusk gradient background (CSS only, no canvas) for visual continuity with the homepage.
-- `.readability-scrim` + `.copy-shadow` utilities already in `styles.css` for legible copy.
-- A reusable `<PageHero>` component (eyebrow label + Instrument Serif headline + body).
-- A reusable `<PageSection>` wrapper with consistent vertical rhythm.
-- Footer: same as homepage, with nav links + service area.
+Promote the existing phone card on `/contact`:
 
-Content scaffolding per page:
+- Make Phone the full-width hero card above the email/area cards, with "Answered by a real person, one business day" microcopy
+- Add response-time + service-area chips below
 
-- **/services** — 4 service cards (Diagnostic, Core Aeration, Deep Soil Restoration, Drainage Engineering), each with what it solves, what's included, when to book. CTA to `/diagnostic`.
-- **/process** — 4 numbered steps (Diagnose, Map, Restore, Steward) as alternating left/right blocks. CTA to `/diagnostic`.
-- **/results** — grid of before/after grade cards (e.g. "Grade F → Grade B in one season"), 2–3 short testimonial quotes. CTA to `/diagnostic`.
-- **/about** — Stewards intro, philosophy paragraph, service-area list pulled from `src/config/business.ts`.
-- **/contact** — Phone number from `business.ts`, contact form (writes to existing `leads` table via a new `submitContact` server fn — same Zod validation pattern as `runDiagnostic`), service-area note. Optional, can be a simple `mailto:` for v1.
-- **/faq** — 8–10 expandable items (reuse `components/ui/accordion`). Covers red clay, pricing tiers, scheduling, what aeration actually does, why diagnostic is free.
+## 6. Accessibility Sweep
 
-## SEO
+- Add visible focus rings (`focus-visible:ring-2 focus-visible:ring-ember`) to all nav links, CallPill, CallBand buttons, and form inputs that currently rely on default outline
+- Promote `<a>` and `<button>` tap targets to `min-h-11 min-w-11` site-wide where they're currently smaller (mobile menu toggle, footer links, skip-the-story link)
+- Add `aria-label` to the homepage logo button ("Restart story"), the mobile menu toggle already has one — verify
+- Ensure `bone/70` text meets contrast on the dusk gradient; bump to `bone/85` where it fails on the lighter glass panels
+- Confirm there's exactly one `<main>` per route — wrap `<Outlet />` in `__root.tsx` with `<main>` and remove any inner `<main>` from page shells
+- Add `aria-live="polite"` to the diagnostic result reveal so screen readers announce the grade
+- Add `lang="en"` to the root `<html>` if missing
 
-Every route gets distinct `head()` meta (title, description, og:title, og:description). Single H1 per page. Semantic `<main>`, `<section>`, `<nav>`, `<footer>`. No og:image at root — only at leaves once we have hero artwork.
+## Files Changed
 
-## Files touched / created
+**Created**
+- `src/components/CallPill.tsx` — sticky glass phone pill
+- `src/components/CallBand.tsx` — inline section CTA
 
-**New:**
-- `src/components/SiteNav.tsx` — hover/scroll-aware glass nav
-- `src/components/SiteFooter.tsx` — shared footer with nav links
-- `src/components/PageHero.tsx`, `src/components/PageSection.tsx` — reusable layout primitives
-- `src/routes/diagnostic.tsx`
-- `src/routes/services.tsx`
-- `src/routes/process.tsx`
-- `src/routes/results.tsx`
-- `src/routes/about.tsx`
-- `src/routes/contact.tsx`
-- `src/routes/faq.tsx`
+**Edited**
+- `src/routes/__root.tsx` — mount `<CallPill />`, ensure single `<main>`, add `lang`
+- `src/components/SiteNav.tsx` — desktop phone CTA + mobile overlay phone line + focus rings
+- `src/components/SiteFooter.tsx` — phone becomes a tel: link, focus rings
+- `src/routes/index.tsx` — "three reasons" block inside Act IV, aria-label on logo restart button
+- `src/routes/contact.tsx` — promote phone card, add response chips
+- `src/routes/services.tsx`, `process.tsx`, `results.tsx`, `about.tsx`, `faq.tsx` — add `<CallBand />` before footer with page-specific copy
+- `src/components/DiagnosticEngine.tsx` — `aria-live` on result reveal
+- `src/styles.css` — `.focus-ring` utility, `.call-pill` glass tokens
 
-**Edited:**
-- `src/routes/__root.tsx` — mount `<SiteNav />` + `<SiteFooter />` around `<Outlet />`
-- `src/routes/index.tsx` — pass `variant="home"` to nav, add "skip" link
-- `src/styles.css` — nav reveal transitions, page-hero utility classes (if needed)
-- `src/lib/diagnostic.functions.ts` — optional `submitContact` server fn if we wire the contact form to the DB (deferred unless you want it now)
+**Not touched**
+- `SunsetStage.tsx`, `useScrollJack.ts`, `LiquidGlassCard.tsx`, `PageShell.tsx`, backend, schema
 
-**No changes:** `DiagnosticEngine.tsx`, `SunsetStage.tsx`, `useScrollJack.ts`, `LiquidGlassCard.tsx`, `routeTree.gen.ts` (auto-regenerates), backend schema.
+## Open Questions (will assume defaults unless you say otherwise)
 
-## Open items I'll default unless you say otherwise
-
-1. **Contact form storage** — default: simple `mailto:` link for v1, no new server fn. Say "wire contact to DB" if you'd rather persist submissions.
-2. **Page copy** — I'll write placeholder copy in the Silent Siphon voice (sparse, confident, dusk-coded). Swap any line later.
-3. **Mobile nav** — full-screen dusk overlay with the 7 links stacked in Instrument Serif. No hamburger animation gimmicks.
+- CallPill behavior on the homepage: I'll hide it during Act I (`t < 0.05`) and fade in for the rest of the scroll
+- "Three reasons" copy above is a first draft in your Silent Siphon voice — easy to swap
+- No SMS/text option added; phone + diagnostic only. Say the word if you want a "Text us" path too.
