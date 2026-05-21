@@ -76,25 +76,47 @@ export function SiteNav() {
               <li key={l.to}>
                 <Link
                   to={l.to}
-                  className="text-[12px] uppercase tracking-[0.18em] font-mono text-bone/75 hover:text-bone transition copy-shadow"
+                  className="text-[12px] uppercase tracking-[0.18em] font-mono text-bone/75 hover:text-bone transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-1 py-2"
                   activeProps={{ className: "text-wheat" }}
                 >
                   {l.label}
                 </Link>
               </li>
             ))}
+            <li>
+              <a
+                href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+                aria-label={`Call ${BUSINESS.phone}`}
+                className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-mono text-ember hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-2 py-2"
+                style={{ minHeight: 36 }}
+              >
+                <span aria-hidden>📞</span>
+                <span className="tracking-normal normal-case">{BUSINESS.phone}</span>
+              </a>
+            </li>
           </ul>
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="md:hidden text-[11px] uppercase tracking-[0.2em] font-mono text-bone/85 copy-shadow"
-          >
-            {open ? "Close" : "Menu"}
-          </button>
+          {/* Mobile: phone + menu */}
+          <div className="md:hidden flex items-center gap-3">
+            <a
+              href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+              aria-label={`Call ${BUSINESS.phone}`}
+              className="inline-flex items-center justify-center rounded-full bg-ember/25 border border-ember/40 text-bone copy-shadow"
+              style={{ minHeight: 44, minWidth: 44 }}
+            >
+              <span aria-hidden>📞</span>
+            </a>
+            <button
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+              className="text-[11px] uppercase tracking-[0.2em] font-mono text-bone/85 copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-2"
+              style={{ minHeight: 44, minWidth: 44 }}
+            >
+              {open ? "Close" : "Menu"}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -123,6 +145,19 @@ export function SiteNav() {
               </Link>
             </li>
           ))}
+          <li className="pt-6 border-t border-bone/15 w-2/3 text-center mt-4">
+            <a
+              href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+              className="inline-flex flex-col items-center gap-1"
+            >
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-ember">
+                Call us
+              </span>
+              <span className="font-display text-3xl text-bone copy-shadow">
+                {BUSINESS.phone}
+              </span>
+            </a>
+          </li>
         </ul>
       </div>
     </>
