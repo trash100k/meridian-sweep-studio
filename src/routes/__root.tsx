@@ -78,17 +78,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Affordable Landscaping and Lawn" },
       { name: "description", content: "The premiere lawn stewards Meridian Mississippi. 
-Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing. We make your lawn look right!" },
+Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing." },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Affordable Landscaping and Lawn" },
       { property: "og:description", content: "The premiere lawn stewards Meridian Mississippi. 
-Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing. We make your lawn look right!" },
+Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Affordable Landscaping and Lawn" },
       { name: "twitter:description", content: "The premiere lawn stewards Meridian Mississippi. 
-Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing. We make your lawn look right!" },
+Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7033cac5-bcb4-4e2a-9618-de2fe8251bc6/id-preview-9a44ecb1--d30b6284-df89-4c3e-acd3-11c2748d67bf.lovable.app-1779030801684.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/7033cac5-bcb4-4e2a-9618-de2fe8251bc6/id-preview-9a44ecb1--d30b6284-df89-4c3e-acd3-11c2748d67bf.lovable.app-1779030801684.png" },
     ],
