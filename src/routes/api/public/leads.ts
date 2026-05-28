@@ -63,11 +63,7 @@ export const Route = createFileRoute("/api/public/leads")({
 
         const rows = (data ?? []).map((row) => ({
           ...row,
-          phone: includePhone
-            ? row.phone
-            : row.phone
-              ? `***${row.phone.slice(-4)}`
-              : null,
+          phone: includePhone ? row.phone : row.phone ? `***${row.phone.slice(-4)}` : null,
         }));
 
         return Response.json({ count: rows.length, leads: rows });

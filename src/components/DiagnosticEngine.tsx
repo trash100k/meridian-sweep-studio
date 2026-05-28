@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { runDiagnostic, attachPhone } from "@/lib/diagnostic.functions";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 type DiagnosticResult = Awaited<ReturnType<typeof runDiagnostic>>;
 type Stage = "idle" | "loading" | "report" | "thanks";
@@ -56,17 +56,23 @@ export function DiagnosticEngine() {
   }
 
   if (stage === "report" && result) {
-    return <Report result={result} phone={phone} setPhone={setPhone} submitPhone={submitPhone} error={error} />;
+    return (
+      <Report
+        result={result}
+        phone={phone}
+        setPhone={setPhone}
+        submitPhone={submitPhone}
+        error={error}
+      />
+    );
   }
 
   if (stage === "thanks") {
     return (
       <div className="text-center py-2">
-        <p className="font-display text-3xl md:text-4xl text-bone mb-3">
-          We've got it.
-        </p>
+        <p className="font-display text-3xl md:text-4xl text-bone mb-3">We've got it.</p>
         <p className="text-bone/70 text-sm">
-          {BUSINESS.shortName} will call within one business day to walk your yard.
+          {SITE_CONFIG.business.shortName} will call within one business day to walk your yard.
         </p>
       </div>
     );
@@ -108,9 +114,7 @@ export function DiagnosticEngine() {
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
       <div className="flex items-center justify-between gap-4 pt-2">
-        <p className="text-[11px] text-bone/70 font-mono">
-          No phone required. No spam.
-        </p>
+        <p className="text-[11px] text-bone/70 font-mono">No phone required. No spam.</p>
         <button type="submit" className="liquid-pill">
           Read my soil →
         </button>
@@ -170,12 +174,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
 
   // Copy beats
   const phase = seconds < 6 ? 0 : seconds < 14 ? 1 : seconds < 22 ? 2 : 3;
-  const lines = [
-    "Reading your dirt…",
-    "Pulling deeper records — Meridian clay is thick today.",
-    "Letting the sun rest on the ridge while we finish.",
-    "Still working. This parcel is taking longer than usual.",
-  ];
+  const lines = SITE_CONFIG.diagnostic.loadingMessages;
 
   // Star opacity after dusk
   const starOpacity = Math.max(0, (progress - 0.85) / 0.15);
@@ -193,7 +192,11 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
         aria-label="Reading your soil"
       >
         {/* Sky */}
-        <svg viewBox="0 0 320 180" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+        <svg
+          viewBox="0 0 320 180"
+          preserveAspectRatio="none"
+          className="absolute inset-0 h-full w-full"
+        >
           <defs>
             <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={mix("#ffb070", "#0a0420", dusk)} />
@@ -391,11 +394,10 @@ function Report({
       </dl>
 
       <form onSubmit={submitPhone} className="pt-4 border-t border-bone/10 space-y-4">
-        <p className="font-display text-2xl text-bone leading-tight">
-          Want us to walk it?
-        </p>
+        <p className="font-display text-2xl text-bone leading-tight">Want us to walk it?</p>
         <p className="text-xs text-bone/60">
-          Drop a number — {BUSINESS.shortName} calls within one business day. No automated systems.
+          Drop a number — {SITE_CONFIG.business.shortName} calls within one business day. No
+          automated systems.
         </p>
         <input
           required

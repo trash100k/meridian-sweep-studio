@@ -12,7 +12,7 @@ import appCss from "../styles.css?url";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CallPill } from "@/components/CallPill";
-
+import { SITE_CONFIG } from "@/config/site";
 
 function NotFoundComponent() {
   return (
@@ -106,10 +106,21 @@ Landscaping, Lawn care, hardscaping, garden and soil experts, pressure washing."
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const themeVars = `
+    :root {
+      --loam: ${SITE_CONFIG.theme.loam};
+      --soil: ${SITE_CONFIG.theme.soil};
+      --ember: ${SITE_CONFIG.theme.ember};
+      --wheat: ${SITE_CONFIG.theme.wheat};
+      --bone: ${SITE_CONFIG.theme.bone};
+    }
+  `;
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        <style dangerouslySetInnerHTML={{ __html: themeVars }} />
       </head>
       <body>
         {/* Hidden SVG defs — liquid-glass refraction filter */}
@@ -121,7 +132,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
         >
           <defs>
             <filter id="liquid-glass-displacement" x="-10%" y="-10%" width="120%" height="120%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="noise">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.012 0.018"
+                numOctaves="2"
+                seed="7"
+                result="noise"
+              >
                 <animate
                   attributeName="baseFrequency"
                   dur="18s"
@@ -129,7 +146,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
                   repeatCount="indefinite"
                 />
               </feTurbulence>
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="noise"
+                scale="6"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
             </filter>
           </defs>
         </svg>
@@ -152,4 +175,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-

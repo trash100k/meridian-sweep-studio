@@ -64,10 +64,12 @@ Promote the existing phone card on `/contact`:
 ## Files Changed
 
 **Created**
+
 - `src/components/CallPill.tsx` — sticky glass phone pill
 - `src/components/CallBand.tsx` — inline section CTA
 
 **Edited**
+
 - `src/routes/__root.tsx` — mount `<CallPill />`, ensure single `<main>`, add `lang`
 - `src/components/SiteNav.tsx` — desktop phone CTA + mobile overlay phone line + focus rings
 - `src/components/SiteFooter.tsx` — phone becomes a tel: link, focus rings
@@ -78,6 +80,7 @@ Promote the existing phone card on `/contact`:
 - `src/styles.css` — `.focus-ring` utility, `.call-pill` glass tokens
 
 **Not touched**
+
 - `SunsetStage.tsx`, `useScrollJack.ts`, `LiquidGlassCard.tsx`, `PageShell.tsx`, backend, schema
 
 ## Open Questions (will assume defaults unless you say otherwise)

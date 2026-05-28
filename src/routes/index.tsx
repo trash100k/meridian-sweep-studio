@@ -2,23 +2,21 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SunsetStage } from "@/components/SunsetStage";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 import { DiagnosticEngine } from "@/components/DiagnosticEngine";
-import { BUSINESS } from "@/config/business";
-
+import { SITE_CONFIG } from "@/config/site";
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: `${BUSINESS.name} — Stewards of your lawn in Meridian, MS` },
+      { title: `${SITE_CONFIG.business.name} — ${SITE_CONFIG.business.tagline}` },
       {
         name: "description",
-        content:
-          "Meridian's red clay sheds water like a tarp. Affordable Landscaping reads the soil six inches deeper than anyone else looks. Free 20-second diagnostic.",
+        content: `${SITE_CONFIG.business.serviceArea}'s ${SITE_CONFIG.content.localized.soilType} ${SITE_CONFIG.content.localized.soilBehavior}. ${SITE_CONFIG.business.shortName} reads the soil six inches deeper than anyone else looks. Free 20-second diagnostic.`,
       },
-      { property: "og:title", content: `${BUSINESS.name} — Free soil diagnostic` },
+      { property: "og:title", content: `${SITE_CONFIG.business.name} — Free soil diagnostic` },
       {
         property: "og:description",
-        content: "Your lawn isn't dying. Your soil is suffocating. Meridian, MS.",
+        content: `Your lawn isn't dying. Your soil is suffocating. ${SITE_CONFIG.business.serviceArea}.`,
       },
     ],
     links: [
@@ -50,9 +48,9 @@ function Index() {
       {({ t, setT }) => {
         // Act I is fully visible at rest (in0 === in1 === 0).
         const act1 = fade(t, 0, 0, 0.16, 0.24);
-        const act2 = fade(t, 0.20, 0.26, 0.36, 0.46);
+        const act2 = fade(t, 0.2, 0.26, 0.36, 0.46);
         const act3 = fade(t, 0.44, 0.52, 0.66, 0.76);
-        const act4Reveal = Math.max(0, Math.min(1, (t - 0.80) / 0.1));
+        const act4Reveal = Math.max(0, Math.min(1, (t - 0.8) / 0.1));
 
         return (
           <div className="relative h-full w-full">
@@ -63,16 +61,18 @@ function Index() {
                 aria-label="Restart story"
                 className="font-display text-xl text-bone tracking-wide hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-1"
               >
-                {BUSINESS.shortName}
+                {SITE_CONFIG.business.shortName}
               </button>
               <a
-                href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
-                aria-label={`Call ${BUSINESS.phone}`}
+                href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
+                aria-label={`Call ${SITE_CONFIG.business.phone}`}
                 className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-bone/90 hover:text-ember font-mono copy-shadow transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-2 py-1"
                 style={{ minHeight: 36 }}
               >
                 <span aria-hidden>📞</span>
-                <span className="tracking-normal normal-case text-sm">{BUSINESS.phone}</span>
+                <span className="tracking-normal normal-case text-sm">
+                  {SITE_CONFIG.business.phone}
+                </span>
               </a>
             </header>
 
@@ -98,15 +98,16 @@ function Index() {
                 <ActLayer opacity={act2} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
                     <p className="text-[11px] uppercase tracking-[0.3em] text-ember mb-4 font-mono copy-shadow">
-                      The Red Clay Problem
+                      The Soil Problem
                     </p>
                     <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone copy-shadow">
-                      Meridian sits on a sheet of <span className="text-ember">red Mississippi clay</span> that
-                      sheds water like a tarp.
+                      {SITE_CONFIG.business.serviceArea.split(",")[0]} sits on a sheet of{" "}
+                      <span className="text-ember">{SITE_CONFIG.content.localized.soilType}</span>{" "}
+                      that {SITE_CONFIG.content.localized.soilBehavior}.
                     </h2>
                     <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
-                      Your grass never had a chance. Most lawn services treat the blade. The damage is
-                      six inches deeper.
+                      Your grass never had a chance. Most lawn services treat the blade. The damage
+                      is six inches deeper.
                     </p>
                   </div>
                 </ActLayer>
@@ -118,14 +119,15 @@ function Index() {
                       The Stewards
                     </p>
                     <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone copy-shadow">
-                      {BUSINESS.shortName} are the
+                      {SITE_CONFIG.business.shortName} are the
                       <br />
                       <span className="text-wheat italic">stewards of your lawn</span> —
                       <br />
                       six inches deeper than anyone else looks.
                     </h2>
                     <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
-                      Born and raised on Meridian dirt. Family-run. Honest pricing.
+                      Born and raised on {SITE_CONFIG.content.localized.dirtName}. Family-run.
+                      Honest pricing.
                     </p>
                   </div>
                 </ActLayer>
@@ -147,7 +149,8 @@ function Index() {
                 style={{
                   opacity: act4Reveal,
                   transform: `translateY(${(1 - act4Reveal) * 12}px)`,
-                  transition: "opacity 480ms cubic-bezier(0.22,1,0.36,1), transform 480ms cubic-bezier(0.22,1,0.36,1)",
+                  transition:
+                    "opacity 480ms cubic-bezier(0.22,1,0.36,1), transform 480ms cubic-bezier(0.22,1,0.36,1)",
                   background:
                     "linear-gradient(135deg, rgba(255,140,80,0.12) 0%, rgba(8,4,12,0.55) 100%)",
                 }}
@@ -156,17 +159,24 @@ function Index() {
                   Or just call us
                 </p>
                 <ul className="space-y-1.5 text-[13px] text-bone/90">
-                  <li className="flex gap-2"><span className="text-ember">·</span>Free yard walk — no obligation, no upsell</li>
-                  <li className="flex gap-2"><span className="text-ember">·</span>Same-week scheduling — Meridian + 25 mi</li>
-                  <li className="flex gap-2"><span className="text-ember">·</span>Real person answers — one business day</li>
+                  <li className="flex gap-2">
+                    <span className="text-ember">·</span>Free yard walk — no obligation, no upsell
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-ember">·</span>Same-week scheduling —{" "}
+                    {SITE_CONFIG.business.serviceArea.split(",")[0]} + 25 mi
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-ember">·</span>Real person answers — one business day
+                  </li>
                 </ul>
                 <a
-                  href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+                  href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
                   className="mt-4 inline-flex items-center gap-2 font-display text-2xl text-bone hover:text-ember transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded"
-                  aria-label={`Call ${BUSINESS.phone}`}
+                  aria-label={`Call ${SITE_CONFIG.business.phone}`}
                 >
                   <span aria-hidden>📞</span>
-                  {BUSINESS.phone}
+                  {SITE_CONFIG.business.phone}
                 </a>
               </div>
             </div>
@@ -177,11 +187,11 @@ function Index() {
               style={{ opacity: t > 0.86 ? 1 : 0 }}
             >
               <a
-                href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+                href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
                 className="hover:text-ember transition"
-                aria-label={`Call ${BUSINESS.phone}`}
+                aria-label={`Call ${SITE_CONFIG.business.phone}`}
               >
-                {BUSINESS.phone}
+                {SITE_CONFIG.business.phone}
               </a>
               <span>Powered by SoilGrids · ISRIC</span>
             </footer>
@@ -190,11 +200,13 @@ function Index() {
             <Link
               to="/diagnostic"
               className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 text-[10px] font-mono uppercase tracking-[0.25em] text-bone/70 hover:text-wheat transition-opacity duration-500 copy-shadow"
-              style={{ opacity: t > 0.04 && t < 0.78 ? 1 : 0, pointerEvents: t > 0.04 && t < 0.78 ? "auto" : "none" }}
+              style={{
+                opacity: t > 0.04 && t < 0.78 ? 1 : 0,
+                pointerEvents: t > 0.04 && t < 0.78 ? "auto" : "none",
+              }}
             >
               Skip the story → run diagnostic
             </Link>
-
           </div>
         );
       }}
@@ -202,11 +214,18 @@ function Index() {
   );
 }
 
-function ActLayer({ opacity, hidden, children }: { opacity: number; hidden?: boolean; children: React.ReactNode }) {
+function ActLayer({
+  opacity,
+  hidden,
+  children,
+}: {
+  opacity: number;
+  hidden?: boolean;
+  children: React.ReactNode;
+}) {
   const eased = easeOutQuint(Math.max(0, Math.min(1, opacity)));
   const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return (
     <div
       aria-hidden={hidden || eased < 0.05}

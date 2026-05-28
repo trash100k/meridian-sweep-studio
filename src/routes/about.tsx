@@ -1,35 +1,37 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
 import { CallBand } from "@/components/CallBand";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
   head: () => ({
     meta: [
-      { title: `About — ${BUSINESS.shortName}` },
+      { title: `About — ${SITE_CONFIG.business.shortName}` },
       {
         name: "description",
-        content:
-          "Family-run lawn stewards born and raised on Meridian, MS red clay. Honest pricing, real diagnostics.",
+        content: `Family-run lawn stewards born and raised on ${SITE_CONFIG.content.localized.dirtName}. Honest pricing, real diagnostics.`,
       },
-      { property: "og:title", content: `About — ${BUSINESS.shortName}` },
+      { property: "og:title", content: `About — ${SITE_CONFIG.business.shortName}` },
       {
         property: "og:description",
-        content: "Born and raised on Meridian dirt. Family-run. Honest pricing.",
+        content: `Born and raised on ${SITE_CONFIG.content.localized.dirtName}. Family-run. Honest pricing.`,
       },
     ],
   }),
 });
-
-const ZIPS = ["39301", "39305", "39307", "39309", "39320"];
 
 function AboutPage() {
   return (
     <PageShell>
       <PageHero
         eyebrow="About"
-        title={<><span className="text-wheat italic">Stewards</span> of Meridian dirt.</>}
+        title={
+          <>
+            <span className="text-wheat italic">Stewards</span> of{" "}
+            {SITE_CONFIG.content.localized.dirtName}.
+          </>
+        }
         body="A family-run crew that got tired of watching neighbors pay for fertilizer their soil couldn't absorb."
       />
 
@@ -37,10 +39,12 @@ function AboutPage() {
         <div className="grid gap-12 md:grid-cols-2 items-start">
           <div className="space-y-5 text-bone/90 leading-relaxed">
             <p>
-              {BUSINESS.shortName} started because the answer to "why is my lawn dying?" in this
-              part of Mississippi is almost never the answer the big chains give you. It's not your
-              watering schedule. It's not your blade height. It's the red clay sitting six inches
-              under the grass, packed so tight rain runs off before it ever reaches a root.
+              {SITE_CONFIG.business.shortName} started because the answer to "why is my lawn dying?"
+              in this part of{" "}
+              {SITE_CONFIG.business.serviceArea.split(",")[1]?.trim() || "the state"} is almost
+              never the answer the big chains give you. It's not your watering schedule. It's not
+              your blade height. It's the {SITE_CONFIG.content.localized.soilType} sitting six
+              inches under the grass, packed so tight rain runs off before it ever reaches a root.
             </p>
             <p>
               We're a small crew. We read soil before we touch it. We tell you when you don't need
@@ -48,7 +52,7 @@ function AboutPage() {
               lock-ins.
             </p>
             <p className="font-display text-2xl text-bone copy-shadow pt-2">
-              {BUSINESS.tagline}
+              {SITE_CONFIG.business.tagline}
             </p>
           </div>
 
@@ -57,11 +61,11 @@ function AboutPage() {
               Service area
             </p>
             <p className="font-display text-3xl text-bone copy-shadow">
-              {BUSINESS.serviceArea}
+              {SITE_CONFIG.business.serviceArea}
             </p>
             <p className="mt-5 text-sm text-bone/70 mb-3">Zip codes we currently steward:</p>
             <ul className="flex flex-wrap gap-2">
-              {ZIPS.map((z) => (
+              {SITE_CONFIG.business.zipCodes.map((z) => (
                 <li
                   key={z}
                   className="font-mono text-[12px] text-bone/85 border border-bone/15 rounded-full px-3 py-1"

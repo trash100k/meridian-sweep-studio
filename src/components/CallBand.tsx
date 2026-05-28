@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
-const telHref = `tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`;
+const telHref = `tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`;
 
 /**
  * Inline CTA panel used near the bottom of every content sub-page.
@@ -10,7 +10,7 @@ const telHref = `tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`;
 export function CallBand({
   headline,
   sub,
-  primaryLabel = `Call ${BUSINESS.phone}`,
+  primaryLabel = `Call ${SITE_CONFIG.business.phone}`,
   secondaryLabel = "Run free diagnostic →",
 }: {
   headline: string;
@@ -19,10 +19,7 @@ export function CallBand({
   secondaryLabel?: string;
 }) {
   return (
-    <section
-      className="px-6 md:px-10 py-12"
-      aria-labelledby="callband-heading"
-    >
+    <section className="px-6 md:px-10 py-12" aria-labelledby="callband-heading">
       <div
         className="mx-auto max-w-5xl rounded-2xl border-l-4 border-ember bg-loam/50 backdrop-blur-md p-7 md:p-10"
         style={{
@@ -42,16 +39,12 @@ export function CallBand({
             >
               {headline}
             </h2>
-            {sub && (
-              <p className="mt-3 text-sm md:text-base text-bone/85 max-w-xl">
-                {sub}
-              </p>
-            )}
+            {sub && <p className="mt-3 text-sm md:text-base text-bone/85 max-w-xl">{sub}</p>}
           </div>
           <div className="flex flex-col sm:flex-row md:flex-col gap-3 md:items-end">
             <a
               href={telHref}
-              aria-label={`Call ${BUSINESS.shortName} at ${BUSINESS.phone}`}
+              aria-label={`Call ${SITE_CONFIG.business.shortName} at ${SITE_CONFIG.business.phone}`}
               className="liquid-pill focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2 focus-visible:ring-offset-loam whitespace-nowrap"
               style={{ minHeight: 44 }}
             >

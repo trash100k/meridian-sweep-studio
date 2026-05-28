@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 const SPRING = "cubic-bezier(0.22, 1, 0.36, 1)";
-const telHref = `tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`;
+const telHref = `tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`;
 
 /**
  * Persistent glass "Call" pill, fixed bottom-right.
@@ -31,7 +31,7 @@ export function CallPill() {
   return (
     <a
       href={telHref}
-      aria-label={`Call ${BUSINESS.shortName} at ${BUSINESS.phone}`}
+      aria-label={`Call ${SITE_CONFIG.business.shortName} at ${SITE_CONFIG.business.phone}`}
       className="call-pill group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2 focus-visible:ring-offset-loam"
       style={{
         position: "fixed",
@@ -51,7 +51,7 @@ export function CallPill() {
       </span>
       <span className="call-pill__label">
         <span className="call-pill__eyebrow">Call</span>
-        <span className="call-pill__number">{BUSINESS.phone}</span>
+        <span className="call-pill__number">{SITE_CONFIG.business.phone}</span>
       </span>
     </a>
   );

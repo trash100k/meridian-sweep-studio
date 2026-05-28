@@ -19,8 +19,7 @@ export function PageShell({ children }: { children: ReactNode }) {
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            "radial-gradient(60% 40% at 85% 20%, rgba(255,170,90,0.18), transparent 70%)",
+          background: "radial-gradient(60% 40% at 85% 20%, rgba(255,170,90,0.18), transparent 70%)",
         }}
       />
       <main className="relative z-10 pt-24">{children}</main>

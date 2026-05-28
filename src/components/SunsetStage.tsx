@@ -230,7 +230,11 @@ export function SunsetStage({ children }: Props) {
   const act = tState < 0.22 ? 0 : tState < 0.5 ? 1 : tState < 0.78 ? 2 : 3;
 
   return (
-    <div ref={wrapRef} className="fixed inset-0 overflow-hidden bg-loam" style={{ touchAction: "none" }}>
+    <div
+      ref={wrapRef}
+      className="fixed inset-0 overflow-hidden bg-loam"
+      style={{ touchAction: "none" }}
+    >
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
       {/* Foreground UI/copy provided by parent */}
       <div className="relative z-10 h-full w-full">
@@ -264,11 +268,7 @@ function mix(aHex: string, bHex: string, t: number): string {
 
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
-  return [
-    parseInt(h.slice(0, 2), 16),
-    parseInt(h.slice(2, 4), 16),
-    parseInt(h.slice(4, 6), 16),
-  ];
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
 }
 
 function drawBeam(

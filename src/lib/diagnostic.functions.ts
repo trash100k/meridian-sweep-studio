@@ -4,6 +4,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { hashString, mulberry32 } from "@/lib/seeded-random";
+import { SITE_CONFIG } from "@/config/site";
 
 // PLACEHOLDER: When you add MAPBOX_TOKEN via the secrets tool, real geocoding
 // + real satellite imagery turn on automatically.
@@ -11,22 +12,17 @@ function getMapboxToken(): string | undefined {
   return process.env.MAPBOX_TOKEN;
 }
 
-// --- Zip → lat/lng fallback (a few Meridian, MS area zips for graceful demo) ---
-const ZIP_CENTROIDS: Record<string, { lat: number; lng: number }> = {
-  "39301": { lat: 32.3643, lng: -88.7034 },
-  "39305": { lat: 32.4287, lng: -88.7264 },
-  "39307": { lat: 32.3552, lng: -88.6708 },
-  "39309": { lat: 32.4019, lng: -88.7681 },
-  "39320": { lat: 32.5418, lng: -88.6961 },
-};
-
 function fallbackCentroid(zip: string) {
-  if (ZIP_CENTROIDS[zip]) return ZIP_CENTROIDS[zip];
-  // Generic fallback: jitter from Meridian center based on zip hash
+  if (SITE_CONFIG.diagnostic.fallbackCentroids[zip])
+    return SITE_CONFIG.diagnostic.fallbackCentroids[zip];
+
+  // Generic fallback: jitter from the first fallback centroid based on zip hash
+  const fallbackValues = Object.values(SITE_CONFIG.diagnostic.fallbackCentroids);
+  const basePoint = fallbackValues[0] || { lat: 32.3643, lng: -88.7034 };
   const r = mulberry32(hashString(zip));
   return {
-    lat: 32.3643 + (r() - 0.5) * 0.4,
-    lng: -88.7034 + (r() - 0.5) * 0.4,
+    lat: basePoint.lat + (r() - 0.5) * 0.4,
+    lng: basePoint.lng + (r() - 0.5) * 0.4,
   };
 }
 
@@ -73,9 +69,9 @@ async function pullSoil(lat: number, lng: number) {
   url.searchParams.append("value", "mean");
 
   const fallback = {
-    clay: 38, // % — mocked Meridian-ish red clay
-    sand: 28,
-    bdod: 1.42, // g/cm³
+    clay: SITE_CONFIG.diagnostic.mockClayPercent,
+    sand: SITE_CONFIG.diagnostic.mockSandPercent,
+    bdod: SITE_CONFIG.diagnostic.mockBulkDensity,
     source: "fallback" as const,
   };
 
@@ -125,7 +121,9 @@ function gradeFromSoil(soil: { clay: number; sand: number; bdod: number }): {
   const clayScore = Math.min(100, Math.max(0, (soil.clay - 10) * 1.6)); // 10% clay = 0, 72.5%+ = 100
   const bdodScore = Math.min(100, Math.max(0, (soil.bdod - 1.1) * 200)); // 1.1 = 0, 1.6 = 100
   const sandRelief = Math.min(20, Math.max(0, soil.sand - 30) * 0.4);
-  const score = Math.round(Math.max(0, Math.min(100, clayScore * 0.55 + bdodScore * 0.45 - sandRelief)));
+  const score = Math.round(
+    Math.max(0, Math.min(100, clayScore * 0.55 + bdodScore * 0.45 - sandRelief)),
+  );
 
   let grade: SoilGrade;
   let headline: string;
@@ -148,7 +146,8 @@ function gradeFromSoil(soil: { clay: number; sand: number; bdod: number }): {
     headline = "Critical";
   } else {
     grade = "F";
-    detail = "Functionally impervious. The lawn isn't dying from drought — it's drowning above sealed clay.";
+    detail =
+      "Functionally impervious. The lawn isn't dying from drought — it's drowning above sealed clay.";
     headline = "Catastrophic";
   }
   return { grade, score, headline, detail };

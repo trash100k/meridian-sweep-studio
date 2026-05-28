@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BUSINESS } from "@/config/business";
+import { SITE_CONFIG } from "@/config/site";
 
 const LINKS = [
   { to: "/diagnostic", label: "Diagnostic" },
@@ -53,8 +53,7 @@ export function SiteNav() {
         style={{
           transform: visible ? "translateY(0)" : "translateY(-100%)",
           transition: `transform 320ms ${SPRING}, background-color 240ms ease`,
-          backgroundColor:
-            !isHome && scrolled ? "rgba(8,4,12,0.55)" : "rgba(8,4,12,0.18)",
+          backgroundColor: !isHome && scrolled ? "rgba(8,4,12,0.55)" : "rgba(8,4,12,0.18)",
           backdropFilter: "blur(18px) saturate(160%)",
           WebkitBackdropFilter: "blur(18px) saturate(160%)",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
@@ -67,7 +66,7 @@ export function SiteNav() {
             to="/"
             className="font-display text-lg text-bone tracking-wide hover:text-wheat transition copy-shadow"
           >
-            {BUSINESS.shortName}
+            {SITE_CONFIG.business.shortName}
           </Link>
 
           {/* Desktop links */}
@@ -85,13 +84,13 @@ export function SiteNav() {
             ))}
             <li>
               <a
-                href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
-                aria-label={`Call ${BUSINESS.phone}`}
+                href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
+                aria-label={`Call ${SITE_CONFIG.business.phone}`}
                 className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-mono text-ember hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-2 py-2"
                 style={{ minHeight: 36 }}
               >
                 <span aria-hidden>📞</span>
-                <span className="tracking-normal normal-case">{BUSINESS.phone}</span>
+                <span className="tracking-normal normal-case">{SITE_CONFIG.business.phone}</span>
               </a>
             </li>
           </ul>
@@ -99,8 +98,8 @@ export function SiteNav() {
           {/* Mobile: phone + menu */}
           <div className="md:hidden flex items-center gap-3">
             <a
-              href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
-              aria-label={`Call ${BUSINESS.phone}`}
+              href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
+              aria-label={`Call ${SITE_CONFIG.business.phone}`}
               className="inline-flex items-center justify-center rounded-full bg-ember/25 border border-ember/40 text-bone copy-shadow"
               style={{ minHeight: 44, minWidth: 44 }}
             >
@@ -147,14 +146,14 @@ export function SiteNav() {
           ))}
           <li className="pt-6 border-t border-bone/15 w-2/3 text-center mt-4">
             <a
-              href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, "")}`}
+              href={`tel:${SITE_CONFIG.business.phone.replace(/[^\d+]/g, "")}`}
               className="inline-flex flex-col items-center gap-1"
             >
               <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-ember">
                 Call us
               </span>
               <span className="font-display text-3xl text-bone copy-shadow">
-                {BUSINESS.phone}
+                {SITE_CONFIG.business.phone}
               </span>
             </a>
           </li>
