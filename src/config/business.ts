@@ -1,7 +1,7 @@
 // Affordable Landscaping — Meridian, MS
 export const BUSINESS = {
   name: "Affordable Landscaping",
-  shortName: "Meridian's Premiere Lawn stewards!",
+  shortName: "Meridian's Premiere Lawn Stewards",
   serviceArea: "Meridian, MS",
   phone: "(601) 604-0461",
   email: "hello@affordablelandscaping.example",
