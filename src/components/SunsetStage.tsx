@@ -248,10 +248,10 @@ export function SunsetStage({ children }: Props) {
       >
         <div className="scroll-nudge">
           <svg className="scroll-nudge__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 14 12 8 18 14" />
+            <polyline points="6 10 12 16 18 10" />
           </svg>
           <svg className="scroll-nudge__arrow scroll-nudge__arrow--delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 14 12 8 18 14" />
+            <polyline points="6 10 12 16 18 10" />
           </svg>
         </div>
       </div>
@@ -280,16 +280,16 @@ export function SunsetStage({ children }: Props) {
           width: 30px;
           height: 30px;
           color: var(--bone);
-          animation: scroll-nudge-rise 1.8s cubic-bezier(0.22,1,0.36,1) infinite;
+          animation: scroll-nudge-fall 1.8s cubic-bezier(0.22,1,0.36,1) infinite;
           filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
         }
         .scroll-nudge__arrow--delay {
           animation-delay: 0.9s;
         }
-        @keyframes scroll-nudge-rise {
-          0%   { transform: translateY(10px); opacity: 0; }
+        @keyframes scroll-nudge-fall {
+          0%   { transform: translateY(-10px); opacity: 0; }
           25%  { opacity: 1; }
-          100% { transform: translateY(-22px); opacity: 0; }
+          100% { transform: translateY(22px); opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
           .scroll-nudge__arrow { animation: none; transform: none; opacity: 1; }
