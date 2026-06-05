@@ -65,7 +65,7 @@ export function SiteNav() {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 md:px-10">
           <Link
             to="/"
-            className="font-display text-lg text-bone tracking-wide hover:text-wheat transition copy-shadow"
+            className="font-display text-base md:text-lg tracking-wide text-bone hover:text-wheat transition copy-shadow whitespace-nowrap leading-tight max-w-[60vw] truncate"
           >
             {BUSINESS.shortName}
           </Link>
