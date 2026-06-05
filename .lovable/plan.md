@@ -1,87 +1,35 @@
-# Plan: Make Contact Front-and-Center (Unobtrusively)
+Replace the small `wheel · drag · type — no scrolling` text at the bottom of the homepage stage with a large glassmorphism **up-arrow** that loops a flash animation: travels from bottom to top while fading in and out, repeating.
 
-The site reads beautifully but never closes. We'll add five quiet conversion surfaces that all reinforce the same call-to-action, then sweep accessibility so they're usable for everyone.
+### File touched
+`src/components/SunsetStage.tsx` — only.
 
-## 1. Persistent "Call" Glass Pill (every page)
+### Changes
 
-A new `<CallPill />` component fixed to the bottom-right.
+1. **Remove** the existing hint `<div>` near the bottom that renders `wheel · drag · type — no scrolling`.
 
-- Glass styling matching `LiquidGlassCard` (dusk tint, blur, ember border on hover)
-- Shows phone icon + `(601) 604-0461` on desktop; collapses to icon-only on mobile (with full label revealed on tap)
-- Renders an `<a href="tel:…">` so it triggers the dialer on mobile and copy-on-click on desktop
-- Hidden on the homepage until `t > 0.05` so it doesn't break the Act I cinema; always visible elsewhere
-- Mounted in `__root.tsx` so it persists across route changes
-- Respects `prefers-reduced-motion` for the entrance fade
-- 44×44 minimum tap target, `aria-label="Call Affordable Landscaping at (601) 604-0461"`
+2. **Insert** in the same place a glassmorphism arrow stack, centered bottom, `z-20`, `pointer-events-none`, fading out at the same threshold (`tState >= 0.04`):
+   - A circular/pill glass container (~56–72 px) using the existing liquid-glass aesthetic: `backdrop-filter: blur(16px) saturate(180%)`, white-to-transparent gradient fill, soft inset highlight, ember-tinted glow shadow, `rounded-full`.
+   - An SVG **chevron-up** icon (~28–32 px) in `text-bone`, centered inside.
+   - A trailing "ghost" arrow layer behind it that runs the looping flash.
 
-## 2. Nav Right-Side CTA
+3. **Looping flash animation** (added as scoped keyframes in `SunsetStage.tsx` via a `<style>` tag or inline `<style jsx>`-style block, since `styles.css` should stay untouched per the request scope):
+   - Keyframe `arrow-rise`:
+     - `0%`  → `translateY(8px)`, `opacity: 0`
+     - `25%` → `opacity: 1`
+     - `100%` → `translateY(-22px)`, `opacity: 0`
+   - Duration ~1.8s, `ease-out`, `infinite`.
+   - Apply to the inner arrow SVG so the static glass disc stays put while the chevron repeatedly drifts upward and fades.
+   - Add a second, delayed copy of the same SVG (delay ~0.9s) so there is always one arrow visible — produces the "flash bottom → top in repetition" feel.
 
-In `SiteNav.tsx`, add a small phone link to the right of the desktop link list:
+4. **Accessibility**:
+   - `aria-hidden="true"` on the visual.
+   - Wrap in `@media (prefers-reduced-motion: reduce)` → disable the rise animation, leave the arrow statically centered.
 
-- `📞 (601) 604-0461` in ember, mono micro-caps
-- On mobile overlay, the phone number becomes a large tappable line beneath the menu links
+5. **Fade with scroll**: keep the existing `opacity` binding to `tState < 0.04 ? 1 : 0` with the same `transition-opacity duration-500`, so as soon as the user advances the story, the arrow disappears.
 
-## 3. Homepage Final Act: "Three Reasons to Call" Card
-
-Inside the existing Act IV liquid glass card (or as a sibling that appears at `t > 0.92`), add a small "Prefer to talk?" footer block under the diagnostic result with three one-line reasons:
-
-1. **Free yard walk** — no obligation, no upsell
-2. **Same-week scheduling** — Meridian + 25 mi
-3. **Real person answers** — one business day, no call center
-
-Each reason is a tiny row with an ember bullet, then the phone number as a tap-to-call button beneath.
-
-## 4. Inline CTA Band on Sub-Pages
-
-A new `<CallBand />` block used once per content page (services, process, results, about, faq) before the footer:
-
-- Dusk gradient panel with ember left border
-- Headline varies per page to give multiple reasons:
-  - **Services**: "Not sure which service fits? We'll tell you straight."
-  - **Process**: "Skip the guesswork — book the free yard walk."
-  - **Results**: "Want results like these on your lawn?"
-  - **About**: "Talk to the family who'll actually be on your yard."
-  - **FAQ**: "Still have questions? We pick up the phone."
-- Two actions: primary `Call (601) 604-0461`, secondary `Run free diagnostic →`
-
-## 5. Contact Page Trust Upgrade
-
-Promote the existing phone card on `/contact`:
-
-- Make Phone the full-width hero card above the email/area cards, with "Answered by a real person, one business day" microcopy
-- Add response-time + service-area chips below
-
-## 6. Accessibility Sweep
-
-- Add visible focus rings (`focus-visible:ring-2 focus-visible:ring-ember`) to all nav links, CallPill, CallBand buttons, and form inputs that currently rely on default outline
-- Promote `<a>` and `<button>` tap targets to `min-h-11 min-w-11` site-wide where they're currently smaller (mobile menu toggle, footer links, skip-the-story link)
-- Add `aria-label` to the homepage logo button ("Restart story"), the mobile menu toggle already has one — verify
-- Ensure `bone/70` text meets contrast on the dusk gradient; bump to `bone/85` where it fails on the lighter glass panels
-- Confirm there's exactly one `<main>` per route — wrap `<Outlet />` in `__root.tsx` with `<main>` and remove any inner `<main>` from page shells
-- Add `aria-live="polite"` to the diagnostic result reveal so screen readers announce the grade
-- Add `lang="en"` to the root `<html>` if missing
-
-## Files Changed
-
-**Created**
-- `src/components/CallPill.tsx` — sticky glass phone pill
-- `src/components/CallBand.tsx` — inline section CTA
-
-**Edited**
-- `src/routes/__root.tsx` — mount `<CallPill />`, ensure single `<main>`, add `lang`
-- `src/components/SiteNav.tsx` — desktop phone CTA + mobile overlay phone line + focus rings
-- `src/components/SiteFooter.tsx` — phone becomes a tel: link, focus rings
-- `src/routes/index.tsx` — "three reasons" block inside Act IV, aria-label on logo restart button
-- `src/routes/contact.tsx` — promote phone card, add response chips
-- `src/routes/services.tsx`, `process.tsx`, `results.tsx`, `about.tsx`, `faq.tsx` — add `<CallBand />` before footer with page-specific copy
-- `src/components/DiagnosticEngine.tsx` — `aria-live` on result reveal
-- `src/styles.css` — `.focus-ring` utility, `.call-pill` glass tokens
-
-**Not touched**
-- `SunsetStage.tsx`, `useScrollJack.ts`, `LiquidGlassCard.tsx`, `PageShell.tsx`, backend, schema
-
-## Open Questions (will assume defaults unless you say otherwise)
-
-- CallPill behavior on the homepage: I'll hide it during Act I (`t < 0.05`) and fade in for the rest of the scroll
-- "Three reasons" copy above is a first draft in your Silent Siphon voice — easy to swap
-- No SMS/text option added; phone + diagnostic only. Say the word if you want a "Text us" path too.
+### Acceptance
+- Old "wheel · drag · type" text is gone.
+- A beautiful glass disc with an up-chevron sits centered at the bottom of the hero on first load.
+- The chevron repeatedly rises from inside the disc and fades, in a continuous loop, giving a "scroll up" nudge.
+- Disappears smoothly the moment the user scrolls/drags.
+- Reduced-motion users see the static arrow only.

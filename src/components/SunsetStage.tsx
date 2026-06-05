@@ -240,13 +240,62 @@ export function SunsetStage({ children }: Props) {
           setT: (v) => scrollJack.setTarget(v),
         })}
       </div>
-      {/* Scroll progress hint, fades when t > 0.05 */}
+      {/* Scroll-up nudge — glass disc with repeating chevron flash. Fades once t > 0.04. */}
       <div
-        className="pointer-events-none absolute bottom-6 left-1/2 z-20 w-[min(18rem,calc(100vw-2rem))] -translate-x-1/2 text-center text-[10px] uppercase tracking-[0.26em] leading-relaxed text-bone/75 font-mono copy-shadow transition-opacity duration-500"
+        aria-hidden
+        className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 transition-opacity duration-500"
         style={{ opacity: tState < 0.04 ? 1 : 0 }}
       >
-        wheel · drag · type — no scrolling
+        <div className="scroll-nudge">
+          <svg className="scroll-nudge__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 14 12 8 18 14" />
+          </svg>
+          <svg className="scroll-nudge__arrow scroll-nudge__arrow--delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 14 12 8 18 14" />
+          </svg>
+        </div>
       </div>
+      <style>{`
+        .scroll-nudge {
+          position: relative;
+          width: 64px;
+          height: 64px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+          backdrop-filter: blur(16px) saturate(180%);
+          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          border: 1px solid rgba(255,255,255,0.28);
+          box-shadow:
+            0 1px 0 0 rgba(255,255,255,0.35) inset,
+            0 -1px 0 0 rgba(255,255,255,0.08) inset,
+            0 18px 40px -16px rgba(0,0,0,0.6),
+            0 0 32px -6px rgba(255,170,90,0.45);
+          overflow: hidden;
+        }
+        .scroll-nudge__arrow {
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          color: var(--bone);
+          animation: scroll-nudge-rise 1.8s cubic-bezier(0.22,1,0.36,1) infinite;
+          filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+        }
+        .scroll-nudge__arrow--delay {
+          animation-delay: 0.9s;
+        }
+        @keyframes scroll-nudge-rise {
+          0%   { transform: translateY(10px); opacity: 0; }
+          25%  { opacity: 1; }
+          100% { transform: translateY(-22px); opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .scroll-nudge__arrow { animation: none; transform: none; opacity: 1; }
+          .scroll-nudge__arrow--delay { display: none; }
+        }
+      `}</style>
     </div>
   );
 }
