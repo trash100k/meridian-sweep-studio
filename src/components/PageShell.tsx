@@ -32,22 +32,44 @@ export function PageHero({
   eyebrow,
   title,
   body,
+  align = "left",
 }: {
   eyebrow: string;
   title: ReactNode;
   body?: ReactNode;
+  align?: "left" | "center";
 }) {
+  const centered = align === "center";
   return (
     <section className="px-6 md:px-10 pb-12">
-      <div className="mx-auto max-w-4xl readability-scrim">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-ember mb-4 font-mono copy-shadow">
-          {eyebrow}
-        </p>
-        <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-balance leading-[1.04] text-bone copy-shadow">
+      <div
+        className={`mx-auto max-w-4xl readability-scrim ${
+          centered ? "text-center" : ""
+        }`}
+      >
+        {/* Tier 1 — eyebrow with flanking ember hairlines */}
+        <div
+          className={`flex items-center gap-4 mb-6 ${
+            centered ? "justify-center" : ""
+          }`}
+        >
+          <span aria-hidden className="eyebrow-rule" />
+          <span className="eyebrow copy-shadow">{eyebrow}</span>
+          <span aria-hidden className="eyebrow-rule" />
+        </div>
+
+        {/* Tier 2 — display serif headline */}
+        <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-balance leading-[1.02] tracking-tight text-bone copy-shadow">
           {title}
         </h1>
+
+        {/* Tier 3 — italic serif support line */}
         {body && (
-          <p className="mt-6 text-base md:text-xl text-bone/90 max-w-2xl text-balance copy-shadow">
+          <p
+            className={`support-line copy-shadow mt-8 max-w-2xl text-balance ${
+              centered ? "mx-auto" : ""
+            }`}
+          >
             {body}
           </p>
         )}

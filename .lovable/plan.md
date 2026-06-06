@@ -1,35 +1,50 @@
-Replace the small `wheel · drag · type — no scrolling` text at the bottom of the homepage stage with a large glassmorphism **up-arrow** that loops a flash animation: travels from bottom to top while fading in and out, repeating.
+## Goal
+Replace the current flat oversized-serif headlines across the site with a true 3-tier editorial hierarchy: **eyebrow → headline → supporting line**, matching the selected "Editorial Sunset" direction.
 
-### File touched
-`src/components/SunsetStage.tsx` — only.
+## What changes (visual only)
 
-### Changes
+Every display moment on the site now uses the same hierarchy:
 
-1. **Remove** the existing hint `<div>` near the bottom that renders `wheel · drag · type — no scrolling`.
+```
+─── THE STEWARDS ───        ← eyebrow: Inter 11px, wheat, uppercase, tracking 0.4em, flanked by short ember rules
+Display Serif Headline.     ← Instrument Serif, 5xl→8xl, bone, leading 1.02, with italic-ember + wheat color accents on a key phrase
+"Supporting italic line."   ← Instrument Serif italic, 2xl→3xl, bone/70
+```
 
-2. **Insert** in the same place a glassmorphism arrow stack, centered bottom, `z-20`, `pointer-events-none`, fading out at the same threshold (`tState >= 0.04`):
-   - A circular/pill glass container (~56–72 px) using the existing liquid-glass aesthetic: `backdrop-filter: blur(16px) saturate(180%)`, white-to-transparent gradient fill, soft inset highlight, ember-tinted glow shadow, `rounded-full`.
-   - An SVG **chevron-up** icon (~28–32 px) in `text-bone`, centered inside.
-   - A trailing "ghost" arrow layer behind it that runs the looping flash.
+Color rhythm: bone for the main words, ember (italic) for the brand phrase, wheat for the closing payoff phrase. Eyebrow uses the existing `--ember/40` hairlines + wheat label.
 
-3. **Looping flash animation** (added as scoped keyframes in `SunsetStage.tsx` via a `<style>` tag or inline `<style jsx>`-style block, since `styles.css` should stay untouched per the request scope):
-   - Keyframe `arrow-rise`:
-     - `0%`  → `translateY(8px)`, `opacity: 0`
-     - `25%` → `opacity: 1`
-     - `100%` → `translateY(-22px)`, `opacity: 0`
-   - Duration ~1.8s, `ease-out`, `infinite`.
-   - Apply to the inner arrow SVG so the static glass disc stays put while the chevron repeatedly drifts upward and fades.
-   - Add a second, delayed copy of the same SVG (delay ~0.9s) so there is always one arrow visible — produces the "flash bottom → top in repetition" feel.
+## Files touched (frontend / presentation only)
 
-4. **Accessibility**:
-   - `aria-hidden="true"` on the visual.
-   - Wrap in `@media (prefers-reduced-motion: reduce)` → disable the rise animation, leave the arrow statically centered.
+1. **`src/components/PageShell.tsx` → `PageHero`**
+   Rebuild the hero block so every page hero (`/about`, `/services`, `/process`, `/diagnostic`, `/faq`, `/contact`, `/results`) gets the new hierarchy:
+   - eyebrow row with flanking ember hairlines
+   - serif headline, leading 1.02, with the existing `title` slot used as-is (so per-page italic/color accents already inline keep working)
+   - support line rendered as italic serif at `text-bone/70` instead of the current plain paragraph
 
-5. **Fade with scroll**: keep the existing `opacity` binding to `tState < 0.04 ? 1 : 0` with the same `transition-opacity duration-500`, so as soon as the user advances the story, the arrow disappears.
+2. **`src/routes/index.tsx` (Acts I, II, III)**
+   Apply the same three-tier shape to all three crossfading copy panels:
+   - Act I — eyebrow "The Diagnosis" (new), keep existing two-line serif headline, support line italicized
+   - Act II — eyebrow "The Red Clay Problem" already exists; add flanking ember rules; italicize the support line
+   - Act III — **rewrite to the locked copy**:
+     - eyebrow: `THE STEWARDS`
+     - headline: `Meridian's Premiere ` + *Lawn Stewards* (italic ember) + ` are the key to your best ` + `lawn & garden.` (wheat)
+     - support: `"Six inches deeper than anyone else looks."` (italic, bone/70)
 
-### Acceptance
-- Old "wheel · drag · type" text is gone.
-- A beautiful glass disc with an up-chevron sits centered at the bottom of the hero on first load.
-- The chevron repeatedly rises from inside the disc and fades, in a continuous loop, giving a "scroll up" nudge.
-- Disappears smoothly the moment the user scrolls/drags.
-- Reduced-motion users see the static arrow only.
+3. **`src/styles.css`** — add two small utilities used by the hierarchy so we don't repeat Tailwind soup:
+   - `@utility eyebrow` → uppercase, tracking 0.4em, 11px, wheat, Inter 600
+   - `@utility eyebrow-rule` → 1px × 3rem ember/40 hairline
+   - `@utility support-line` → Instrument Serif italic, bone/70, responsive 2xl→3xl
+
+   (Tailwind v4 `@utility` form, not `@layer utilities`.)
+
+4. **`src/components/SunsetStage.tsx`** — no logic change; just confirm the existing scrim opacity still keeps the wheat eyebrow legible (no edits expected unless contrast fails QA).
+
+## What stays the same
+- All routing, data, server functions, scroll-jack, glassmorphism arrow, Lovable Cloud wiring, diagnostic engine, business config.
+- Photographic backgrounds, sunset stage animation, nav, footer, call pill.
+- Copy on pages other than Act III remains as-is.
+
+## Acceptance
+- Every hero on the site reads as **eyebrow → headline → support**, with consistent spacing rhythm and the ember-hairline eyebrow treatment.
+- Home Act III renders the exact locked copy with italic ember on "Lawn Stewards" and wheat on "lawn & garden."
+- No layout/route changes; no business-logic changes.

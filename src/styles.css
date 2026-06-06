@@ -424,4 +424,46 @@
   }
 }
 
+/* ─── Editorial type hierarchy (eyebrow / headline / support) ──────── */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: var(--wheat);
+  white-space: nowrap;
+}
+
+@utility eyebrow-rule {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 1px;
+  background: color-mix(in oklab, var(--ember) 40%, transparent);
+}
+
+@utility support-line {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  color: color-mix(in oklab, var(--bone) 70%, transparent);
+  font-size: 1.25rem;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}
+
+@media (min-width: 768px) {
+  .support-line {
+    font-size: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .support-line {
+    font-size: 1.75rem;
+  }
+}
+
+
 
