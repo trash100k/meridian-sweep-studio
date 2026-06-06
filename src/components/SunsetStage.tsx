@@ -240,62 +240,98 @@ export function SunsetStage({ children }: Props) {
           setT: (v) => scrollJack.setTarget(v),
         })}
       </div>
-      {/* Scroll-up nudge — glass disc with repeating chevron flash. Fades once t > 0.04. */}
+      {/* Begin CTA — pulsing pill that also advances the scene on click. Fades once t > 0.04. */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-8 left-1/2 z-20 -translate-x-1/2 transition-opacity duration-500"
-        style={{ opacity: tState < 0.04 ? 1 : 0 }}
+        className="absolute bottom-10 left-1/2 z-20 -translate-x-1/2 transition-opacity duration-500"
+        style={{
+          opacity: tState < 0.04 ? 1 : 0,
+          pointerEvents: tState < 0.04 ? "auto" : "none",
+        }}
       >
-        <div className="scroll-nudge">
-          <svg className="scroll-nudge__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 10 12 16 18 10" />
+        <button
+          type="button"
+          onClick={() => scrollJack.setTarget(0.25)}
+          className="begin-cta"
+          aria-label="Begin the diagnostic"
+        >
+          <span className="begin-cta__ring" aria-hidden />
+          <span className="begin-cta__label">Begin the diagnostic</span>
+          <svg
+            className="begin-cta__arrow"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <polyline points="6 14 12 8 18 14" />
           </svg>
-          <svg className="scroll-nudge__arrow scroll-nudge__arrow--delay" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 10 12 16 18 10" />
-          </svg>
-        </div>
+        </button>
       </div>
       <style>{`
-        .scroll-nudge {
+        .begin-cta {
           position: relative;
-          width: 64px;
-          height: 64px;
-          border-radius: 999px;
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          justify-content: center;
-          background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
-          backdrop-filter: blur(16px) saturate(180%);
-          -webkit-backdrop-filter: blur(16px) saturate(180%);
-          border: 1px solid rgba(255,255,255,0.28);
+          gap: 0.65rem;
+          padding: 0.85rem 1.5rem 0.85rem 1.6rem;
+          border-radius: 999px;
+          background: var(--ember, #e0813a);
+          color: var(--bone, #f6f1e6);
+          font-family: var(--font-sans, Inter, system-ui, sans-serif);
+          font-weight: 600;
+          font-size: 13px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          border: 1px solid rgba(246, 241, 230, 0.22);
           box-shadow:
-            0 1px 0 0 rgba(255,255,255,0.35) inset,
-            0 -1px 0 0 rgba(255,255,255,0.08) inset,
-            0 18px 40px -16px rgba(0,0,0,0.6),
-            0 0 32px -6px rgba(255,170,90,0.45);
-          overflow: hidden;
+            0 1px 0 0 rgba(255, 255, 255, 0.25) inset,
+            0 18px 40px -16px rgba(0, 0, 0, 0.65),
+            0 0 28px -4px rgba(224, 129, 58, 0.7);
+          cursor: pointer;
+          transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 200ms ease;
         }
-        .scroll-nudge__arrow {
+        .begin-cta:hover {
+          transform: translateY(-1px);
+          box-shadow:
+            0 1px 0 0 rgba(255, 255, 255, 0.3) inset,
+            0 22px 44px -16px rgba(0, 0, 0, 0.7),
+            0 0 36px -2px rgba(224, 129, 58, 0.85);
+        }
+        .begin-cta:focus-visible {
+          outline: 2px solid var(--bone, #f6f1e6);
+          outline-offset: 3px;
+        }
+        .begin-cta__arrow {
+          width: 16px;
+          height: 16px;
+          animation: begin-cta-arrow 1.8s ease-in-out infinite;
+        }
+        .begin-cta__ring {
           position: absolute;
-          width: 30px;
-          height: 30px;
-          color: var(--bone);
-          animation: scroll-nudge-fall 1.8s cubic-bezier(0.22,1,0.36,1) infinite;
-          filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+          inset: -4px;
+          border-radius: 999px;
+          border: 1.5px solid rgba(224, 129, 58, 0.55);
+          animation: begin-cta-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          pointer-events: none;
         }
-        .scroll-nudge__arrow--delay {
-          animation-delay: 0.9s;
+        @keyframes begin-cta-pulse {
+          0%   { transform: scale(1);    opacity: 0.75; }
+          70%  { transform: scale(1.22); opacity: 0;    }
+          100% { transform: scale(1.22); opacity: 0;    }
         }
-        @keyframes scroll-nudge-fall {
-          0%   { transform: translateY(-10px); opacity: 0; }
-          25%  { opacity: 1; }
-          100% { transform: translateY(22px); opacity: 0; }
+        @keyframes begin-cta-arrow {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-3px); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .scroll-nudge__arrow { animation: none; transform: none; opacity: 1; }
-          .scroll-nudge__arrow--delay { display: none; }
+          .begin-cta__ring,
+          .begin-cta__arrow { animation: none; }
         }
       `}</style>
+
     </div>
   );
 }
