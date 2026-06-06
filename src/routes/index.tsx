@@ -82,14 +82,18 @@ function Index() {
                 {/* Act I */}
                 <ActLayer opacity={act1} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
-                    <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] text-bone copy-shadow">
+                    <div className="flex items-center gap-4 mb-6">
+                      <span aria-hidden className="eyebrow-rule" />
+                      <span className="eyebrow copy-shadow">The Diagnosis</span>
+                      <span aria-hidden className="eyebrow-rule" />
+                    </div>
+                    <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] tracking-tight text-bone copy-shadow">
                       Your lawn isn't dying.
                       <br />
-                      <span className="text-ember">Your soil is suffocating.</span>
+                      <span className="text-ember italic">Your soil is suffocating.</span>
                     </h1>
-                    <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
-                      A free, 20-second look at the dirt under your feet — before you spend another
-                      dollar on fertilizer that can't reach the roots.
+                    <p className="support-line copy-shadow mt-8 max-w-xl text-balance">
+                      A free, 20-second look at the dirt under your feet — before you spend another dollar on fertilizer that can't reach the roots.
                     </p>
                   </div>
                 </ActLayer>
@@ -97,16 +101,16 @@ function Index() {
                 {/* Act II */}
                 <ActLayer opacity={act2} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
-                    <p className="text-[11px] uppercase tracking-[0.3em] text-ember mb-4 font-mono copy-shadow">
-                      The Red Clay Problem
-                    </p>
-                    <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone copy-shadow">
-                      Meridian sits on a sheet of <span className="text-ember">red Mississippi clay</span> that
-                      sheds water like a tarp.
+                    <div className="flex items-center gap-4 mb-6">
+                      <span aria-hidden className="eyebrow-rule" />
+                      <span className="eyebrow copy-shadow">The Red Clay Problem</span>
+                      <span aria-hidden className="eyebrow-rule" />
+                    </div>
+                    <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.04] tracking-tight text-bone copy-shadow">
+                      Meridian sits on a sheet of <span className="text-ember italic">red Mississippi clay</span> that sheds water like a tarp.
                     </h2>
-                    <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
-                      Your grass never had a chance. Most lawn services treat the blade. The damage is
-                      six inches deeper.
+                    <p className="support-line copy-shadow mt-8 max-w-xl text-balance">
+                      Your grass never had a chance. Most lawn services treat the blade. The damage is six inches deeper.
                     </p>
                   </div>
                 </ActLayer>
@@ -114,21 +118,23 @@ function Index() {
                 {/* Act III */}
                 <ActLayer opacity={act3} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
-                    <p className="text-[11px] uppercase tracking-[0.3em] text-wheat mb-4 font-mono copy-shadow">
-                      The Stewards
-                    </p>
-                    <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.05] text-bone copy-shadow">
-                      {BUSINESS.shortName} are the
-                      <br />
-                      <span className="text-wheat italic">stewards of your lawn</span> —
-                      <br />
-                      six inches deeper than anyone else looks.
+                    <div className="flex items-center gap-4 mb-6">
+                      <span aria-hidden className="eyebrow-rule" />
+                      <span className="eyebrow copy-shadow">The Stewards</span>
+                      <span aria-hidden className="eyebrow-rule" />
+                    </div>
+                    <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.02] tracking-tight text-bone copy-shadow">
+                      Meridian's Premiere{" "}
+                      <span className="text-ember italic">Lawn Stewards</span>{" "}
+                      are the key to your best{" "}
+                      <span className="text-wheat">lawn &amp; garden.</span>
                     </h2>
-                    <p className="mt-6 text-base md:text-xl text-bone/90 max-w-xl text-balance copy-shadow">
-                      Born and raised on Meridian dirt. Family-run. Honest pricing.
+                    <p className="support-line copy-shadow mt-8 max-w-xl text-balance">
+                      &ldquo;Six inches deeper than anyone else looks.&rdquo;
                     </p>
                   </div>
                 </ActLayer>
+
               </div>
             </div>
 
