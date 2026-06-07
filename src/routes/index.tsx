@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SunsetStage } from "@/components/SunsetStage";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
-import { DiagnosticEngine } from "@/components/DiagnosticEngine";
 import { BUSINESS } from "@/config/business";
 
 
@@ -9,16 +8,15 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: `${BUSINESS.name} — Stewards of your lawn in Meridian, MS` },
+      { title: `${BUSINESS.name} — Landscaping, Masonry & Lawn Care in Meridian, MS` },
       {
         name: "description",
-        content:
-          "Meridian's red clay sheds water like a tarp. Affordable Landscaping reads the soil six inches deeper than anyone else looks. Free 20-second diagnostic.",
+        content: `Family-run landscaping, hardscaping, stone masonry, outdoor lighting, and weekly lawn care across Meridian, MS. Owned by ${BUSINESS.owner}. Call ${BUSINESS.phone}.`,
       },
-      { property: "og:title", content: `${BUSINESS.name} — Free soil diagnostic` },
+      { property: "og:title", content: `${BUSINESS.name} — Meridian, MS` },
       {
         property: "og:description",
-        content: "Your lawn isn't dying. Your soil is suffocating. Meridian, MS.",
+        content: `Landscaping, masonry, lighting, and lawn care. Owned by ${BUSINESS.owner}.`,
       },
     ],
     links: [
@@ -32,7 +30,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-// Plateau fade: ramps in over [in0,in1], holds at 1 across [in1,out0], ramps out over [out0,out1].
 const fade = (t: number, in0: number, in1: number, out0: number, out1: number) => {
   if (t <= in0) return in0 === in1 ? 1 : 0;
   if (t < in1) return (t - in0) / (in1 - in0);
@@ -41,14 +38,21 @@ const fade = (t: number, in0: number, in1: number, out0: number, out1: number) =
   return 0;
 };
 
-// Snappy attack, soft tail — Apple-style.
 const easeOutQuint = (x: number) => 1 - Math.pow(1 - x, 5);
+
+const SERVICES = [
+  { name: "Lawn Maintenance", note: "Weekly mowing, edging, cleanups" },
+  { name: "Landscape Design", note: "Beds, plantings, refreshes" },
+  { name: "Hardscaping", note: "Patios, walls, fire pits" },
+  { name: "Stone Masonry", note: "Hand-laid stonework that lasts" },
+  { name: "Outdoor Lighting", note: "Low-voltage LED, paths + uplighting" },
+  { name: "Free Soil Diagnostic", note: "When grass won't take", to: "/diagnostic" as const },
+];
 
 function Index() {
   return (
     <SunsetStage>
       {({ t, setT }) => {
-        // Act I is fully visible at rest (in0 === in1 === 0).
         const act1 = fade(t, 0, 0, 0.16, 0.24);
         const act2 = fade(t, 0.20, 0.26, 0.36, 0.46);
         const act3 = fade(t, 0.44, 0.52, 0.66, 0.76);
@@ -56,7 +60,6 @@ function Index() {
 
         return (
           <div className="relative h-full w-full">
-            {/* Top bar */}
             <header className="absolute inset-x-0 top-0 z-30 px-6 md:px-10 py-6 flex items-center justify-between">
               <button
                 onClick={() => setT(0)}
@@ -76,61 +79,54 @@ function Index() {
               </a>
             </header>
 
-            {/* Acts I–III — crossfading copy stacked center-left */}
             <div className="absolute inset-0 z-20 flex items-center px-6 md:px-12 pointer-events-none">
               <div className="max-w-2xl w-full">
-                {/* Act I */}
                 <ActLayer opacity={act1} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
                     <div className="flex items-center gap-4 mb-6">
                       <span aria-hidden className="eyebrow-rule" />
-                      <span className="eyebrow copy-shadow">The Diagnosis</span>
+                      <span className="eyebrow copy-shadow">Meridian, MS · Family-run since 2009</span>
                       <span aria-hidden className="eyebrow-rule" />
                     </div>
                     <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] tracking-tight text-bone copy-shadow">
-                      Your lawn isn't dying.
+                      Landscaping, masonry, and lawn care —
                       <br />
-                      <span className="text-ember italic">Your soil is suffocating.</span>
+                      <span className="text-ember italic">done by hand, done right.</span>
                     </h1>
                     <p className="support-line copy-shadow mt-8 max-w-xl text-balance">
-                      A free, 20-second look at the dirt under your feet — before you spend another dollar on fertilizer that can't reach the roots.
+                      {BUSINESS.name}. Owned and run by {BUSINESS.owner} and a small in-house crew.
                     </p>
                   </div>
                 </ActLayer>
 
-                {/* Act II */}
                 <ActLayer opacity={act2} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
                     <div className="flex items-center gap-4 mb-6">
                       <span aria-hidden className="eyebrow-rule" />
-                      <span className="eyebrow copy-shadow">The Red Clay Problem</span>
+                      <span className="eyebrow copy-shadow">What we do</span>
                       <span aria-hidden className="eyebrow-rule" />
                     </div>
                     <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.04] tracking-tight text-bone copy-shadow">
-                      Meridian sits on a sheet of <span className="text-ember italic">red Mississippi clay</span> that sheds water like a tarp.
+                      One crew for the <span className="text-ember italic">whole yard</span> — from weekly mowing to hand-laid stone.
                     </h2>
                     <p className="support-line copy-shadow mt-8 max-w-xl text-balance">
-                      Your grass never had a chance. Most lawn services treat the blade. The damage is six inches deeper.
+                      Lawn care · Landscape design · Hardscaping · Stone masonry · Outdoor lighting.
                     </p>
                   </div>
                 </ActLayer>
 
-                {/* Act III */}
                 <ActLayer opacity={act3} hidden={act4Reveal > 0.5}>
                   <div className="readability-scrim pr-4">
                     <div className="flex items-center gap-4 mb-6">
                       <span aria-hidden className="eyebrow-rule" />
-                      <span className="eyebrow copy-shadow">The Stewards</span>
+                      <span className="eyebrow copy-shadow">Why people call us</span>
                       <span aria-hidden className="eyebrow-rule" />
                     </div>
                     <h2 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-balance leading-[1.02] tracking-tight text-bone copy-shadow">
-                      Meridian's Premiere{" "}
-                      <span className="text-ember italic">Lawn Stewards</span>{" "}
-                      are the key to your best{" "}
-                      <span className="text-wheat">lawn &amp; garden.</span>
+                      The <span className="text-wheat">owner</span> answers the phone. The crew you meet is the crew that <span className="text-ember italic">does the work.</span>
                     </h2>
                     <p className="support-line copy-shadow mt-8 max-w-xl text-balance">
-                      &ldquo;Six inches deeper than anyone else looks.&rdquo;
+                      ★ {BUSINESS.rating.stars} on Google ({BUSINESS.rating.count} reviews) · 5.0 on Facebook · Licensed & insured.
                     </p>
                   </div>
                 </ActLayer>
@@ -138,18 +134,53 @@ function Index() {
               </div>
             </div>
 
-            {/* Act IV — liquid glass form, center */}
+            {/* Act IV — services card + phone CTA */}
             <div
               className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 py-20 overflow-y-auto"
               style={{ pointerEvents: act4Reveal > 0.5 ? "auto" : "none" }}
             >
-              <LiquidGlassCard reveal={act4Reveal} className="w-full max-w-lg">
-                <DiagnosticEngine />
+              <LiquidGlassCard reveal={act4Reveal} className="w-full max-w-2xl">
+                <div className="p-2">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ember mb-2 copy-shadow">
+                    Services
+                  </p>
+                  <h2 className="font-display text-3xl md:text-4xl text-bone copy-shadow mb-5">
+                    What can we do for your yard?
+                  </h2>
+                  <ul className="grid sm:grid-cols-2 gap-2.5">
+                    {SERVICES.map((s) =>
+                      s.to ? (
+                        <li key={s.name}>
+                          <Link
+                            to={s.to}
+                            className="block rounded-xl border border-bone/15 hover:border-ember/50 px-4 py-3 transition bg-loam/30"
+                          >
+                            <p className="font-display text-lg text-bone copy-shadow leading-tight">{s.name}</p>
+                            <p className="text-[12px] text-bone/70 mt-0.5">{s.note}</p>
+                          </Link>
+                        </li>
+                      ) : (
+                        <li key={s.name}>
+                          <Link
+                            to="/services"
+                            className="block rounded-xl border border-bone/10 hover:border-ember/50 px-4 py-3 transition bg-loam/20"
+                          >
+                            <p className="font-display text-lg text-bone copy-shadow leading-tight">{s.name}</p>
+                            <p className="text-[12px] text-bone/70 mt-0.5">{s.note}</p>
+                          </Link>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <Link to="/services" className="liquid-pill text-sm">All services →</Link>
+                    <Link to="/contact" className="liquid-pill text-sm">Request a quote →</Link>
+                  </div>
+                </div>
               </LiquidGlassCard>
 
-              {/* Three reasons to call — quiet trust strip beneath the card */}
               <div
-                className="mt-6 w-full max-w-lg rounded-2xl border border-bone/15 backdrop-blur-md px-5 py-4"
+                className="mt-6 w-full max-w-2xl rounded-2xl border border-bone/15 backdrop-blur-md px-5 py-4"
                 style={{
                   opacity: act4Reveal,
                   transform: `translateY(${(1 - act4Reveal) * 12}px)`,
@@ -159,10 +190,10 @@ function Index() {
                 }}
               >
                 <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember mb-3 copy-shadow">
-                  Or just call us
+                  Or just call {BUSINESS.owner}
                 </p>
                 <ul className="space-y-1.5 text-[13px] text-bone/90">
-                  <li className="flex gap-2"><span className="text-ember">·</span>Free yard walk — no obligation, no upsell</li>
+                  <li className="flex gap-2"><span className="text-ember">·</span>Free walkthrough — no obligation, no upsell</li>
                   <li className="flex gap-2"><span className="text-ember">·</span>Same-week scheduling — Meridian + 25 mi</li>
                   <li className="flex gap-2"><span className="text-ember">·</span>Real person answers — one business day</li>
                 </ul>
@@ -177,7 +208,6 @@ function Index() {
               </div>
             </div>
 
-            {/* Tiny footer credit */}
             <footer
               className="absolute inset-x-0 bottom-0 z-20 px-6 md:px-10 py-5 flex items-center justify-between text-[10px] font-mono text-bone/80 copy-shadow transition-opacity duration-500"
               style={{ opacity: t > 0.86 ? 1 : 0 }}
@@ -189,16 +219,15 @@ function Index() {
               >
                 {BUSINESS.phone}
               </a>
-              <span>Powered by SoilGrids · ISRIC</span>
+              <span>{BUSINESS.name} · Licensed & insured</span>
             </footer>
 
-            {/* Skip-the-story link — appears once cinema is past Act II */}
             <Link
-              to="/diagnostic"
+              to="/services"
               className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 text-[10px] font-mono uppercase tracking-[0.25em] text-bone/70 hover:text-wheat transition-opacity duration-500 copy-shadow"
               style={{ opacity: t > 0.04 && t < 0.78 ? 1 : 0, pointerEvents: t > 0.04 && t < 0.78 ? "auto" : "none" }}
             >
-              Skip the story → run diagnostic
+              Skip the story → see services
             </Link>
 
           </div>
