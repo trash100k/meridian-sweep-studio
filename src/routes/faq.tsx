@@ -16,13 +16,12 @@ export const Route = createFileRoute("/faq")({
       { title: `FAQ — ${BUSINESS.shortName}` },
       {
         name: "description",
-        content:
-          "Answers about red clay, aeration, pricing, scheduling, and what to expect from a soil diagnostic in Meridian, MS.",
+        content: `Answers about lawn care, landscaping, hardscaping, stone masonry, lighting, pricing, and scheduling in ${BUSINESS.serviceArea}.`,
       },
       { property: "og:title", content: `FAQ — ${BUSINESS.shortName}` },
       {
         property: "og:description",
-        content: "Common questions about soil, lawns, and our work.",
+        content: "Common questions about our services, pricing, and scheduling.",
       },
     ],
   }),
@@ -30,36 +29,40 @@ export const Route = createFileRoute("/faq")({
 
 const FAQS = [
   {
-    q: "Why is the diagnostic free?",
-    a: "Because most lawns in Meridian don't need what they're being sold. The diagnostic tells us — and you — whether the soil is actually the problem. If it's not, we save you a service call. If it is, you know exactly why.",
+    q: "What services do you offer?",
+    a: "Weekly lawn maintenance, landscape design and planting, hardscaping (patios, walkways, retaining walls, fire pits), hand-laid stone masonry, and low-voltage outdoor lighting. We also offer a free soil diagnostic when a lawn isn't taking.",
   },
   {
-    q: "What's actually wrong with red clay?",
-    a: "Compacted clay sheds water like a tarp. Your sprinkler runs, the surface gets wet, and the water runs off before it ever reaches a root. Roots stay shallow, the grass dries out from underneath, and you blame the weather.",
+    q: "Where do you work?",
+    a: `${BUSINESS.serviceArea} and about 25 miles out — Marion, Toomsuba, Collinsville, Bailey, and the surrounding communities. Call us even if you're a little outside; we go further some weeks.`,
   },
   {
-    q: "How accurate is a 60-second diagnostic?",
-    a: "We pull real soil composition data from ISRIC SoilGrids for your specific address — clay percentage, sand percentage, bulk density at 0–30cm. It's the same source agronomists use. We confirm with an on-site walk before any work.",
+    q: "Do I need to sign a long-term contract for weekly lawn care?",
+    a: "No long-term contracts. Most clients book seasonally and renew because they want to, not because they're locked in. Cancel any time with a week's notice.",
   },
   {
-    q: "What does aeration cost?",
-    a: "Pricing depends on lot size and grade. A typical 1/4-acre lot with a Grade C reads as $180–$280 for core aeration. We give you a written quote after the diagnostic — no obligation.",
+    q: "How do you price hardscaping and masonry?",
+    a: "By the project, after a walkthrough. We take measurements, look at the material you want, and send a written estimate with clear line items. No verbal-only handshake numbers.",
   },
   {
-    q: "When should I schedule?",
-    a: "Early fall (September–October) and early spring (March) are the windows where aeration does the most good. Drainage work happens any time the ground isn't frozen. The diagnostic itself you can run right now.",
-  },
-  {
-    q: "Do you do mowing, edging, or general landscaping?",
-    a: "No. We do soil work — diagnostics, aeration, deep restoration, drainage. We'll happily refer you to good local crews for the weekly stuff.",
-  },
-  {
-    q: "What if my zip isn't in your service area?",
-    a: "Run the diagnostic anyway. We sometimes reach further depending on the week, and we'll always tell you up front if we can't.",
+    q: "How long does a patio or wall take?",
+    a: "Most patios run 3–6 working days. Retaining walls depend on length and height — figure a week for a standard residential wall. We'll give you a real timeline before you sign.",
   },
   {
     q: "Are you licensed and insured?",
     a: "Yes — fully licensed in Mississippi and carrying general liability + workers' comp. Documentation provided before any on-site work.",
+  },
+  {
+    q: "Do you guarantee plantings?",
+    a: "Yes. New plantings come with a 30-day check-back, and we replace anything that didn't root for free if you watered as instructed.",
+  },
+  {
+    q: "What's the free soil diagnostic?",
+    a: "A 60-second address-level read of your soil — clay percentage, compaction, and a written plan. Useful when grass keeps dying no matter what you do. Free, no obligation.",
+  },
+  {
+    q: "Who's actually going to show up?",
+    a: `${BUSINESS.owner} is on most jobs personally, with our small in-house crew. No rotating subs, no surprises.`,
   },
 ];
 
@@ -69,7 +72,7 @@ function FaqPage() {
       <PageHero
         eyebrow="FAQ"
         title={<>Questions <span className="text-ember">we hear most.</span></>}
-        body="Don't see yours? Call or text and a real person will answer within one business day."
+        body="Don't see yours? Call or text Richard — a real person answers within one business day."
       />
 
       <PageSection>
@@ -86,9 +89,12 @@ function FaqPage() {
           ))}
         </Accordion>
 
-        <div className="mt-12 flex justify-center">
-          <Link to="/diagnostic" className="liquid-pill">
-            Run the diagnostic →
+        <div className="mt-12 flex flex-wrap gap-4 justify-center">
+          <Link to="/contact" className="liquid-pill">
+            Ask a question →
+          </Link>
+          <Link to="/services" className="liquid-pill">
+            See services →
           </Link>
         </div>
       </PageSection>
