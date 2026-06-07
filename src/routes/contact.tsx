@@ -9,8 +9,7 @@ export const Route = createFileRoute("/contact")({
       { title: `Contact — ${BUSINESS.shortName}` },
       {
         name: "description",
-        content:
-          "Call, email, or run the free soil diagnostic. Family-run lawn stewards in Meridian, MS.",
+        content: `Call, email, or send a note. ${BUSINESS.name} — owned by ${BUSINESS.owner} in ${BUSINESS.serviceArea}. ${BUSINESS.phone}.`,
       },
       { property: "og:title", content: `Contact — ${BUSINESS.shortName}` },
       {
