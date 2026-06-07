@@ -7,41 +7,40 @@ export const Route = createFileRoute("/results")({
   component: ResultsPage,
   head: () => ({
     meta: [
-      { title: `Results — ${BUSINESS.shortName}` },
+      { title: `Recent Work — ${BUSINESS.shortName}` },
       {
         name: "description",
-        content:
-          "Before-and-after soil grade lifts and homeowner quotes from Meridian, MS lawns we've restored.",
+        content: `Hardscaping, masonry, lighting, and lawn restoration projects ${BUSINESS.shortName} has completed across Meridian, MS.`,
       },
-      { property: "og:title", content: `Results — ${BUSINESS.shortName}` },
+      { property: "og:title", content: `Recent Work — ${BUSINESS.shortName}` },
       {
         property: "og:description",
-        content: "Real soil grades before and after. Not opinions.",
+        content: "Patios, stonework, plantings, lighting — completed jobs across Meridian.",
       },
     ],
   }),
 });
 
-const LIFTS = [
-  { area: "29th Ave", before: "F", after: "B", note: "Standing water gone in one season." },
-  { area: "Poplar Springs", before: "D", after: "B", note: "Roots down 4 inches in 90 days." },
-  { area: "North Hills", before: "C", after: "A", note: "Cut watering by 40%." },
-  { area: "Bonita Lakes", before: "F", after: "C", note: "Year-one fix. Tracking toward B." },
-  { area: "West End", before: "D", after: "A", note: "Drainage rebuild + restoration." },
-  { area: "Toomsuba", before: "C", after: "B", note: "Just aeration. No re-sod needed." },
+const PROJECTS = [
+  { area: "29th Ave", type: "Paver Patio", note: "550 sq ft of charcoal pavers + fire pit. Built in 6 days." },
+  { area: "Poplar Springs", type: "Stone Retaining Wall", note: "Hand-laid limestone, 38 ft long, terraced planting above." },
+  { area: "North Hills", type: "Full Landscape Refresh", note: "Bed redesign, 22 new shrubs, mulch reset, sprinkler tune-up." },
+  { area: "Bonita Lakes", type: "Outdoor Lighting", note: "12-fixture path + tree uplighting. Low-voltage LED, 10-year warranty." },
+  { area: "West End", type: "Drainage + Sod Restoration", note: "French drain install, regraded back yard, fresh sod that finally held." },
+  { area: "Toomsuba", type: "Weekly Lawn Care", note: "Going on 3 seasons. Mow, edge, blow, seasonal cleanups." },
 ];
 
 const QUOTES = [
   {
-    body: "They told me my soil was the problem, not my fertilizer. They were right. First time in eight years the grass is green in August.",
+    body: "Richard and his crew built us a patio we use every weekend now. Came in on budget, finished a day early, and cleaned up like they were never there.",
     by: "Marcus T., Meridian",
   },
   {
-    body: "Honest pricing, showed up when they said. The soil report alone was worth more than what most companies charge to mow.",
+    body: "Honest pricing, showed up when they said. The stone wall they built looks like it's been there forever. Couldn't be happier.",
     by: "Linda R., Poplar Springs",
   },
   {
-    body: "We were ready to re-sod the whole lot. They aerated, did the deep work, and the lawn came back on its own.",
+    body: "We've tried three other lawn companies. R & C is the only one that does it right every time and actually answers the phone.",
     by: "James K., North Hills",
   },
 ];
@@ -50,27 +49,25 @@ function ResultsPage() {
   return (
     <PageShell>
       <PageHero
-        eyebrow="Results"
-        title={<>Real <span className="text-ember">grade lifts</span>. Not opinions.</>}
-        body="Every job ends with a 90-day re-read using the same soil source we started with. Here's what changed."
+        eyebrow="Recent Work"
+        title={<>Jobs we're <span className="text-ember">proud to point at.</span></>}
+        body="A small sample of what we've built around Meridian. Want to see more? Ask Richard — he'll text you photos from his phone."
       />
 
       <PageSection>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {LIFTS.map((l) => (
+          {PROJECTS.map((p) => (
             <article
-              key={l.area}
+              key={p.area + p.type}
               className="rounded-2xl border border-bone/10 bg-loam/40 p-6 backdrop-blur-sm"
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/55">
-                {l.area}
+                {p.area}
               </p>
-              <div className="mt-4 flex items-baseline gap-3">
-                <span className="font-display text-5xl text-destructive">{l.before}</span>
-                <span className="font-mono text-bone/40">→</span>
-                <span className="font-display text-5xl text-wheat">{l.after}</span>
-              </div>
-              <p className="mt-4 text-sm text-bone/85 leading-relaxed">{l.note}</p>
+              <h3 className="mt-3 font-display text-2xl text-bone copy-shadow leading-tight">
+                {p.type}
+              </h3>
+              <p className="mt-4 text-sm text-bone/85 leading-relaxed">{p.note}</p>
             </article>
           ))}
         </div>
@@ -94,15 +91,15 @@ function ResultsPage() {
         </div>
 
         <div className="mt-12 flex justify-center">
-          <Link to="/diagnostic" className="liquid-pill">
-            See your starting grade →
+          <Link to="/contact" className="liquid-pill">
+            Get a quote for your project →
           </Link>
         </div>
       </PageSection>
 
       <CallBand
-        headline="Want grade lifts like these on your lawn?"
-        sub="Every job above started with one phone call. We'll tell you on the spot if your soil is fixable — and what it'd realistically cost."
+        headline="Want work like this on your property?"
+        sub={`Every job above started with one phone call to ${BUSINESS.owner}. We'll tell you on the spot whether it's a fit and what it'd realistically cost.`}
       />
     </PageShell>
   );

@@ -11,7 +11,7 @@ export function CallBand({
   headline,
   sub,
   primaryLabel = `Call ${BUSINESS.phone}`,
-  secondaryLabel = "Run free diagnostic →",
+  secondaryLabel = "Request a quote →",
 }: {
   headline: string;
   sub?: string;
@@ -34,7 +34,7 @@ export function CallBand({
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-ember mb-3 copy-shadow">
-              Talk to a real steward
+              Talk to the owner
             </p>
             <h2
               id="callband-heading"
@@ -59,7 +59,7 @@ export function CallBand({
               <span>{primaryLabel}</span>
             </a>
             <Link
-              to="/diagnostic"
+              to="/contact"
               className="text-[12px] uppercase tracking-[0.22em] font-mono text-bone/80 hover:text-wheat transition copy-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember rounded px-2 py-2"
             >
               {secondaryLabel}

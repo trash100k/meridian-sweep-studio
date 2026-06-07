@@ -11,12 +11,12 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Soil diagnostics, core aeration, deep soil restoration, and drainage engineering for Meridian, MS lawns.",
+          "Lawn maintenance, landscape design, hardscaping, stone masonry, outdoor lighting, and free soil diagnostics across Meridian, MS.",
       },
       { property: "og:title", content: `Services — ${BUSINESS.shortName}` },
       {
         property: "og:description",
-        content: "Four ways we get water and air back to your roots.",
+        content: "Full-service landscaping, masonry, and outdoor living in Meridian, MS.",
       },
     ],
   }),
@@ -24,28 +24,40 @@ export const Route = createFileRoute("/services")({
 
 const SERVICES = [
   {
-    name: "Soil Diagnostic",
-    solves: "Not knowing what's actually wrong.",
-    includes: "Address-level soil read, compaction grade, written plan. Free.",
-    when: "Always start here.",
+    name: "Lawn Maintenance",
+    solves: "A yard that always looks tended, never overgrown.",
+    includes: "Weekly or biweekly mowing, edging, blowing, seasonal cleanups, and shrub trimming.",
+    when: "Year-round. Most clients sign on for the season.",
   },
   {
-    name: "Core Aeration",
-    solves: "Surface runoff and shallow roots.",
-    includes: "3-inch plugs across the full lot, debris cleared, overseed-ready.",
-    when: "Early fall or early spring.",
+    name: "Landscape Design & Planting",
+    solves: "Front yards that look like nobody's home, or beds that never grew in.",
+    includes: "Site walk, plant plan, soil prep, install, and a 30-day check-back.",
+    when: "Spring and fall are best for new plantings.",
   },
   {
-    name: "Deep Soil Restoration",
-    solves: "Severe clay compaction (Grade D / F).",
-    includes: "Vertical fracturing, gypsum + organic matter injection, follow-up read at 90 days.",
-    when: "Once. Maintenance after.",
+    name: "Hardscaping",
+    solves: "Muddy paths, unusable slopes, no real outdoor space to enjoy.",
+    includes: "Patios, walkways, retaining walls, fire pits, and outdoor kitchens. Paver or natural stone.",
+    when: "Any season — we build year-round when weather allows.",
   },
   {
-    name: "Drainage Engineering",
-    solves: "Standing water, sloped runoff into the wrong place.",
-    includes: "Site survey, French drain or swale design, build, and verification.",
-    when: "Before the next big rain.",
+    name: "Stone Masonry",
+    solves: "Wanting craftsmanship that lasts decades, not seasons.",
+    includes: "Hand-laid stone walls, pillars, veneer, chimneys, and custom features.",
+    when: "Booked by quote. Most jobs scheduled 2–4 weeks out.",
+  },
+  {
+    name: "Outdoor Lighting",
+    solves: "A yard that disappears at sunset, or unsafe walkways at night.",
+    includes: "Path lights, uplighting on trees and architecture, low-voltage LED systems, install + warranty.",
+    when: "Often paired with a hardscape or planting project.",
+  },
+  {
+    name: "Free Soil Diagnostic",
+    solves: "Lawns that won't take, no matter how much you water or fertilize.",
+    includes: "Address-level soil read, compaction grade, and a written plan. No obligation.",
+    when: "Always free. Start here if the grass keeps dying.",
   },
 ];
 
@@ -54,8 +66,8 @@ function ServicesPage() {
     <PageShell>
       <PageHero
         eyebrow="Services"
-        title={<>Four ways we get <span className="text-ember">water and air</span> back to your roots.</>}
-        body="Every service starts with the free diagnostic. We won't sell you aeration if the soil doesn't need it."
+        title={<>Everything your yard needs, from <span className="text-ember">one family-run crew.</span></>}
+        body={`${BUSINESS.shortName} handles weekly lawn care, landscape design, hardscaping, stone masonry, and outdoor lighting across ${BUSINESS.serviceArea} and the surrounding 25 miles.`}
       />
 
       <PageSection>
@@ -75,16 +87,19 @@ function ServicesPage() {
           ))}
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-12 flex flex-wrap gap-4 justify-center">
+          <Link to="/contact" className="liquid-pill">
+            Request a quote →
+          </Link>
           <Link to="/diagnostic" className="liquid-pill">
-            Start with the free diagnostic →
+            Or run the free diagnostic →
           </Link>
         </div>
       </PageSection>
 
       <CallBand
-        headline="Not sure which service your yard needs?"
-        sub="One short call and we'll tell you straight — no quote pressure, no auto-renew contracts. If the soil doesn't need it, we say so."
+        headline="Not sure which service you need?"
+        sub={`Call Richard and tell him about your yard. One short conversation, an honest recommendation — no pressure, no auto-renew contracts.`}
       />
     </PageShell>
   );
