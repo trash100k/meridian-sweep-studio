@@ -116,6 +116,20 @@ function AboutPage() {
           </aside>
         </div>
 
+        <div className="mt-16 overflow-hidden rounded-2xl border border-bone/10 bg-loam/30 backdrop-blur-sm">
+          <div className="aspect-[16/9] overflow-hidden">
+            <img
+              src={PHOTOS.truck}
+              alt="R & C Landscaping work truck and trailer"
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <p className="px-6 py-4 text-sm text-bone/80 text-center">
+            The rig you'll see in your driveway — same truck, same crew, every visit.
+          </p>
+        </div>
+
         <div className="mt-12 flex flex-wrap gap-4 justify-center">
           <Link to="/services" className="liquid-pill">
             See our services →
