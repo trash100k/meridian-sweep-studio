@@ -44,12 +44,12 @@ const fade = (t: number, in0: number, in1: number, out0: number, out1: number) =
 const easeOutQuint = (x: number) => 1 - Math.pow(1 - x, 5);
 
 const SERVICES = [
-  { name: "Lawn Maintenance", note: "Weekly mowing, edging, cleanups" },
-  { name: "Landscape Design", note: "Beds, plantings, refreshes" },
-  { name: "Hardscaping", note: "Patios, walls, fire pits" },
-  { name: "Stone Masonry", note: "Hand-laid stonework that lasts" },
-  { name: "Outdoor Lighting", note: "Low-voltage LED, paths + uplighting" },
-  { name: "Free Soil Diagnostic", note: "When grass won't take", to: "/diagnostic" as const },
+  { name: "Lawn Maintenance", note: "Weekly mowing, edging, cleanups", photo: PHOTOS.stripedLawn },
+  { name: "Landscape Design", note: "Beds, plantings, refreshes", photo: PHOTOS.flowerBed },
+  { name: "Hardscaping", note: "Patios, walls, fire pits", photo: PHOTOS.flagstonePatio },
+  { name: "Stone Masonry", note: "Hand-laid stonework that lasts", photo: PHOTOS.stoneWalkway },
+  { name: "Outdoor Lighting", note: "Low-voltage LED, paths + uplighting", photo: PHOTOS.flagstonePatio },
+  { name: "Free Soil Diagnostic", note: "When grass won't take", to: "/diagnostic" as const, photo: PHOTOS.dryCreek },
 ];
 
 function Index() {
