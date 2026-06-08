@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
 import { CallBand } from "@/components/CallBand";
 import { BUSINESS } from "@/config/business";
+import { PHOTOS } from "@/config/photos";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -57,16 +58,25 @@ function AboutPage() {
           </div>
 
           <aside className="space-y-6">
-            <div className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm">
-              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-ember mb-4 copy-shadow">
-                Owner
-              </p>
-              <p className="font-display text-3xl text-bone copy-shadow">
-                {BUSINESS.owner}
-              </p>
-              <p className="mt-3 text-sm text-bone/80 leading-relaxed">
-                Hands-on owner. On nearly every job. Reachable by phone, day-of.
-              </p>
+            <div className="rounded-2xl border border-bone/10 bg-loam/40 backdrop-blur-sm overflow-hidden">
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src={PHOTOS.richard}
+                  alt={`${BUSINESS.owner}, owner of ${BUSINESS.shortName}`}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-ember mb-3 copy-shadow">
+                  Owner
+                </p>
+                <p className="font-display text-3xl text-bone copy-shadow">
+                  {BUSINESS.owner}
+                </p>
+                <p className="mt-3 text-sm text-bone/80 leading-relaxed">
+                  Hands-on owner. On nearly every job. Reachable by phone, day-of.
+                </p>
+              </div>
             </div>
 
             <div className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm">
@@ -104,6 +114,20 @@ function AboutPage() {
               </p>
             </div>
           </aside>
+        </div>
+
+        <div className="mt-16 overflow-hidden rounded-2xl border border-bone/10 bg-loam/30 backdrop-blur-sm">
+          <div className="aspect-[16/9] overflow-hidden">
+            <img
+              src={PHOTOS.truck}
+              alt="R & C Landscaping work truck and trailer"
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <p className="px-6 py-4 text-sm text-bone/80 text-center">
+            The rig you'll see in your driveway — same truck, same crew, every visit.
+          </p>
         </div>
 
         <div className="mt-12 flex flex-wrap gap-4 justify-center">

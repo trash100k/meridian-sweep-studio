@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
 import { CallBand } from "@/components/CallBand";
 import { BUSINESS } from "@/config/business";
+import { PHOTOS } from "@/config/photos";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/services")({
         property: "og:description",
         content: "Full-service landscaping, masonry, and outdoor living in Meridian, MS.",
       },
+      { property: "og:image", content: PHOTOS.stripedLawn },
+      { name: "twitter:image", content: PHOTOS.stripedLawn },
     ],
   }),
 });
@@ -25,36 +28,42 @@ export const Route = createFileRoute("/services")({
 const SERVICES = [
   {
     name: "Lawn Maintenance",
+    photo: PHOTOS.stripedLawn,
     solves: "A yard that always looks tended, never overgrown.",
     includes: "Weekly or biweekly mowing, edging, blowing, seasonal cleanups, and shrub trimming.",
     when: "Year-round. Most clients sign on for the season.",
   },
   {
     name: "Landscape Design & Planting",
+    photo: PHOTOS.flowerBed,
     solves: "Front yards that look like nobody's home, or beds that never grew in.",
     includes: "Site walk, plant plan, soil prep, install, and a 30-day check-back.",
     when: "Spring and fall are best for new plantings.",
   },
   {
     name: "Hardscaping",
+    photo: PHOTOS.flagstonePatio,
     solves: "Muddy paths, unusable slopes, no real outdoor space to enjoy.",
     includes: "Patios, walkways, retaining walls, fire pits, and outdoor kitchens. Paver or natural stone.",
     when: "Any season — we build year-round when weather allows.",
   },
   {
     name: "Stone Masonry",
+    photo: PHOTOS.stoneWalkway,
     solves: "Wanting craftsmanship that lasts decades, not seasons.",
     includes: "Hand-laid stone walls, pillars, veneer, chimneys, and custom features.",
     when: "Booked by quote. Most jobs scheduled 2–4 weeks out.",
   },
   {
     name: "Outdoor Lighting",
+    photo: PHOTOS.flagstonePatio,
     solves: "A yard that disappears at sunset, or unsafe walkways at night.",
     includes: "Path lights, uplighting on trees and architecture, low-voltage LED systems, install + warranty.",
     when: "Often paired with a hardscape or planting project.",
   },
   {
     name: "Free Soil Diagnostic",
+    photo: PHOTOS.dryCreek,
     solves: "Lawns that won't take, no matter how much you water or fertilize.",
     includes: "Address-level soil read, compaction grade, and a written plan. No obligation.",
     when: "Always free. Start here if the grass keeps dying.",
@@ -75,14 +84,24 @@ function ServicesPage() {
           {SERVICES.map((s) => (
             <article
               key={s.name}
-              className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm"
+              className="overflow-hidden rounded-2xl border border-bone/10 bg-loam/40 backdrop-blur-sm"
             >
-              <h2 className="font-display text-3xl text-bone copy-shadow">{s.name}</h2>
-              <dl className="mt-5 space-y-3 text-sm">
-                <Row label="Solves" value={s.solves} />
-                <Row label="Includes" value={s.includes} />
-                <Row label="When" value={s.when} />
-              </dl>
+              <div className="aspect-[16/9] overflow-hidden">
+                <img
+                  src={s.photo}
+                  alt={s.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                />
+              </div>
+              <div className="p-7">
+                <h2 className="font-display text-3xl text-bone copy-shadow">{s.name}</h2>
+                <dl className="mt-5 space-y-3 text-sm">
+                  <Row label="Solves" value={s.solves} />
+                  <Row label="Includes" value={s.includes} />
+                  <Row label="When" value={s.when} />
+                </dl>
+              </div>
             </article>
           ))}
         </div>
