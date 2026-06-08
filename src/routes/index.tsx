@@ -151,29 +151,42 @@ function Index() {
                     What can we do for your yard?
                   </h2>
                   <ul className="grid sm:grid-cols-2 gap-2.5">
-                    {SERVICES.map((s) =>
-                      s.to ? (
+                    {SERVICES.map((s) => {
+                      const inner = (
+                        <>
+                          <img
+                            src={s.photo}
+                            alt=""
+                            aria-hidden
+                            loading="lazy"
+                            className="h-11 w-11 shrink-0 rounded-lg object-cover border border-bone/15"
+                          />
+                          <div className="min-w-0">
+                            <p className="font-display text-lg text-bone copy-shadow leading-tight truncate">{s.name}</p>
+                            <p className="text-[12px] text-bone/70 mt-0.5">{s.note}</p>
+                          </div>
+                        </>
+                      );
+                      return s.to ? (
                         <li key={s.name}>
                           <Link
                             to={s.to}
-                            className="block rounded-xl border border-bone/15 hover:border-ember/50 px-4 py-3 transition bg-loam/30"
+                            className="flex items-center gap-3 rounded-xl border border-bone/15 hover:border-ember/50 px-3 py-2.5 transition bg-loam/30"
                           >
-                            <p className="font-display text-lg text-bone copy-shadow leading-tight">{s.name}</p>
-                            <p className="text-[12px] text-bone/70 mt-0.5">{s.note}</p>
+                            {inner}
                           </Link>
                         </li>
                       ) : (
                         <li key={s.name}>
                           <Link
                             to="/services"
-                            className="block rounded-xl border border-bone/10 hover:border-ember/50 px-4 py-3 transition bg-loam/20"
+                            className="flex items-center gap-3 rounded-xl border border-bone/10 hover:border-ember/50 px-3 py-2.5 transition bg-loam/20"
                           >
-                            <p className="font-display text-lg text-bone copy-shadow leading-tight">{s.name}</p>
-                            <p className="text-[12px] text-bone/70 mt-0.5">{s.note}</p>
+                            {inner}
                           </Link>
                         </li>
-                      )
-                    )}
+                      );
+                    })}
                   </ul>
                   <div className="mt-5 flex flex-wrap gap-3">
                     <Link to="/services" className="liquid-pill text-sm">All services →</Link>
