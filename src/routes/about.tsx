@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell, PageHero, PageSection } from "@/components/PageShell";
 import { CallBand } from "@/components/CallBand";
 import { BUSINESS } from "@/config/business";
+import { PHOTOS } from "@/config/photos";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
