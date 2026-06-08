@@ -17,4 +17,7 @@ export const PHOTOS = {
   dryCreek: dryCreek.url,
   waterFeature: waterFeature.url,
   stoneSteps: stoneSteps.url,
-  flowerBed: flowerBed.url
+  flowerBed: flowerBed.url,
+  truck: truck.url,
+  richard: richard.url,
+} as const;
