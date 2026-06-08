@@ -84,14 +84,24 @@ function ServicesPage() {
           {SERVICES.map((s) => (
             <article
               key={s.name}
-              className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm"
+              className="overflow-hidden rounded-2xl border border-bone/10 bg-loam/40 backdrop-blur-sm"
             >
-              <h2 className="font-display text-3xl text-bone copy-shadow">{s.name}</h2>
-              <dl className="mt-5 space-y-3 text-sm">
-                <Row label="Solves" value={s.solves} />
-                <Row label="Includes" value={s.includes} />
-                <Row label="When" value={s.when} />
-              </dl>
+              <div className="aspect-[16/9] overflow-hidden">
+                <img
+                  src={s.photo}
+                  alt={s.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                />
+              </div>
+              <div className="p-7">
+                <h2 className="font-display text-3xl text-bone copy-shadow">{s.name}</h2>
+                <dl className="mt-5 space-y-3 text-sm">
+                  <Row label="Solves" value={s.solves} />
+                  <Row label="Includes" value={s.includes} />
+                  <Row label="When" value={s.when} />
+                </dl>
+              </div>
             </article>
           ))}
         </div>
