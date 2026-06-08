@@ -58,16 +58,25 @@ function AboutPage() {
           </div>
 
           <aside className="space-y-6">
-            <div className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm">
-              <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-ember mb-4 copy-shadow">
-                Owner
-              </p>
-              <p className="font-display text-3xl text-bone copy-shadow">
-                {BUSINESS.owner}
-              </p>
-              <p className="mt-3 text-sm text-bone/80 leading-relaxed">
-                Hands-on owner. On nearly every job. Reachable by phone, day-of.
-              </p>
+            <div className="rounded-2xl border border-bone/10 bg-loam/40 backdrop-blur-sm overflow-hidden">
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src={PHOTOS.richard}
+                  alt={`${BUSINESS.owner}, owner of ${BUSINESS.shortName}`}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-ember mb-3 copy-shadow">
+                  Owner
+                </p>
+                <p className="font-display text-3xl text-bone copy-shadow">
+                  {BUSINESS.owner}
+                </p>
+                <p className="mt-3 text-sm text-bone/80 leading-relaxed">
+                  Hands-on owner. On nearly every job. Reachable by phone, day-of.
+                </p>
+              </div>
             </div>
 
             <div className="rounded-2xl border border-bone/10 bg-loam/40 p-7 backdrop-blur-sm">
