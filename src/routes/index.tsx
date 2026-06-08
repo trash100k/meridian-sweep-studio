@@ -19,6 +19,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: `Landscaping, masonry, lighting, and lawn care. Owned by ${BUSINESS.owner}.`,
       },
+      { property: "og:image", content: PHOTOS.heroLawn },
+      { name: "twitter:image", content: PHOTOS.heroLawn },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
