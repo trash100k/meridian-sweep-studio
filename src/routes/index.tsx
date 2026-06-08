@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SunsetStage } from "@/components/SunsetStage";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 import { BUSINESS } from "@/config/business";
+import { PHOTOS } from "@/config/photos";
 
 
 export const Route = createFileRoute("/")({
