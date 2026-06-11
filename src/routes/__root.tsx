@@ -12,6 +12,8 @@ import appCss from "../styles.css?url";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CallPill } from "@/components/CallPill";
+import { DemoBanner } from "@/components/DemoBanner";
+import { BUSINESS } from "@/config/business";
 
 
 function NotFoundComponent() {
@@ -76,15 +78,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "R & C Landscaping & Lawn Service LLC — Meridian, MS" },
-      { name: "description", content: "Family-run landscaping, hardscaping, stone masonry, lighting, and lawn care in Meridian, MS. Owned by Richard Borders. (601) 880-3974." },
-      { name: "author", content: "R & C Landscaping" },
-      { property: "og:title", content: "R & C Landscaping & Lawn Service LLC — Meridian, MS" },
-      { property: "og:description", content: "Family-run landscaping, hardscaping, stone masonry, lighting, and lawn care in Meridian, MS." },
+      { title: `${BUSINESS.name} — Landscaping & Stone Co.` },
+      { name: "description", content: `Family-run landscaping, hardscaping, stone masonry, lighting, and lawn care in ${BUSINESS.serviceArea}. Owned by ${BUSINESS.owner}. ${BUSINESS.phone}.` },
+      { name: "author", content: BUSINESS.name },
+      { property: "og:title", content: `${BUSINESS.name} — ${BUSINESS.serviceArea}` },
+      { property: "og:description", content: `Family-run landscaping, hardscaping, stone masonry, lighting, and lawn care in ${BUSINESS.serviceArea}.` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "R & C Landscaping & Lawn Service LLC" },
-      { name: "twitter:description", content: "Family-run landscaping, hardscaping, masonry, and lawn care in Meridian, MS." },
+      { name: "twitter:title", content: BUSINESS.name },
+      { name: "twitter:description", content: `Landscaping, hardscaping, masonry, and lawn care in ${BUSINESS.serviceArea}.` },
     ],
     links: [
       {
@@ -139,6 +141,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <DemoBanner />
       <SiteNav />
       <Outlet />
       <SiteFooter />
