@@ -26,7 +26,7 @@ const STEPS = [
   {
     n: "01",
     title: "Call",
-    body: "You call or text. Richard answers — usually same day. We talk through what you want done and whether we're the right fit.",
+    body: `You call or text. ${BUSINESS.owner} answers — usually same day. We talk through what you want done and whether we're the right fit.`,
   },
   {
     n: "02",
@@ -41,7 +41,7 @@ const STEPS = [
   {
     n: "04",
     title: "Build",
-    body: "Our own crew does the work. Richard is on most jobs. Daily cleanup, respect for your property, and the timeline we promised.",
+    body: `Our own crew does the work. ${BUSINESS.owner} is on most jobs. Daily cleanup, respect for your property, and the timeline we promised.`,
   },
   {
     n: "05",
@@ -106,7 +106,7 @@ function ProcessPage() {
 
       <CallBand
         headline="Ready for the walkthrough?"
-        sub={`Call ${BUSINESS.owner} and we'll set a time this week — Meridian + 25 miles, no obligation.`}
+        sub={`Call ${BUSINESS.owner} and we'll set a time this week — ${BUSINESS.city} + 25 miles, no obligation.`}
       />
     </PageShell>
   );

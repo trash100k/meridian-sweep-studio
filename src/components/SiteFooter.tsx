@@ -49,7 +49,7 @@ export function SiteFooter() {
           </a>
           <p>{BUSINESS.serviceArea}</p>
           <p className="text-[10px] font-mono text-bone/55 pt-2">
-            Owned by {BUSINESS.owner} · Licensed & insured in MS
+            Owned by {BUSINESS.owner} · Licensed & insured in {BUSINESS.state}
           </p>
         </div>
       </div>

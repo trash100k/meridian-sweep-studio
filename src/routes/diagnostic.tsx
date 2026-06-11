@@ -12,7 +12,7 @@ export const Route = createFileRoute("/diagnostic")({
       {
         name: "description",
         content:
-          "Free 20-second soil diagnostic for Meridian, MS lawns. Real soil data, no call required, no spam.",
+          `Free 20-second soil diagnostic for ${BUSINESS.serviceArea} lawns. Real soil data, no call required, no spam.`,
       },
       { property: "og:title", content: `Free Soil Diagnostic — ${BUSINESS.shortName}` },
       {
@@ -39,7 +39,7 @@ function DiagnosticPage() {
           </LiquidGlassCard>
 
           <p className="mt-8 text-center text-[11px] font-mono text-bone/65 copy-shadow">
-            Used by 30+ Meridian homeowners · Soil data from ISRIC SoilGrids · Your address is never shared.
+            Used by neighbors across {BUSINESS.serviceArea} · Soil data from ISRIC SoilGrids · Your address is never shared.
           </p>
         </div>
       </PageSection>
