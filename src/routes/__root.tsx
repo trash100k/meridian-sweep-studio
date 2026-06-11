@@ -87,6 +87,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: BUSINESS.name },
       { name: "twitter:description", content: `Landscaping, hardscaping, masonry, and lawn care in ${BUSINESS.serviceArea}.` },
+      { title: "Your Lawn Care Website" },
+      { property: "og:title", content: "Your Lawn Care Website" },
+      { name: "twitter:title", content: "Your Lawn Care Website" },
+      { name: "description", content: "Cinematic Studio creates immersive, interactive experiences that engage users with dynamic visuals and data enrichment." },
+      { property: "og:description", content: "Cinematic Studio creates immersive, interactive experiences that engage users with dynamic visuals and data enrichment." },
+      { name: "twitter:description", content: "Cinematic Studio creates immersive, interactive experiences that engage users with dynamic visuals and data enrichment." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c53a6e97-f7dc-48b9-97c7-0d5c6320c5b6/id-preview-d45d4819--d30b6284-df89-4c3e-acd3-11c2748d67bf.lovable.app-1781215425804.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c53a6e97-f7dc-48b9-97c7-0d5c6320c5b6/id-preview-d45d4819--d30b6284-df89-4c3e-acd3-11c2748d67bf.lovable.app-1781215425804.png" },
     ],
     links: [
       {
