@@ -1,13 +1,13 @@
-import heroLawn from "@/assets/rc/hero-lawn.jpg.asset.json";
-import stripedLawn from "@/assets/rc/striped-lawn.jpg.asset.json";
-import flagstonePatio from "@/assets/rc/flagstone-patio.jpg.asset.json";
-import stoneWalkway from "@/assets/rc/stone-walkway.jpg.asset.json";
-import dryCreek from "@/assets/rc/dry-creek.jpg.asset.json";
-import waterFeature from "@/assets/rc/water-feature.jpg.asset.json";
-import stoneSteps from "@/assets/rc/stone-steps.jpg.asset.json";
-import flowerBed from "@/assets/rc/flower-bed.jpg.asset.json";
-import truck from "@/assets/rc/truck.jpg.asset.json";
-import richard from "@/assets/rc/richard.jpg.asset.json";
+import heroLawn from "@/assets/demo/hero-lawn.jpg.asset.json";
+import stripedLawn from "@/assets/demo/striped-lawn.jpg.asset.json";
+import flagstonePatio from "@/assets/demo/flagstone-patio.jpg.asset.json";
+import stoneWalkway from "@/assets/demo/stone-walkway.jpg.asset.json";
+import dryCreek from "@/assets/demo/dry-creek.jpg.asset.json";
+import waterFeature from "@/assets/demo/water-feature.jpg.asset.json";
+import stoneSteps from "@/assets/demo/stone-steps.jpg.asset.json";
+import flowerBed from "@/assets/demo/flower-bed.jpg.asset.json";
+import truck from "@/assets/demo/truck.jpg.asset.json";
+import owner from "@/assets/demo/owner.jpg.asset.json";
 
 export const PHOTOS = {
   heroLawn: heroLawn.url,
@@ -19,5 +19,6 @@ export const PHOTOS = {
   stoneSteps: stoneSteps.url,
   flowerBed: flowerBed.url,
   truck: truck.url,
-  richard: richard.url,
+  richard: owner.url, // legacy alias for owner portrait
+  owner: owner.url,
 } as const;

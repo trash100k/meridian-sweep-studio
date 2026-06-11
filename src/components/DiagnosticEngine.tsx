@@ -172,7 +172,7 @@ function SunsetLoader({ onRetry }: { onRetry: () => void }) {
   const phase = seconds < 6 ? 0 : seconds < 14 ? 1 : seconds < 22 ? 2 : 3;
   const lines = [
     "Reading your dirt…",
-    "Pulling deeper records — Meridian clay is thick today.",
+    "Pulling deeper records — local clay is thick today.",
     "Letting the sun rest on the ridge while we finish.",
     "Still working. This parcel is taking longer than usual.",
   ];

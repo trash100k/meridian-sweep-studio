@@ -50,7 +50,7 @@ function ContactPage() {
             Answered by a real person. One business day, no automated systems.
           </p>
           <ul className="mt-5 flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-[0.18em]">
-            {["Free yard walk", "No contracts", "Meridian + 25 mi"].map((c) => (
+            {["Free yard walk", "No contracts", `${BUSINESS.city} + 25 mi`].map((c) => (
               <li
                 key={c}
                 className="rounded-full border border-bone/20 px-3 py-1 text-bone/85"

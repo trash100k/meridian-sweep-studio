@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: "Where do you work?",
-    a: `${BUSINESS.serviceArea} and about 25 miles out — Marion, Toomsuba, Collinsville, Bailey, and the surrounding communities. Call us even if you're a little outside; we go further some weeks.`,
+    a: `${BUSINESS.serviceArea} and about 25 miles out — ${BUSINESS.nearbyTowns.join(", ")}, and the surrounding communities. Call us even if you're a little outside; we go further some weeks.`,
   },
   {
     q: "Do I need to sign a long-term contract for weekly lawn care?",
@@ -50,7 +50,7 @@ const FAQS = [
   },
   {
     q: "Are you licensed and insured?",
-    a: "Yes — fully licensed in Mississippi and carrying general liability + workers' comp. Documentation provided before any on-site work.",
+    a: `Yes — fully licensed in ${BUSINESS.state} and carrying general liability + workers' comp. Documentation provided before any on-site work.`,
   },
   {
     q: "Do you guarantee plantings?",
@@ -72,7 +72,7 @@ function FaqPage() {
       <PageHero
         eyebrow="FAQ"
         title={<>Questions <span className="text-ember">we hear most.</span></>}
-        body="Don't see yours? Call or text Richard — a real person answers within one business day."
+        body={`Don't see yours? Call or text ${BUSINESS.owner} — a real person answers within one business day.`}
       />
 
       <PageSection>

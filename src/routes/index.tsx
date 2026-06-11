@@ -9,12 +9,12 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: `${BUSINESS.name} — Landscaping, Masonry & Lawn Care in Meridian, MS` },
+      { title: `${BUSINESS.name} — Landscaping, Masonry & Lawn Care in ${BUSINESS.serviceArea}` },
       {
         name: "description",
-        content: `Family-run landscaping, hardscaping, stone masonry, outdoor lighting, and weekly lawn care across Meridian, MS. Owned by ${BUSINESS.owner}. Call ${BUSINESS.phone}.`,
+        content: `Family-run landscaping, hardscaping, stone masonry, outdoor lighting, and weekly lawn care across ${BUSINESS.serviceArea}. Owned by ${BUSINESS.owner}. Call ${BUSINESS.phone}.`,
       },
-      { property: "og:title", content: `${BUSINESS.name} — Meridian, MS` },
+      { property: "og:title", content: `${BUSINESS.name} — ${BUSINESS.serviceArea}` },
       {
         property: "og:description",
         content: `Landscaping, masonry, lighting, and lawn care. Owned by ${BUSINESS.owner}.`,
@@ -88,7 +88,7 @@ function Index() {
                   <div className="readability-scrim pr-4">
                     <div className="flex items-center gap-4 mb-6">
                       <span aria-hidden className="eyebrow-rule" />
-                      <span className="eyebrow copy-shadow">Meridian, MS · Family-run since 2009</span>
+                      <span className="eyebrow copy-shadow">{BUSINESS.serviceArea} · Family-run since {BUSINESS.founded}</span>
                       <span aria-hidden className="eyebrow-rule" />
                     </div>
                     <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-balance leading-[1.02] tracking-tight text-bone copy-shadow">
@@ -210,7 +210,7 @@ function Index() {
                 </p>
                 <ul className="space-y-1.5 text-[13px] text-bone/90">
                   <li className="flex gap-2"><span className="text-ember">·</span>Free walkthrough — no obligation, no upsell</li>
-                  <li className="flex gap-2"><span className="text-ember">·</span>Same-week scheduling — Meridian + 25 mi</li>
+                  <li className="flex gap-2"><span className="text-ember">·</span>Same-week scheduling — {BUSINESS.serviceArea} + 25 mi</li>
                   <li className="flex gap-2"><span className="text-ember">·</span>Real person answers — one business day</li>
                 </ul>
                 <a

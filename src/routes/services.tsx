@@ -12,12 +12,12 @@ export const Route = createFileRoute("/services")({
       {
         name: "description",
         content:
-          "Lawn maintenance, landscape design, hardscaping, stone masonry, outdoor lighting, and free soil diagnostics across Meridian, MS.",
+          `Lawn maintenance, landscape design, hardscaping, stone masonry, outdoor lighting, and free soil diagnostics across ${BUSINESS.serviceArea}.`,
       },
       { property: "og:title", content: `Services — ${BUSINESS.shortName}` },
       {
         property: "og:description",
-        content: "Full-service landscaping, masonry, and outdoor living in Meridian, MS.",
+        content: `Full-service landscaping, masonry, and outdoor living in ${BUSINESS.serviceArea}.`,
       },
       { property: "og:image", content: PHOTOS.stripedLawn },
       { name: "twitter:image", content: PHOTOS.stripedLawn },
@@ -118,7 +118,7 @@ function ServicesPage() {
 
       <CallBand
         headline="Not sure which service you need?"
-        sub={`Call Richard and tell him about your yard. One short conversation, an honest recommendation — no pressure, no auto-renew contracts.`}
+        sub={`Call ${BUSINESS.owner} and tell us about your yard. One short conversation, an honest recommendation — no pressure, no auto-renew contracts.`}
       />
     </PageShell>
   );
