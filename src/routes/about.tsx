@@ -11,7 +11,7 @@ export const Route = createFileRoute("/about")({
       { title: `About — ${BUSINESS.shortName}` },
       {
         name: "description",
-        content: `Family-run landscaping and stone masonry in Meridian, MS. Owned and operated by ${BUSINESS.owner}. 4.5 stars on Google.`,
+        content: `Family-run landscaping and stone masonry in ${BUSINESS.serviceArea}. Owned and operated by ${BUSINESS.owner}. ${BUSINESS.rating.stars} stars on ${BUSINESS.rating.source}.`,
       },
       { property: "og:title", content: `About — ${BUSINESS.shortName}` },
       {
@@ -22,14 +22,14 @@ export const Route = createFileRoute("/about")({
   }),
 });
 
-const ZIPS = ["39301", "39305", "39307", "39309", "39320"];
+const ZIPS = ["00001", "00002", "00003", "00004", "00005"];
 
 function AboutPage() {
   return (
     <PageShell>
       <PageHero
         eyebrow="About"
-        title={<>A <span className="text-wheat italic">family crew</span>, rooted in Meridian.</>}
+        title={<>A <span className="text-wheat italic">family crew</span>, rooted in {BUSINESS.city}.</>}
         body={`${BUSINESS.name} is owned and run by ${BUSINESS.owner} — a small team that treats every yard like it's our own.`}
       />
 
@@ -38,12 +38,12 @@ function AboutPage() {
           <div className="space-y-5 text-bone/90 leading-relaxed">
             <p>
               {BUSINESS.shortName} is run by {BUSINESS.owner} — born and raised in
-              Meridian, working these yards for the better part of his life. What started as
-              weekend mowing for neighbors grew into a full landscaping, masonry, and lawn
-              care company that's now trusted by 30+ families across the area.
+              {" "}{BUSINESS.city}, working these yards for the better part of a lifetime. What
+              started as weekend mowing for neighbors grew into a full landscaping, masonry, and
+              lawn care company trusted by neighbors across the area.
             </p>
             <p>
-              We're small on purpose. Richard answers the phone. The crew you meet on the
+              We're small on purpose. {BUSINESS.owner} answers the phone. The crew you meet on the
               first walk is the crew that does the work. No call centers, no rotating
               subcontractors, no surprise upcharges in the final bill.
             </p>
@@ -120,7 +120,7 @@ function AboutPage() {
           <div className="aspect-[16/9] overflow-hidden">
             <img
               src={PHOTOS.truck}
-              alt="R & C Landscaping work truck and trailer"
+              alt={`${BUSINESS.shortName} work truck and trailer`}
               className="h-full w-full object-cover"
               loading="lazy"
             />
@@ -135,13 +135,13 @@ function AboutPage() {
             See our services →
           </Link>
           <Link to="/contact" className="liquid-pill">
-            Talk to Richard →
+            Talk to {BUSINESS.owner} →
           </Link>
         </div>
       </PageSection>
 
       <CallBand
-        headline="Talk to Richard directly."
+        headline={`Talk to ${BUSINESS.owner} directly.`}
         sub="No call center, no offshore intake form. Pick up the phone and you'll get the owner — usually same day."
       />
     </PageShell>
