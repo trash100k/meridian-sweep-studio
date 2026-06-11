@@ -11,12 +11,12 @@ export const Route = createFileRoute("/results")({
       { title: `Recent Work — ${BUSINESS.shortName}` },
       {
         name: "description",
-        content: `Hardscaping, masonry, lighting, and lawn restoration projects ${BUSINESS.shortName} has completed across Meridian, MS.`,
+        content: `Hardscaping, masonry, lighting, and lawn restoration projects ${BUSINESS.shortName} has completed across ${BUSINESS.serviceArea}.`,
       },
       { property: "og:title", content: `Recent Work — ${BUSINESS.shortName}` },
       {
         property: "og:description",
-        content: "Patios, stonework, plantings, lighting — completed jobs across Meridian.",
+        content: `Patios, stonework, plantings, lighting — completed jobs across ${BUSINESS.serviceArea}.`,
       },
       { property: "og:image", content: PHOTOS.heroLawn },
       { name: "twitter:image", content: PHOTOS.heroLawn },
@@ -26,37 +26,37 @@ export const Route = createFileRoute("/results")({
 
 const PROJECTS = [
   {
-    area: "29th Ave",
+    area: "Northside",
     type: "Flagstone Patio",
     note: "Irregular flagstone laid in decomposed granite, integrated with the existing planting bed. Built in 6 days.",
     photo: PHOTOS.flagstonePatio,
   },
   {
-    area: "Poplar Springs",
+    area: "Westbrook",
     type: "Stone Walkway & Borders",
     note: "Hand-laid stone walkway with cut-stone edging and seasonal plantings flanking both sides.",
     photo: PHOTOS.stoneWalkway,
   },
   {
-    area: "North Hills",
+    area: "Hillcrest",
     type: "Terraced Stone Steps",
     note: "Stacked stone steps and tiered beds rebuilt to handle slope drainage, with fresh sod and mature shrub install.",
     photo: PHOTOS.stoneSteps,
   },
   {
-    area: "Bonita Lakes",
+    area: "Lakeview",
     type: "Water Feature",
     note: "Stone-edged pond with river-rock spillway, integrated into a wooded backyard for year-round visual interest.",
     photo: PHOTOS.waterFeature,
   },
   {
-    area: "West End",
+    area: "Riverside",
     type: "Dry Creek & Drainage",
     note: "River-rock dry creek paired with a brick path — turned a wet, unusable side yard into a feature.",
     photo: PHOTOS.dryCreek,
   },
   {
-    area: "Toomsuba",
+    area: "Oakwood",
     type: "Weekly Lawn Care",
     note: "Going on 3 seasons. Diamond mow stripes, edged, blown, with seasonal cleanups.",
     photo: PHOTOS.heroLawn,
@@ -65,16 +65,16 @@ const PROJECTS = [
 
 const QUOTES = [
   {
-    body: "Richard and his crew built us a patio we use every weekend now. Came in on budget, finished a day early, and cleaned up like they were never there.",
-    by: "Marcus T., Meridian",
+    body: `${BUSINESS.owner} and the crew built us a patio we use every weekend now. Came in on budget, finished a day early, and cleaned up like they were never there.`,
+    by: "Marcus T., Northside",
   },
   {
     body: "Honest pricing, showed up when they said. The stone wall they built looks like it's been there forever. Couldn't be happier.",
-    by: "Linda R., Poplar Springs",
+    by: "Linda R., Westbrook",
   },
   {
-    body: "We've tried three other lawn companies. R & C is the only one that does it right every time and actually answers the phone.",
-    by: "James K., North Hills",
+    body: `We've tried three other lawn companies. ${BUSINESS.shortName} is the only one that does it right every time and actually answers the phone.`,
+    by: "James K., Hillcrest",
   },
 ];
 
@@ -84,7 +84,7 @@ function ResultsPage() {
       <PageHero
         eyebrow="Recent Work"
         title={<>Jobs we're <span className="text-ember">proud to point at.</span></>}
-        body="A small sample of what we've built around Meridian. Want to see more? Ask Richard — he'll text you photos from his phone."
+        body={`A small sample of what we've built around ${BUSINESS.city}. Want to see more? Ask ${BUSINESS.owner} — we'll text you photos.`}
       />
 
       <PageSection>
